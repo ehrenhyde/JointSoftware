@@ -2,6 +2,59 @@
 <head>
 </head>
 <body>
-<h1>template loaded</h1>
+<!--<form method='post' action='/login'> 
+  <div id='form_div'> 
+    <h3>Log in</h3> 
+    {% if message %} 
+    <p style='padding: 0; margin: 0; color:#FF0000'>{{ message }}</p> 
+    {% endif %} 
+    <table width="100%" border="0"> 
+      <tr> 
+        <td><label for='username' style="width: 3em">Username:</ 
+label></td> 
+        <td><input name='user' type='text' id='user'/></td> 
+      </tr> 
+      <tr> 
+        <td><label for='pass' style="width: 3em">Password:</label> 
+        </td> 
+        <td><input name='pass' type='password' value='' id='pass'/></ 
+td> 
+      </tr> 
+    </table> 
+    <p style='margin-left: 3em'> 
+      <input name='action' value='Login' type='submit' 
+             id='submit-login' /> 
+      <a href="/signup">Create Account</a> </p> 
+  </div> 
+  <input name='continue' type='hidden' value='{{callback_url}}'/> 
+</form> 
+-->
+<form method="post" action="/login">
+	<div>
+		<h3>Login</h3>
+		{% if message %}
+			<p> {{ message }}</p>
+		{% endif %}
+		<label for='username'>Username:</label>
+		<input name='username' id='username' type='text'/>
+		<label for='password'>Password:</label>
+		<input name='password' id='password' type='text'/>
+		<input name='action' value='Login' type='submit' id='login-submit' />
+	</div>
+</form>
+
+<form method="post" action="/createUser">
+	<div>
+		<h3>Create User</h3>
+		{% if message %}
+			<p> {{ message }}</p>
+		{% endif %}
+		<label for='username'>Username:</label>
+		<input name='username' id='username' type='text'/>
+		<label for='password'>Password:</label>
+		<input name='password' id='password' type='text'/>
+		<input name='action' value='Create User' type='submit' id='createUser-submit' />
+	</div>
+</form>
 </body>
 </html>

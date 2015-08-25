@@ -16,12 +16,12 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 DEFAULT_ORG_NAME = "freedivers_brisbane"
 
-class user(ndb.Model):
+class User(ndb.Model):
     username = ndb.StringProperty()
     password = ndb.StringProperty()
     session_id = ndb.StringProperty()
 
-class session:
+class Session:
     def __init__(self,handler):
         #Requires a webapp requesthandler to be passed as a contructor
         self.handler = handler
@@ -29,7 +29,7 @@ class session:
 
     def create_user(self,email,username,password):
         #creates a user in the datastore
-        tmp = user(key_name=username.lower())
+        tmp = User(key_name=username.lower())
         tmp.username = username
         tmp.password = password
 
@@ -85,41 +85,62 @@ class session:
         return data
 
     def _fetch_user_with_pass(self,u,p):
-        tmp = user.get_by_key_name(u.lower())
-        if not tmp: return None
+        diverUserQuery = User.gql("WHERE username = :1", u)
+        tmp = diverUserQuery.get()
+        if not tmp:
+            return None
         if tmp.password != p: return None
         return tmp
-
-
-class Login(webapp.RequestHandler):
-    def get(self):
-        a = "fish"
-        print "I like: "
+    
+class CreateUser(webapp2.RequestHandler):
     def post(self):
-        b = "cake"
-    """
+        u = self.request.get('username')
+        p = self.request.get('password')
+        newUser = User()
+        newUser.username = u
+        newUser.password = p
+        newUser.put()
+
+        msg = 'User : '+newUser.username + ' was added'
+        variables = {
+            'message':msg
+        }
+        template = JINJA_ENVIRONMENT.get_template('login.html')
+        self.response.write(template.render(variables))
+
+class LoggedIn(webapp2.RequestHandler):
+    def get(self):
+        user = Session(self).get_current_user()
+        username = user.username
+        variables = {
+            'username':username
+        }
+        template = JINJA_ENVIRONMENT.get_template('loggedIn.html')
+        self.response.write(template.render(variables))
+        
+
+class Login(webapp2.RequestHandler):
     def get(self): 
         variables = {'callback_url':self.request.get('continue')} 
-        path = os.path.join(os.path.dirname(__file__), 'login.html') 
-        self.response.out.write(template.render(path,variables)) 
+        template = JINJA_ENVIRONMENT.get_template('login.html')
+        self.response.write(template.render(variables)) 
 
     def post(self): 
         c = self.request.get('continue') 
-        if not c: c = '/' 
-        u = self.request.get('user') 
-        p = self.request.get('pass') 
-        tmp = session(self).grab_login(u,p) 
-
+        if not c: c = '/loggedIn' 
+        u = self.request.get('username') 
+        p = self.request.get('password') 
+        tmp = Session(self).grab_login(u,p) 
         if not tmp: 
             if tmp is None: msg = 'Bad username and/or password' 
-            if tmp is False: msg = 'That account has not been activated yet.' 
-            variables = {'callback_url':c, 
-                         'message':msg,} 
-            path = os.path.join(os.path.dirname(__file__), 'login.html') 
-            self.response.out.write(template.render(path,variables)) 
-        else: 
+            variables = {
+                'message':msg
+            } 
+            template = JINJA_ENVIRONMENT.get_template('login.html')
+            self.response.write(template.render(variables)) 
+        else:
+            #self.response.write('found user name = ' + tmp.username + ' pass  = ' + tmp.password)
             self.redirect(c)
-        """
 
 
 class MainPage(webapp2.RequestHandler):
@@ -130,5 +151,8 @@ class MainPage(webapp2.RequestHandler):
         self.response.write(template.render(template_values))
 
 app = webapp2.WSGIApplication([
-        ('/',MainPage)
+        ('/',MainPage),
+        ('/login',Login),
+        ('/createUser',CreateUser),
+        ('/loggedIn',LoggedIn)
 ], debug = True)
