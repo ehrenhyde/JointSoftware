@@ -1,58 +1,73 @@
 <!DOCTYPE HTML>
 <html>
-<head>
-	<link type="text/css" rel="stylesheet" href="/stylesheets/global.css"/>
-	<link type="text/css" rel="stylesheet" href="/stylesheets/users.css"/>
-</head>
-<body>
-	<div id="topMenu">
-		<a id='btnEvents' href="/events" class="button">Events</a>
-		<a id='btnProfile' href="/profile" class="button">Profile</a>
-		<a id='btnUsers' href="/users" class="button">Users</a><!--only visible to admin-->
-	</div>
-	<div id="privliges">
-		<a href="/activateTreasurer" class="button privligeButton">Activate Treasurer</a>
-		<a href="/activateEventManager" class="button privligeButton">Deactivate Event Manager</a>
-		<a href="/activateAdmin" class="button privligeButton">Deactivate Admin</a>
-	</div>
-	<a id='createUser' href="/createUser" class="button"></a>
-	<ul id="usersList">
-		<li class="userItem">
-			<a href="/profile?userId=3" class="userItemName">Jack White</a>
-			<span>Credits 2</span>
-			<!--these are not hyperlinks because we will use AJAX (javascript)to send the webservice-->
-			<span class="add1Credit" onclick="addCredits(3,1)">+1</span>
-			<span class="add1Credit" onclick="addCredits(3,10)">+10</span>
-			<span class="take1Credit" onclick="takeCredits(3,1)">-1</span>
-		</li>
-		<li class="userItem">
-			<a href="/profile?userId=4" class="userItemName">Peter Jones</a>
-			<span>Credits 4</span>
-			<span class="add1Credit" onclick="addCredits(4,1)">+1</span>
-			<span class="add1Credit" onclick="addCredits(4,10)">+10</span>
-			<span class="take1Credit" onclick="takeCredits(4,1)">-1</span>
-		</li>
-		<li class="userItem">
-			<a href="/profile?userId=7" class="userItemName">Sally Parker</a>
-			<span>Credits -2</span>
-			<span class="add1Credit" onclick="addCredits(7,1)">+1</span>
-			<span class="add1Credit" onclick="addCredits(7,10)">+10</span>
-			<span class="take1Credit" onclick="takeCredits(7,1)">-1</span>
-		</li>
-		<li class="userItem">
-			<a href="/profile?userId=8" class="userItemName">Jane Brown</a>
-			<span>Credits 6</span>
-			<span class="add1Credit" onclick="addCredits(8,1)">+1</span>
-			<span class="add1Credit" onclick="addCredits(8,10)">+10</span>
-			<span class="take1Credit" onclick="takeCredits(8,1)">-1</span>
-		</li>
-		<li class="userItem">
-			<a href="/profile?userId=9" class="userItemName">Thomas Smith</a>
-			<span>Credits -6</span>
-			<span class="add1Credit" onclick="addCredits(9,1)">+1</span>
-			<span class="add1Credit" onclick="addCredits(9,10)">+10</span>
-			<span class="take1Credit" onclick="takeCredits(9,1)">-1</span>
-		</li>
-	</ul>
-</body>
+	<head>
+		<title>Users</title>
+		<link type="text/css" rel="stylesheet" href="stylesheets/global.css"/>
+	</head>
+	<body>
+		<!--Main Header-->
+		<div id="header">
+		<h1>Australian Free Diving Association</h1>
+		</div>
+		
+		<!--Admin Menu-->
+		<div id="privliges">
+			<a href="#" class="button privligeButton">Activate Treasurer</a>
+			<a href="#" class="button privligeButton">Deactivate Event Manager</a>
+			<a href="#" class="button privligeButton">Deactivate Admin</a>
+		</div>
+
+		<!--General Menu-->
+		<div id="nav">
+			<a id='btnEvents' href="events.html" class="button">Events</a><br>
+			<a id='btnProfile' href="profile.html" class="button">Profile</a><br>
+			<a id='btnUsers' href="users.html" class="button">Users</a><br>
+		</div>
+		
+		<!--Users - We'll put this in a container-->		
+		<a id='createUser' href="/createUser" class="button"></a>
+		<ul id="usersList">
+			<li class="userItem">
+				<a href="/profile?userId=3" class="userItemName">Jack White</a>
+				<span>Credits 2</span>
+				<!--these are not hyperlinks because we will use AJAX (javascript)to send the webservice-->
+				<span class="add1Credit" onclick="addCredits(3,1)">+1</span>
+				<span class="add1Credit" onclick="addCredits(3,10)">+10</span>
+				<span class="take1Credit" onclick="takeCredits(3,1)">-1</span>
+			</li>
+			<li class="userItem">
+				<a href="/profile?userId=4" class="userItemName">Peter Jones</a>
+				<span>Credits 4</span>
+				<span class="add1Credit" onclick="addCredits(4,1)">+1</span>
+				<span class="add1Credit" onclick="addCredits(4,10)">+10</span>
+				<span class="take1Credit" onclick="takeCredits(4,1)">-1</span>
+			</li>
+			<li class="userItem">
+				<a href="/profile?userId=7" class="userItemName">Sally Parker</a>
+				<span>Credits -2</span>
+				<span class="add1Credit" onclick="addCredits(7,1)">+1</span>
+				<span class="add1Credit" onclick="addCredits(7,10)">+10</span>
+				<span class="take1Credit" onclick="takeCredits(7,1)">-1</span>
+			</li>
+			<li class="userItem">
+				<a href="/profile?userId=8" class="userItemName">Jane Brown</a>
+				<span>Credits 6</span>
+				<span class="add1Credit" onclick="addCredits(8,1)">+1</span>
+				<span class="add1Credit" onclick="addCredits(8,10)">+10</span>
+				<span class="take1Credit" onclick="takeCredits(8,1)">-1</span>
+			</li>
+			<li class="userItem">
+				<a href="/profile?userId=9" class="userItemName">Thomas Smith</a>
+				<span>Credits -6</span>
+				<span class="add1Credit" onclick="addCredits(9,1)">+1</span>
+				<span class="add1Credit" onclick="addCredits(9,10)">+10</span>
+				<span class="take1Credit" onclick="takeCredits(9,1)">-1</span>
+			</li>
+		</ul>
+		
+		<!--Footer-->
+		<div id="footer">
+		JointSoftware 2015
+		</div>
+	</body>
 </html>

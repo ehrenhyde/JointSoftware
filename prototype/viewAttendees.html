@@ -1,38 +1,53 @@
 <!DOCTYPE HTML>
 <html>
-<head>
-	<link type="text/css" rel="stylesheet" href="/stylesheets/global.css"/>
-	<link type="text/css" rel="stylesheet" href="/stylesheets/viewAttendees.css"/>
-</head>
-<body>
-	<div id="topMenu">
-		<a id='btnEvents' href="/events" class="button">Events</a>
-		<a id='btnProfile' href="/profile" class="button">Profile</a>
-		<a id='btnUsers' href="/users" class="button">Users</a><!--only visible to admin-->
-	</div>
-	<div id="privliges">
-		<a href="/activateTreasurer" class="button privligeButton">Activate Treasurer</a>
-		<a href="/activateEventManager" class="button privligeButton">Deactivate Event Manager</a>
-		<a href="/activateAdmin" class="button privligeButton">Deactivate Admin</a>
-	</div>
-	<span id="printAttendees" class="button" onclick="printAttendees()">Print Attendees</span>
-	<h2>Attendees</h2>
-	<ul>
-		<li class="attendeeItem">
-			Jack White
-		</li>
-		<li class="attendeeItem">
-			Peter Jones
-		</li>
-		<li class="attendeeItem">
-			Sally Parker
-		</li>
-		<li class="attendeeItem">
-			Jane Brown
-		</li>
-		<li class="attendeeItem">
-			Thomas Smith
-		</li>
-	</ul>
-</body>
+	<head>
+		<title>Attendees</title>
+		<link type="text/css" rel="stylesheet" href="stylesheets/global.css"/>
+	</head>
+	<body>
+		<!--Main Header-->
+		<div id="header">
+		<h1>Australian Free Diving Association</h1>
+		</div>
+		
+		<!--Admin Menu-->
+		<div id="privliges">
+			<a href="#" class="button privligeButton">Activate Treasurer</a>
+			<a href="#" class="button privligeButton">Deactivate Event Manager</a>
+			<a href="#" class="button privligeButton">Deactivate Admin</a>
+		</div>
+
+		<!--General Menu-->
+		<div id="nav">
+			<a id='btnEvents' href="events.html" class="button">Events</a><br>
+			<a id='btnProfile' href="profile.html" class="button">Profile</a><br>
+			<a id='btnUsers' href="users.html" class="button">Users</a><br>
+		</div>
+		
+		<!--Attendees - We'll put this in a container-->
+		<span id="printAttendees" class="button" onclick="printAttendees()">Print Attendees</span>
+		<h2>Attendees</h2>
+		<ul>
+			<li class="attendeeItem">
+				Jack White
+			</li>
+			<li class="attendeeItem">
+				Peter Jones
+			</li>
+			<li class="attendeeItem">
+				Sally Parker
+			</li>
+			<li class="attendeeItem">
+				Jane Brown
+			</li>
+			<li class="attendeeItem">
+				Thomas Smith
+			</li>
+		</ul>
+		
+		<!--Footer-->
+		<div id="footer">
+		JointSoftware 2015
+		</div>
+	</body>
 </html>

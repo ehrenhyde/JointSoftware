@@ -1,77 +1,94 @@
 <!DOCTYPE HTML>
 <html>
-<head>
-	<link type="text/css" rel="stylesheet" href="/stylesheets/global.css"/>
-	<link type="text/css" rel="stylesheet" href="/stylesheets/events.css"/>
-</head>
-<body>
-	<div id="topMenu">
-		<a id='btnEvents' href="/events" class="button">Events</a>
-		<a id='btnProfile' href="/profile" class="button">Profile</a>
-		<a id='btnUsers' href="/users" class="button">Users</a><!--only visible to admin-->
-	</div>
-	<div id="privliges">
-		<a href="/activateTreasurer" class="button privligeButton">Activate Treasurer</a>
-		<a href="/activateEventManager" class="button privligeButton">Deactivate Event Manager</a>
-		<a href="/activateAdmin" class="button privligeButton">Deactivate Admin</a>
-	</div>
-	<h2>Events</h2>
-	<a href="/createEvent">Create Event</a><!--only visible to some accounts-->
-	<ul>
-		<li class="event">
-			<span class="eventItemName">Fortnightly Endurance Training</span>
-			<span class="eventItemDatetime">03/08/2015 17:00</span>
-			<span class="eventItemLocation">Brisbane Athletics Centre</span>
-			<span class="eventItemDesc">Build up and maintain your dive times</span>
-			<a href="/registerAttendance?status=going&fromPage=events" class="registerGoing">Register Going</a>
-			<a href="/registerAttendance?status=maybe&fromPage=events" class="registerMaybe">Register Maybe</a>
-			<!--<a href="/registerAttendance?status=decline&fromPage=events" class="registerDecline">Register Decline</a>-->
-		</li>
-		<li class="event">
-			<span class="eventItemName">Weight Recovery Challenge</span>
-			<span class="eventItemDatetime">11/08/2015 19:00</span>
-			<span class="eventItemLocation">Blue Horizon Pool</span>
-			<span class="eventItemDesc">How much weight can you carry up out of the pool?</span>
-			<a href="/registerAttendance?status=going&fromPage=events" class="registerGoing">Register Going</a>
-			<a href="/registerAttendance?status=maybe&fromPage=events" class="registerMaybe">Register Maybe</a>
-			<!--<a href="/registerAttendance?status=decline&fromPage=events" class="registerDecline">Register Decline</a>-->
-		</li>
-		<li class="event">
-			<span class="eventItemName">Fortnightly Endurance Training</span>
-			<span class="eventItemDatetime">17/08/2015 17:00</span>
-			<span class="eventItemLocation">Brisbane Athletics Centre</span>
-			<span class="eventItemDesc">Build up and maintain your dive times</span>
-			<a href="/registerAttendance?status=going&fromPage=events" class="registerGoing">Register Going</a>
-			<a href="/registerAttendance?status=maybe&fromPage=events" class="registerMaybe">Register Maybe</a>
-			<!--<a href="/registerAttendance?status=decline&fromPage=events" class="registerDecline">Register Decline</a>-->
-		</li>
-		<li class="event">
-			<span class="eventItemName">Morning Casual Laps</span>
-			<span class="eventItemDatetime">31/08/2015 8:00</span>
-			<span class="eventItemLocation">QUT Gardens Point Gym</span>
-			<span class="eventItemDesc">Socialise and swim laps</span>
-			<a href="/registerAttendance?status=going&fromPage=events" class="registerGoing">Register Going</a>
-			<a href="/registerAttendance?status=maybe&fromPage=events" class="registerMaybe">Register Maybe</a>
-			<!--<a href="/registerAttendance?status=decline&fromPage=events" class="registerDecline">Register Decline</a>-->
-		</li>
-		<li class="event">
-			<span class="eventItemName">BBQ and Pool Party</span>
-			<span class="eventItemDatetime">13/09/2015 11:00</span>
-			<span class="eventItemLocation">Blue Horizon Pool</span>
-			<span class="eventItemDesc">Bring your swimmers and saussages</span>
-			<a href="/registerAttendance?status=going&fromPage=events" class="registerGoing">Register Going</a>
-			<a href="/registerAttendance?status=maybe&fromPage=events" class="registerMaybe">Register Maybe</a>
-			<!--<a href="/registerAttendance?status=decline&fromPage=events" class="registerDecline">Register Decline</a>-->
-		</li>
-		<li class="event">
-			<span class="eventItemName">Fortnightly Endurance Training</span>
-			<span class="eventItemDatetime">14/09/2015 17:00</span>
-			<span class="eventItemLocation">Brisbane Athletics Centre</span>
-			<span class="eventItemDesc">Build up and maintain your dive times</span>
-			<a href="/registerAttendance?status=going&fromPage=events" class="registerGoing">Register Going</a>
-			<a href="/registerAttendance?status=maybe&fromPage=events" class="registerMaybe">Register Maybe</a>
-			<!--<a href="/registerAttendance?status=decline&fromPage=events" class="registerDecline">Register Decline</a>-->
-		</li>
-	</ul>
-</body>
+	<head>
+		<title>Home</title>
+		<link type="text/css" rel="stylesheet" href="stylesheets/global.css"/>
+	</head>
+	<body>
+		<!--Main Header-->
+			<div id="header">
+			<h1>Australian Free Diving Association</h1>
+			</div>
+			
+			<!--Admin Menu-->
+			<div id="privliges">
+				<a href="#" class="button privligeButton">Activate Treasurer</a>
+				<a href="#" class="button privligeButton">Deactivate Event Manager</a>
+				<a href="#" class="button privligeButton">Deactivate Admin</a>
+			</div>
+
+			<!--General Menu-->
+			<div id="nav">
+				<a id='btnEvents' href="events.html" class="button">Events</a><br>
+				<a id='btnProfile' href="profile.html" class="button">Profile</a><br>
+				<a id='btnUsers' href="users.html" class="button">Users</a><br>
+			</div>
+			
+			<!-- Events Container (needs some work)-->
+			<div id="container">
+				<h2>Events</h2>
+				<a href="/createEvent">Create Event</a><!--only visible to some accounts-->
+				<ul>
+					<li class="event">
+						<span class="eventItemName">Fortnightly Endurance Training</span>
+						<span class="eventItemDatetime">03/08/2015 17:00</span>
+						<span class="eventItemLocation">Brisbane Athletics Centre</span>
+						<span class="eventItemDesc">Build up and maintain your dive times</span>
+						<a href="/registerAttendance?status=going&fromPage=events" class="registerGoing">Register Going</a>
+						<a href="/registerAttendance?status=maybe&fromPage=events" class="registerMaybe">Register Maybe</a>
+						<!--<a href="/registerAttendance?status=decline&fromPage=events" class="registerDecline">Register Decline</a>-->
+					</li>
+					<li class="event">
+						<span class="eventItemName">Weight Recovery Challenge</span>
+						<span class="eventItemDatetime">11/08/2015 19:00</span>
+						<span class="eventItemLocation">Blue Horizon Pool</span>
+						<span class="eventItemDesc">How much weight can you carry up out of the pool?</span>
+						<a href="/registerAttendance?status=going&fromPage=events" class="registerGoing">Register Going</a>
+						<a href="/registerAttendance?status=maybe&fromPage=events" class="registerMaybe">Register Maybe</a>
+						<!--<a href="/registerAttendance?status=decline&fromPage=events" class="registerDecline">Register Decline</a>-->
+					</li>
+					<li class="event">
+						<span class="eventItemName">Fortnightly Endurance Training</span>
+						<span class="eventItemDatetime">17/08/2015 17:00</span>
+						<span class="eventItemLocation">Brisbane Athletics Centre</span>
+						<span class="eventItemDesc">Build up and maintain your dive times</span>
+						<a href="/registerAttendance?status=going&fromPage=events" class="registerGoing">Register Going</a>
+						<a href="/registerAttendance?status=maybe&fromPage=events" class="registerMaybe">Register Maybe</a>
+						<!--<a href="/registerAttendance?status=decline&fromPage=events" class="registerDecline">Register Decline</a>-->
+					</li>
+					<li class="event">
+						<span class="eventItemName">Morning Casual Laps</span>
+						<span class="eventItemDatetime">31/08/2015 8:00</span>
+						<span class="eventItemLocation">QUT Gardens Point Gym</span>
+						<span class="eventItemDesc">Socialise and swim laps</span>
+						<a href="/registerAttendance?status=going&fromPage=events" class="registerGoing">Register Going</a>
+						<a href="/registerAttendance?status=maybe&fromPage=events" class="registerMaybe">Register Maybe</a>
+						<!--<a href="/registerAttendance?status=decline&fromPage=events" class="registerDecline">Register Decline</a>-->
+					</li>
+					<li class="event">
+						<span class="eventItemName">BBQ and Pool Party</span>
+						<span class="eventItemDatetime">13/09/2015 11:00</span>
+						<span class="eventItemLocation">Blue Horizon Pool</span>
+						<span class="eventItemDesc">Bring your swimmers and saussages</span>
+						<a href="/registerAttendance?status=going&fromPage=events" class="registerGoing">Register Going</a>
+						<a href="/registerAttendance?status=maybe&fromPage=events" class="registerMaybe">Register Maybe</a>
+						<!--<a href="/registerAttendance?status=decline&fromPage=events" class="registerDecline">Register Decline</a>-->
+					</li>
+					<li class="event">
+						<span class="eventItemName">Fortnightly Endurance Training</span>
+						<span class="eventItemDatetime">14/09/2015 17:00</span>
+						<span class="eventItemLocation">Brisbane Athletics Centre</span>
+						<span class="eventItemDesc">Build up and maintain your dive times</span>
+						<a href="/registerAttendance?status=going&fromPage=events" class="registerGoing">Register Going</a>
+						<a href="/registerAttendance?status=maybe&fromPage=events" class="registerMaybe">Register Maybe</a>
+						<!--<a href="/registerAttendance?status=decline&fromPage=events" class="registerDecline">Register Decline</a>-->
+					</li>
+				</ul>
+			</div>
+		
+		<!--Footer-->
+		<div id="footer">
+			JointSoftware 2015
+		</div>
+	</body>
 </html>

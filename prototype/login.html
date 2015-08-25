@@ -1,24 +1,42 @@
 <!DOCTYPE HTML>
 <html>
-<head>
-	<link type="text/css" rel="stylesheet" href="/stylesheets/global.css"/>
-	<link type="text/css" rel="stylesheet" href="/stylesheets/login.css"/>
-</head>
-<body>
-	<form action="/login" method="post">
-		<label for="username">
-			Freedivers Username
-			<input name="username" type="text"><br/>
-		</label>
+	<head>
+		<title>Login</title>
+		<link type="text/css" rel="stylesheet" href="stylesheets/global.css"/>
+	</head>
+		<body>
+			<!--Main Header-->
+			<div id="header">
+			<h1>Australian Free Diving Association</h1>
+			</div>
 			
-		<label for="password">
-			Password
-			<input name="password" type="password">
-		</label>
+			<!--Login Box (needs some work)-->
+			<div id="login">	
+					<form action="/login" method="post">
+						<fieldset>
+							<legend>Login</legend>
+							<br>
+							<label for="username">
+								Email:
+								<br><input name="username" type="text"><br/>
+							</label>
+							<label for="password"><br>
+								Password:
+								<br><input name="password" type="password">
+							</label>
+							<br><br>
+							<center>
+							<input type="submit" value="Login">
+							<input type="submit" value="Register">
+							</center>
+						</fieldset>
+					</form>
+				<!--<a href="/forgotPassword">Forgot Password?</a>-->
+			</div>
+		</body>
 		
-		<input type="submit" value="login">
-	</form>
-	
-	<!--<a href="/forgotPassword">Forgot Password?</a>-->
-</body>
+		<!--Footer-->
+		<div id="footer">
+			JointSoftware 2015
+		</div>
 </html>
