@@ -58,6 +58,9 @@ class Session:
         return uuid.uuid4()
 
     def _sync_user(self, _user):
+        #stores a session_id on the users computer
+        #and assigns the same session_id to their profile
+        #on the database
         sid = str(self._gen_session_id())
         ssid = '='.join(('ssid',sid))
         self.handler.response.headers.add_header('Set-Cookie',ssid)
@@ -67,6 +70,7 @@ class Session:
         memcache.add(sid,_user)
 
     def _fetch_user_by_cookie(self):
+        #retrive a user based on the session_id on their computer
         if not self.session_id:
             try:
                 sid = self.handler.request.cookies['ssid']
@@ -86,22 +90,13 @@ class Session:
         return data
 
     def _fetch_user_with_pass(self,u,p):
+        #retrives a individual user based on their creds
         diverUserQuery = User.gql("WHERE username = :1", u)
         tmp = diverUserQuery.get()
         if not tmp:
             return None
         if tmp.password != p: return None
         return tmp
-
-def login_required(handler_method):
-    def check_login(self,*args):
-        user = Session(self).get_current_user()
-        if not user:
-            self.redirect('='.join(('/login?continue',self.request.uri)))
-        else:
-            handler_method(self,*args)
-        
-    return check_login
     
 class CreateUser(webapp2.RequestHandler):
     def post(self):
@@ -119,26 +114,37 @@ class CreateUser(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('login.html')
         self.response.write(template.render(variables))
 
-@login_required
 class LoggedIn(webapp2.RequestHandler):
+    #a page which uses user details
     def get(self):
         user = Session(self).get_current_user()
-        username = user.username
-        variables = {
-            'username':username
-        }
-        template = JINJA_ENVIRONMENT.get_template('loggedIn.html')
-        self.response.write(template.render(variables))
+        if not user:
+            nextPath = '='.join(('/login?continue',self.request.url))
+            self.redirect(nextPath)
+        else:
+            username = user.username
+            variables = {
+                'username':username
+            }
+            template = JINJA_ENVIRONMENT.get_template('loggedIn.html')
+            self.response.write(template.render(variables))
+
+class Logout(webapp2.RequestHandler):
+    def post(self):
+        Session(self).logout()
+        self.redirect('/')
         
 
 class Login(webapp2.RequestHandler):
+    #provides a login form
     def get(self): 
         variables = {'callback_url':self.request.get('continue')} 
         template = JINJA_ENVIRONMENT.get_template('login.html')
         self.response.write(template.render(variables)) 
 
+    #catches the login form and tries to log the user in
     def post(self): 
-        c = self.request.get('continue') 
+        c = self.request.get('continue')
         if not c: c = '/loggedIn' 
         u = self.request.get('username') 
         p = self.request.get('password') 
@@ -151,10 +157,11 @@ class Login(webapp2.RequestHandler):
             template = JINJA_ENVIRONMENT.get_template('login.html')
             self.response.write(template.render(variables)) 
         else:
-            #self.response.write('found user name = ' + tmp.username + ' pass  = ' + tmp.password)
-            self.redirect(c)
+            strC = str(c)
+            self.redirect(strC)
 
 class MainPage(webapp2.RequestHandler):
+    #shows a login form
     def get(self):
         template_values={
         }
@@ -163,7 +170,9 @@ class MainPage(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([
         ('/',MainPage),
+        ('/mainPage',MainPage),
         ('/login',Login),
         ('/createUser',CreateUser),
-        ('/loggedIn',LoggedIn)
+        ('/loggedIn',LoggedIn),
+        ('/logout',Logout)
 ], debug = True)
