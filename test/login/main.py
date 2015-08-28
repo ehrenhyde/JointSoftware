@@ -79,7 +79,8 @@ class Session:
 
         data = memcache.get(sid)
         if data is None:
-            data = user.all().filter('session_id = ',sid).get()
+            #data = User.all().filter('session_id = ',sid).get()
+            data = User.query(User.session_id == sid).get()
             if data is not None: memcache.add(sid,data)
 
         return data
@@ -91,6 +92,16 @@ class Session:
             return None
         if tmp.password != p: return None
         return tmp
+
+def login_required(handler_method):
+    def check_login(self,*args):
+        user = Session(self).get_current_user()
+        if not user:
+            self.redirect('='.join(('/login?continue',self.request.uri)))
+        else:
+            handler_method(self,*args)
+        
+    return check_login
     
 class CreateUser(webapp2.RequestHandler):
     def post(self):
@@ -108,6 +119,7 @@ class CreateUser(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('login.html')
         self.response.write(template.render(variables))
 
+@login_required
 class LoggedIn(webapp2.RequestHandler):
     def get(self):
         user = Session(self).get_current_user()
@@ -141,7 +153,6 @@ class Login(webapp2.RequestHandler):
         else:
             #self.response.write('found user name = ' + tmp.username + ' pass  = ' + tmp.password)
             self.redirect(c)
-
 
 class MainPage(webapp2.RequestHandler):
     def get(self):

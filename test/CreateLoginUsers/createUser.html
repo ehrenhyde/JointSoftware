@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Create User</Title>
+		<link type="text/css" rel="stylesheet" href="stylesheets/global.css"/>
+	</head>
+	<body>
+			<!--Main Header-->
+			<div id="header">
+			<h1>Australian Free Diving Association</h1>
+			</div>
+			
+			<!--Admin Menu-->
+			<div id="privliges">
+				<a href="#" class="button privligeButton">Activate Treasurer</a>
+				<a href="#" class="button privligeButton">Deactivate Event Manager</a>
+				<a href="#" class="button privligeButton">Deactivate Admin</a>
+			</div>
+
+			<!--General Menu-->
+			<div id="nav">
+				<a id='btnEvents' href="events.html" class="button">Events</a><br>
+				<a id='btnProfile' href="profile.html" class="button">Profile</a><br>
+				<a id='btnUsers' href="users.html" class="button">Users</a><br>
+			</div>
+			
+		<!-- Create User - We'll make a div for this-->	
+		<img src="theiProfilePhoto.dynamic" alt="Profile Photo" onclick="uploadPhoto()">
+		<form id="userDetails" action="/createUser" method="post">
+			<label for="name">
+				Name
+				<input name="name" type="text" value=""><br/>
+			</label>	
+			<label for="email">
+				Email
+				<input name="email" type="text" value=""><br/>
+			</label>		
+			<label for="emergencyName">
+				Emergency Name
+				<input name="emergencyName" type="text" value=""><br/>
+			</label>	
+			<label for="emergencyMobile">
+				Emergency Mobile
+				<input name="emergencyMobile" type="text" value=""><br/>
+			</label>		
+			<label for="password">
+				Password
+				<input name="password" type="text" value=""><br/>
+			</label>
+			<input type="submit" value="Create User">
+		</form>
+
+		<!--Footer-->
+		<div id="footer">
+		JointSoftware 2015
+		</div>
+	</body>
+</html>
