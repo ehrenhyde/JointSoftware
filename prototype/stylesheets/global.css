@@ -1,4 +1,5 @@
 #header {
+	position: relative;
 	background-color:#A1C4D8;
 	color:white;
 	text-align:center;
@@ -42,6 +43,7 @@
 	color: #FFF; 
 	line-height: 30px; 
 	white-space: nowrap; 
+	overflow:hidden;
 	text-align: center;
 }	
 
@@ -64,37 +66,41 @@
 	line-height:30px;
 	background-color:#EAEFF9;
 	height:400px;
-	width:100px;
+	width:20%;
+	max-width:150px;
 	float:left;
-	padding:5px;
 	text-align: center;
 	}	
 /* Menus FINISH */	
 	
 /* Content Containers START*/	
-#sectionL {
-	width:45%;
-	float:left;
-	padding:5px;
-}
-
-#sectionR {
-	width:45%;
-	float:right;	
-	padding:5px;
-	border: 1px;
-}
 	
 #container {
+	position: relative;
 	width:80%;
 	float:left;
-	padding:5px;
+}
+
+#eventsContainer {
+	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+	overflow: nowrap;
 }
 	
 #login {
-	padding: 10px;
-	height:200px;
-	width:50px;
+	text-align: center;
+	padding: 40px;
+	width:30%;
+	min-width:180px;
+	max-width:300px;
+	height: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	border-radius: 25px;
+    border: 2px solid #808080;
 }
 /* Content Containers FINISH */	
 
