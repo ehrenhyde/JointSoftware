@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Create Event</title>
+		<link type="text/css" rel="stylesheet" href="stylesheets/global.css"/>
+	</head>
+	<body>
+			<!--Main Header-->
+			<div id="header">
+			<h1>Australian Free Diving Association</h1>
+			</div>
+			
+			<!--Admin Menu-->
+			<div id="privliges">
+				<a href="#" class="button privligeButton">Activate Treasurer</a>
+				<a href="#" class="button privligeButton">Deactivate Event Manager</a>
+				<a href="#" class="button privligeButton">Deactivate Admin</a>
+			</div>
+
+			<!--General Menu-->
+			<div id="nav">
+				<a id='btnEvents' href="events.html" class="button">Events</a><br>
+				<a id='btnProfile' href="profile.html" class="button">Profile</a><br>
+				<a id='btnUsers' href="users.html" class="button">Users</a><br>
+				<a id='btnLogout' href="login.html" class="button">Logout</a><br>
+			</div>
+		
+		<!--Create Event - We'll put this in a container-->
+		<form id="eventDetails" action="/createevent" method="post">
+		
+			<label for="name">
+				Event Name
+				<input name="name" type="text"><br/>
+			</label>
+			
+			<label for="date">
+				Date
+				<input name="date" type="date"><br/>
+			</label>
+			
+			<label for="time">
+				Time
+				<input name="time" type="time"><br/>
+			</label>
+			
+			<label for="location">
+				Location
+				<input name="location" type="text"><br/>
+			</label>
+			
+			<input id="isRepeat" type="checkbox" name="isRepeat">
+			<label for="isRepeat">Is Repeated</label>
+			
+			<select name="interval"><!--Javacript will hide this when the isRepeat checkbox is unchecked-->
+				<option value="daily">Daily</option>
+				<option value="weekly">Weekly</option>
+				<option value="fortnightly">Fortnightly</option>
+				<option value="monthly">Monthly</option>
+			</select>
+			
+			<label for="desc">
+				Description
+				<textarea name="desc" type="textarea" rows="10" cols="30"></textarea>
+			</label>
+			
+			<input type="submit" value="Create Event">
+		
+		</form>
+
+		<!--Footer-->
+		<div id="footer">
+		JointSoftware 2015
+		</div>
+	</body>
+</html>

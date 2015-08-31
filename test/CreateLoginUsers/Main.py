@@ -1,3 +1,4 @@
+#Test Github
 import os
 import urllib
 
@@ -20,8 +21,32 @@ class Account(ndb.Model):
 	Emergency_Contact = ndb.StringProperty()
 	Emergency_Phone= ndb.StringProperty()
 	Password = ndb.StringProperty()
+	Picture = ndb.BlobProperty(default=None)
+	Credits = ndb.IntegerProperty(default=0)
+	Admin= ndb.BooleanProperty()
+	Treasurer = ndb.BooleanProperty()
+	EventManager = ndb.BooleanProperty()
+
+class Event(ndb.Model):
+	name = ndb.StringProperty()
+	Description  = ndb.StringProperty()
+	Date= ndb.DateProperty(auto_now_add=True)
+	Time = ndb.TimeProperty(auto_now_add=True)
+	Duration = ndb.IntegerProperty()
+	Location = ndb.StringProperty()
 	
 class MainPage(webapp2.RequestHandler):
+    def get(self):
+		template_values = {}
+		template = JINJA_ENVIRONMENT.get_template('login.html')
+		self.response.write(template.render(template_values))
+
+#Sesion Creation then redirect to events page		
+class Login(webapp2.RequestHandler):
+    def post(self):
+		self.redirect('/events')
+
+class Users(webapp2.RequestHandler):
     def get(self):
 		accounts = Account.query().order(Account.name)
 		template_values = {
@@ -31,13 +56,12 @@ class MainPage(webapp2.RequestHandler):
 		self.response.write(template.render(template_values))
 
 
-class AddAccount(webapp2.RequestHandler):
+class CreateUser(webapp2.RequestHandler):
     def get(self):
 		template_values = {}
 		template = JINJA_ENVIRONMENT.get_template('createUser.html')
 		self.response.write(template.render(template_values))
 
-class CreateAccount(webapp2.RequestHandler):
     def post(self):
 		a = Account()
 		a.name =self.request.get('name')
@@ -45,11 +69,52 @@ class CreateAccount(webapp2.RequestHandler):
 		a.Emergency_Contact =self.request.get('emergencyName')
 		a.Emergency_Phone =self.request.get('emergencyMobile')
 		a.Password =self.request.get('password')
+		a.Admin = False
+		a.Treasurer = False
+		a.EventManager = False
 		a.put()
-		self.redirect('/')
+		self.redirect('/users')
 
+class profile(webapp2.RequestHandler):
+    def get(self):
+		template_values = {}
+		template = JINJA_ENVIRONMENT.get_template('profile.html')
+		self.response.write(template.render(template_values))	
+		
+class EventsMain(webapp2.RequestHandler):
+    def get(self):
+		template_values = {}
+		template = JINJA_ENVIRONMENT.get_template('events.html')
+		self.response.write(template.render(template_values))	
+		
+class CreateEvent(webapp2.RequestHandler):
+    def get(self):
+		template_values = {}
+		template = JINJA_ENVIRONMENT.get_template('createEvent.html')
+		self.response.write(template.render(template_values))			
+		
+    def post(self):
+		a = Event()
+		a.name =self.request.get('name')
+		a.Description =self.request.get('desc')
+		a.Location = self.request.get('location')
+		a.put()
+		self.redirect('/events')		
+		
+class EventDetails(webapp2.RequestHandler):
+    def get(self):
+		template_values = {}
+		template = JINJA_ENVIRONMENT.get_template('eventDetails.html')
+		self.response.write(template.render(template_values))
+		
 app = webapp2.WSGIApplication([
     ('/', MainPage),
-	('/AddAccount',AddAccount),
-    ('/createUser', CreateAccount),
+	('/users',Users),
+	('/createUser', CreateUser),
+	('/profile', profile),
+	('/events',EventsMain),
+	('/createevent',CreateEvent),
+	('/eventdetails',EventDetails),
+	('/login',Login)
+	
 ], debug=True)

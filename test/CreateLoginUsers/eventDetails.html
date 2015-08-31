@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Event Details</title>
+		<link type="text/css" rel="stylesheet" href="stylesheets/global.css"/>
+	</head>
+	<body>
+		<!--Main Header-->
+		<div id="header">
+		<h1>Australian Free Diving Association</h1>
+		</div>
+			
+		<!--Admin Menu-->
+		<div id="privliges">
+			<a href="#" class="button privligeButton">Activate Treasurer</a>
+			<a href="#" class="button privligeButton">Deactivate Event Manager</a>
+			<a href="#" class="button privligeButton">Deactivate Admin</a>
+		</div>
+
+		<!--General Menu-->
+			<div id="nav">
+				<a id='btnEvents' href="events.html" class="button">Events</a><br>
+				<a id='btnProfile' href="profile.html" class="button">Profile</a><br>
+				<a id='btnUsers' href="users.html" class="button">Users</a><br>
+				<a id='btnLogout' href="login.html" class="button">Logout</a><br>
+			</div>
+			
+		<!--Create Event - We'll put this in a container-->
+		<span id="eventName">Fortnightly Endurance Training</span>
+		<a id="viewAttendees" href="/viewAttendees" class="button">View Attendees</a>
+		<a id="editEvent" href="/editEvent" class="button">Edit Event</a>
+		<div id="eventDetails">
+			<span id="eventDatetime">03/08/2015 17:00</span>
+			<a href="/registerAttendance?status=going&fromPage=eventDetails" class="registerGoing">Register Going</a>
+			<a href="/registerAttendance?status=maybe&fromPage=eventDetails" class="registerMaybe">Register Maybe</a>
+			<!--<a href="/registerAttendance?status=decline&fromPage=events" class="registerDecline">Register Decline</a>-->
+			<span id="eventLocation">Brisbane Athletics Centre 23 Healthy Way Chermside 4034</span>
+			<span id="eventDesc">Build up and maintain your dive times. We start by doing a 30 second dive to warm up and then build up by 5 seconds each time until we can useually do a two minute dive by the end of the event. Take turns spotting and diving. Bring your own gear and see you there.</span>
+		</div>
+		
+		<!--Footer-->
+		<div id="footer">
+			JointSoftware 2015
+		</div>
+	</body>
+</html>

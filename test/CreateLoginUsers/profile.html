@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Profile</title>
+		<link type="text/css" rel="stylesheet" href="stylesheets/global.css"/>
+	</head>
+	<body>
+		<!--Main Header-->
+		<div id="header">
+		<h1>Australian Free Diving Association</h1>
+		</div>
+		
+		<!--Admin Menu-->
+		<div id="privliges">
+			<a href="#" class="button privligeButton">Activate Treasurer</a>
+			<a href="#" class="button privligeButton">Deactivate Event Manager</a>
+			<a href="#" class="button privligeButton">Deactivate Admin</a>
+		</div>
+
+		<!--General Menu-->
+			<div id="nav">
+				<a id='btnEvents' href="events.html" class="button">Events</a><br>
+				<a id='btnProfile' href="profile.html" class="button">Profile</a><br>
+				<a id='btnUsers' href="users.html" class="button">Users</a><br>
+				<a id='btnLogout' href="login.html" class="button">Logout</a><br>
+			</div>
+		
+		<!--Profile - We'll put this in a container-->
+		<img src="myProfilePhoto.dynamic" alt="Profile Photo" onclick="uploadPhoto()">
+		<form id="userDetails" action="/changeDetails" method="post">
+			<label for="name">
+				Name
+				<input name="name" type="text" value="Jack"><br/>
+			</label>
+			
+			<span id="userCredits">12</span>
+			
+			<label for="email">
+				Email
+				<input name="email" type="text" value="White"><br/>
+			</label>
+			
+			<label for="emergencyName">
+				Emergency Name
+				<input name="emergencyName" type="text" value="Peter"><br/>
+			</label>
+			
+			<label for="emergencyMobile">
+				Emergency Mobile
+				<input name="emergencyMobile" type="text" value="0485 596 745"><br/>
+			</label>
+			
+			<label for="password">
+				Password
+				<input name="password" type="password" value="open sesame"><br/>
+			</label>
+			
+			<!--only visisble to admin-->
+			<input id="isAdmin" type="checkbox" name="isAdmin">
+			<label for="isAdmin">Admin</label>
+			
+			<input id="isTreasurer" type="checkbox" name="isTreasurer">
+			<label for="isTreasurer">Treasurer</label>
+			
+			<input id="isEventManager" type="checkbox" name="isEventManager">
+			<label for="isEventManager">Event Manager</label>
+			
+			<input type="submit" value="Save Details">
+		</form>
+		<a href="/deleteUser" class="button">Delete User</a>
+		
+		<!--Footer-->
+		<div id="footer">
+			JointSoftware 2015
+		</div>
+	</body>
+</html>
