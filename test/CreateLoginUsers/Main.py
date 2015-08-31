@@ -54,7 +54,20 @@ class Users(webapp2.RequestHandler):
 		}
 		template = JINJA_ENVIRONMENT.get_template('users.html')
 		self.response.write(template.render(template_values))
-
+class changeUserDetails(webapp2.RequestHandler):
+    def post(self):
+		ID = long(self.request.get('userId'))
+		a = Account.get_by_id(ID)
+		a.name =self.request.get('name')
+		a.Email =self.request.get('email')
+		a.Emergency_Contact =self.request.get('emergencyName')
+		a.Emergency_Phone =self.request.get('emergencyMobile')
+		a.Password =self.request.get('password')
+		#a.Admin = self.request.get('isAdmin')
+		#a.Treasurer = self.request.get('isTreasurer')
+		#a.EventManager = self.request.get('isEventManager')
+		a.put()
+		self.redirect('/users')
 
 class CreateUser(webapp2.RequestHandler):
     def get(self):
@@ -76,8 +89,12 @@ class CreateUser(webapp2.RequestHandler):
 		self.redirect('/users')
 
 class profile(webapp2.RequestHandler):
-    def get(self):
-		template_values = {}
+      def get(self): 
+		ID = long(self.request.get('userId'))
+		user = Account.get_by_id(ID)
+		template_values = {
+		'user' : user,
+		}
 		template = JINJA_ENVIRONMENT.get_template('profile.html')
 		self.response.write(template.render(template_values))	
 		
@@ -111,6 +128,7 @@ app = webapp2.WSGIApplication([
     ('/', MainPage),
 	('/users',Users),
 	('/createUser', CreateUser),
+	('/changeUserDetails', changeUserDetails),
 	('/profile', profile),
 	('/events',EventsMain),
 	('/createevent',CreateEvent),
