@@ -5,25 +5,7 @@
 		<link type="text/css" rel="stylesheet" href="stylesheets/global.css"/>
 	</head>
 	<body>
-			<!--Main Header-->
-			<div id="header">
-			<h1>Australian Free Diving Association</h1>
-			</div>
-			
-			<!--Admin Menu-->
-			<div id="privliges">
-				<a href="#" class="button privligeButton">Activate Treasurer</a>
-				<a href="#" class="button privligeButton">Deactivate Event Manager</a>
-				<a href="#" class="button privligeButton">Deactivate Admin</a>
-			</div>
-
-			<!--General Menu-->
-			<div id="nav">
-				<a id='btnEvents' href="events.html" class="button">Events</a><br>
-				<a id='btnProfile' href="profile.html" class="button">Profile</a><br>
-				<a id='btnUsers' href="users.html" class="button">Users</a><br>
-				<a id='btnLogout' href="login.html" class="button">Logout</a><br>
-			</div>
+		{%include "MainHeader.html"%}
 		
 		<!--Create Event - We'll put this in a container-->
 		<form id="eventDetails" action="/createevent" method="post">

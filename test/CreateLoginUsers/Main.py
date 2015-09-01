@@ -34,17 +34,22 @@ class Event(ndb.Model):
 	Time = ndb.TimeProperty(auto_now_add=True)
 	Duration = ndb.IntegerProperty()
 	Location = ndb.StringProperty()
+
+	#Sesion Creation then redirect to events page		
+class Login(webapp2.RequestHandler):
+    def post(self):
+		self.redirect('/events')
+		
+#Sesion deletion then redirect to login page		
+class Logout(webapp2.RequestHandler):
+    def get(self):
+		self.redirect('/')
 	
 class MainPage(webapp2.RequestHandler):
     def get(self):
 		template_values = {}
 		template = JINJA_ENVIRONMENT.get_template('login.html')
 		self.response.write(template.render(template_values))
-
-#Sesion Creation then redirect to events page		
-class Login(webapp2.RequestHandler):
-    def post(self):
-		self.redirect('/events')
 
 class Users(webapp2.RequestHandler):
     def get(self):
@@ -133,6 +138,7 @@ app = webapp2.WSGIApplication([
 	('/events',EventsMain),
 	('/createevent',CreateEvent),
 	('/eventdetails',EventDetails),
-	('/login',Login)
+	('/login',Login),
+	('/logout',Logout)
 	
 ], debug=True)
