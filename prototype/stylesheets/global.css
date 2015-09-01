@@ -87,7 +87,19 @@
 	margin-right: auto;
 	overflow: nowrap;
 }
-	
+/* PROFILE PAGE START */
+#profileContainer table {
+	position: center;
+	margin-left: auto;
+	margin-right: auto;
+	overflow: nowrap;
+}
+
+#profileContainer table th {
+	text-align: right;
+	padding: 10px;
+}
+/* PROFILE PAGE END */	
 #login {
 	text-align: center;
 	padding: 40px;
@@ -104,10 +116,15 @@
 }
 /* Content Containers FINISH */	
 
+/* Footer Version 1 */
 #footer {
 	background-color:#A1C4D8;
 	color:white;
 	clear:both;
+	width:100%;
 	text-align:center;
-	padding:5px;	 	 
+	padding: 5px;
+	position:fixed;
+	bottom:0px;
 }
+
