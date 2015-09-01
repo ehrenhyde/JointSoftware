@@ -25,26 +25,23 @@
 				<a id='btnLogout' href="login.html" class="button">Logout</a><br>
 			</div>
 		
-		<!--Attendees - We'll put this in a container-->
-		<span id="printAttendees" class="button" onclick="printAttendees()">Print Attendees</span>
-		<h2>Attendees</h2>
-		<ul>
-			<li class="attendeeItem">
-				Jack White
-			</li>
-			<li class="attendeeItem">
-				Peter Jones
-			</li>
-			<li class="attendeeItem">
-				Sally Parker
-			</li>
-			<li class="attendeeItem">
-				Jane Brown
-			</li>
-			<li class="attendeeItem">
-				Thomas Smith
-			</li>
-		</ul>
+		<!--Attendees-->
+		<div id="container">
+			<div id="attendeeContainer">
+				<center><h2>Attendees</h2></center>
+				<ul>
+					<li class="attendeeItem"> Jack White </li>
+					<li class="attendeeItem"> Peter Jones </li>
+					<li class="attendeeItem"> Sally Parker </li>					
+					<li class="attendeeItem"> Jane Brown </li>
+					<li class="attendeeItem"> Thomas Smith </li>				
+				</ul>
+				</br>
+				<input type="button" value="Print Attendees" onclick="printAttendees()">
+			</div>
+		</div>
+		
+		
 		
 		<!--Footer-->
 		<div id="footer">

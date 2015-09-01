@@ -99,7 +99,20 @@
 	text-align: right;
 	padding: 10px;
 }
-/* PROFILE PAGE END */	
+/* PROFILE PAGE END */
+
+
+/* ATTENDEE PAGE */
+#attendeeContainer{
+	float: center;
+	text-align:center;
+}
+
+#attendeeContainer ul{
+	display:inline-block;	
+}	
+/* ATTENDEE PAGE END*/
+
 #login {
 	text-align: center;
 	padding: 40px;
