@@ -5,7 +5,24 @@
 		<link type="text/css" rel="stylesheet" href="stylesheets/global.css"/>
 	</head>
 	<body>
-			{%include "MainHeader.html"%}
+			<!--Main Header-->
+			<div id="header">
+			<h1>Australian Free Diving Association</h1>
+			</div>
+			
+			<!--Admin Menu-->
+			<div id="privliges">
+				<a href="#" class="button privligeButton">Activate Treasurer</a>
+				<a href="#" class="button privligeButton">Deactivate Event Manager</a>
+				<a href="#" class="button privligeButton">Deactivate Admin</a>
+			</div>
+
+			<!--General Menu-->
+			<div id="nav">
+				<a id='btnEvents' href="events.html" class="button">Events</a><br>
+				<a id='btnProfile' href="profile.html" class="button">Profile</a><br>
+				<a id='btnUsers' href="users.html" class="button">Users</a><br>
+			</div>
 			
 		<!-- Create User - We'll make a div for this-->	
 		<img src="theiProfilePhoto.dynamic" alt="Profile Photo" onclick="uploadPhoto()">
