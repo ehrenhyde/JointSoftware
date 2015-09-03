@@ -5,25 +5,11 @@
 		<link type="text/css" rel="stylesheet" href="stylesheets/global.css"/>
 	</head>
 	<body>
-		<!--Main Header-->
-		<div id="header">
-		<h1>Australian Free Diving Association</h1>
-		</div>
+		{% include 'includes/mainHeader.html' %}
 		
-		<!--Admin Menu-->
-		<div id="privliges">
-			<a href="#" class="button privligeButton">Activate Treasurer</a>
-			<a href="#" class="button privligeButton">Deactivate Event Manager</a>
-			<a href="#" class="button privligeButton">Deactivate Admin</a>
-		</div>
+		{% include 'includes/adminMenu.html' %}
 
-		<!--General Menu-->
-			<div id="nav">
-				<a id='btnEvents' href="events.html" class="button">Events</a><br>
-				<a id='btnProfile' href="profile.html" class="button">Profile</a><br>
-				<a id='btnUsers' href="users.html" class="button">Users</a><br>
-				<a id='btnLogout' href="login.html" class="button">Logout</a><br>
-			</div>
+		{% include 'includes/generalMenu.html' %}	
 		
 		<!--Profile - We'll put this in a container-->
 		<img src="myProfilePhoto.dynamic" alt="Profile Photo" onclick="uploadPhoto()">
@@ -72,9 +58,6 @@
 		<a href="/deleteUser" class="button">Delete User</a>
 		<ul id="usersList"> 
 
-		 <!--Footer-->
-		<div id="footer">
-			JointSoftware 2015 
-		</div>
+		
 	</body>
 </html>

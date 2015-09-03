@@ -5,25 +5,11 @@
 		<link type="text/css" rel="stylesheet" href="stylesheets/global.css"/>
 	</head>
 	<body>
-		<!--Main Header-->
-		<div id="header">
-		<h1>Australian Free Diving Association</h1>
-		</div>
-			
-		<!--Admin Menu-->
-		<div id="privliges">
-			<a href="#" class="button privligeButton">Activate Treasurer</a>
-			<a href="#" class="button privligeButton">Deactivate Event Manager</a>
-			<a href="#" class="button privligeButton">Deactivate Admin</a>
-		</div>
+		{% include 'includes/mainHeader.html' %}
+		
+		{% include 'includes/adminMenu.html' %}
 
-		<!--General Menu-->
-			<div id="nav">
-				<a id='btnEvents' href="events.html" class="button">Events</a><br>
-				<a id='btnProfile' href="profile.html" class="button">Profile</a><br>
-				<a id='btnUsers' href="users.html" class="button">Users</a><br>
-				<a id='btnLogout' href="login.html" class="button">Logout</a><br>
-			</div>
+		{% include 'includes/generalMenu.html' %}	
 			
 		<!--Create Event - We'll put this in a container-->
 		<span id="eventName">Fortnightly Endurance Training</span>
@@ -38,9 +24,6 @@
 			<span id="eventDesc">Build up and maintain your dive times. We start by doing a 30 second dive to warm up and then build up by 5 seconds each time until we can useually do a two minute dive by the end of the event. Take turns spotting and diving. Bring your own gear and see you there.</span>
 		</div>
 		
-		<!--Footer-->
-		<div id="footer">
-			JointSoftware 2015
-		</div>
+		{% include 'includes/footer.html' %}
 	</body>
 </html>

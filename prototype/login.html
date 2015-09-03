@@ -5,12 +5,8 @@
 		<link type="text/css" rel="stylesheet" href="stylesheets/global.css"/>
 	</head>
 		<body>
-			<!--Main Header-->
-			<div id="header">
-			<h1>Australian Free Diving Association</h1>
-			<h6>V 2.0.1.3</h6>
-			</div>
-			
+			{% include 'includes/mainHeader.html' %}
+				
 			<!--Login Box (needs some work)-->
 			<div id="login">	
 					<!--<form action="/login" method="post">-->
@@ -31,8 +27,5 @@
 			</div>
 		</body>
 		
-		<!--Footer-->
-		<div id="footer">
-			JointSoftware 2015
-		</div>
+		{% include 'includes/footer.html' %}
 </html>
