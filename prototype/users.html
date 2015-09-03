@@ -18,52 +18,28 @@
 		</div>
 
 		<!--General Menu-->
-			<div id="nav">
-				<a id='btnEvents' href="events.html" class="button">Events</a><br>
-				<a id='btnProfile' href="profile.html" class="button">Profile</a><br>
-				<a id='btnUsers' href="users.html" class="button">Users</a><br>
-				<a id='btnLogout' href="login.html" class="button">Logout</a><br>
-			</div>
+		<div id="nav">
+			<a id='btnEvents' href="events.html" class="button">Events</a><br>
+			<a id='btnProfile' href="profile.html" class="button">Profile</a><br>
+			<a id='btnUsers' href="users.html" class="button">Users</a><br>
+		</div>
 		
 		<!--Users - We'll put this in a container-->		
-		<a id='createUser' href="/createUser" class="button"></a>
-		<ul id="usersList">
-			<li class="userItem">
-				<a href="/profile?userId=3" class="userItemName">Jack White</a>
-				<span>Credits 2</span>
+		
+		<ul id="usersList"> 
+		{% for account in Accounts %}		
+         <li class="userItem">
+				<a href="/profile?userId={{account.key. integer_id()}}" class="userItemName">{{ account.name }}</a>
+				<span>{{ account.Email }} Credits: {{ account.Credits }} Add:</span>
 				<!--these are not hyperlinks because we will use AJAX (javascript)to send the webservice-->
 				<span class="add1Credit" onclick="addCredits(3,1)">+1</span>
 				<span class="add1Credit" onclick="addCredits(3,10)">+10</span>
 				<span class="take1Credit" onclick="takeCredits(3,1)">-1</span>
 			</li>
-			<li class="userItem">
-				<a href="/profile?userId=4" class="userItemName">Peter Jones</a>
-				<span>Credits 4</span>
-				<span class="add1Credit" onclick="addCredits(4,1)">+1</span>
-				<span class="add1Credit" onclick="addCredits(4,10)">+10</span>
-				<span class="take1Credit" onclick="takeCredits(4,1)">-1</span>
-			</li>
-			<li class="userItem">
-				<a href="/profile?userId=7" class="userItemName">Sally Parker</a>
-				<span>Credits -2</span>
-				<span class="add1Credit" onclick="addCredits(7,1)">+1</span>
-				<span class="add1Credit" onclick="addCredits(7,10)">+10</span>
-				<span class="take1Credit" onclick="takeCredits(7,1)">-1</span>
-			</li>
-			<li class="userItem">
-				<a href="/profile?userId=8" class="userItemName">Jane Brown</a>
-				<span>Credits 6</span>
-				<span class="add1Credit" onclick="addCredits(8,1)">+1</span>
-				<span class="add1Credit" onclick="addCredits(8,10)">+10</span>
-				<span class="take1Credit" onclick="takeCredits(8,1)">-1</span>
-			</li>
-			<li class="userItem">
-				<a href="/profile?userId=9" class="userItemName">Thomas Smith</a>
-				<span>Credits -6</span>
-				<span class="add1Credit" onclick="addCredits(9,1)">+1</span>
-				<span class="add1Credit" onclick="addCredits(9,10)">+10</span>
-				<span class="take1Credit" onclick="takeCredits(9,1)">-1</span>
-			</li>
+		 {% endfor %}
+		 <li>
+			<a id='createUser' href="/createUser" class="button">Add New Member</a>
+		</li>
 		</ul>
 		
 		<!--Footer-->
