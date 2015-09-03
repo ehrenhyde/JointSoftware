@@ -213,10 +213,17 @@ class profile(webapp2.RequestHandler):
             nextPath = '='.join(('/login?continue',self.request.url))
             self.redirect(nextPath)
         else:
+            targetUser = None
+            
+            #if the page was passed a userId look at that profile instead
             #Todo
             #If user.Id == ID (user looks at self) or user.isAdmin
-	    ID = long(self.request.get('userId'))
-	    user = Account.get_by_id(ID)
+            if isinstance(self.request.get('userId'),(int, long)):
+                targetUserId = long(self.request.get('userId'))
+                targetUser = Account.get_by_id(ID)
+            #else the logged in user
+            else:
+                targetUser = user
             template_values = {
                 'user' : user,
 	    }
