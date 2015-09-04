@@ -8,6 +8,8 @@ threadsafe: true
 handlers:
 - url: /stylesheets
   static_dir: stylesheets
+- url: /js
+  static_dir: global
 - url: /.*
   script: Main.app
 # [END handlers]
