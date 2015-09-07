@@ -11,6 +11,7 @@
 		{% include 'includes/adminMenu.html' %}
 
 		{% include 'includes/generalMenu.html' %}	
+
 			
 			<!-- Events Container (needs some work)-->
 			<div id="container">
@@ -21,58 +22,28 @@
 							<th>Event</th>
 							<th>Time</th>
 							<th>Location</th>
-							<th>Description</th>
 							<th colspan="2">Attendance</th>
 
 						</tr>
+						
+						
+						
+						
+		{% for Event in Events %}		
 						<tr>
-								<td><span class="eventItemName">Fortnightly Endurance Training</span></td>
-								<td><span class="eventItemDatetime">03/08/2015 17:00</span></td>
-								<td><span class="eventItemLocation">Brisbane Athletics Centre</span></td>
-								<td><span class="eventItemDesc">Build up and maintain your dive times</span></td>
-								<td><input type="button" value="Attend" onclick="window.location.href='#'" /></td>
-								<td><input type="button" value="Maybe" onclick="window.location.href='#'" /></td>
+				
+								<td><span class="eventItemName">{{Event.Name}}</span></td>
+								<td><span class="eventItemDatetime">{{Event.Date}} {{Event.Time}}</span></td>
+								<td><span class="eventItemLocation">{{Event.Location}}</span></td>
+								<td><input type="button" value="Attend" onclick="window.location.href='{{Event.key.integer_id()}}'" /></td>
+								<td><input type="button" value="Maybe" onclick="window.location.href='{{Event.key.integer_id()}}'" /></td>
 								<!--<a href="/registerAttendance?status=decline&fromPage=events" class="registerDecline">Register Decline</a>-->
 						</tr>
+				
+				
+		 {% endfor %}
 						<tr>
-								<td><span class="eventItemName">Weight Recovery Challenge</span></td>
-								<td><span class="eventItemDatetime">11/08/2015 19:00</span></td>
-								<td><span class="eventItemLocation">Blue Horizon Pool</span></td>
-								<td><span class="eventItemDesc">How much weight can you carry up out of the pool?</span></td>
-								<td><input type="button" value="Attend" onclick="window.location.href='#'" /></td>
-								<td><input type="button" value="Maybe" onclick="window.location.href='#'" /></td>
-								<!--<a href="/registerAttendance?status=decline&fromPage=events" class="registerDecline">Register Decline</a>-->
-						</tr>
-						<tr>
-								<td><span class="eventItemName">Fortnightly Endurance Training</span></td>
-								<td><span class="eventItemDatetime">17/08/2015 17:00</span></td>
-								<td><span class="eventItemLocation">Brisbane Athletics Centre</span></td>
-								<td><span class="eventItemDesc">Build up and maintain your dive times</span></td>
-								<td><input type="button" value="Attend" onclick="window.location.href='#'" /></td>
-								<td><input type="button" value="Maybe" onclick="window.location.href='#'" /></td>
-								<!--<a href="/registerAttendance?status=decline&fromPage=events" class="registerDecline">Register Decline</a>-->
-							</li>
-						</tr>
-						<tr>
-								<td><span class="eventItemName">Morning Casual Laps</span></td>
-								<td><span class="eventItemDatetime">31/08/2015 8:00</span></td>
-								<td><span class="eventItemLocation">QUT Gardens Point Gym</span></td>
-								<td><span class="eventItemDesc">Socialise and swim laps</span></td>
-								<td><input type="button" value="Attend" onclick="window.location.href='#'" /></td>
-								<td><input type="button" value="Maybe" onclick="window.location.href='#'" /></td>
-								<!--<a href="/registerAttendance?status=decline&fromPage=events" class="registerDecline">Register Decline</a>-->
-						</tr>
-						<tr>
-								<td><span class="eventItemName">BBQ and Pool Party</span></td>
-								<td><span class="eventItemDatetime">13/09/2015 11:00</span></td>
-								<td><span class="eventItemLocation">Blue Horizon Pool</span></td>
-								<td><span class="eventItemDesc">Bring your swimmers and saussages</span></td>
-								<td><input type="button" value="Attend" onclick="window.location.href='#'" /></td>
-								<td><input type="button" value="Maybe" onclick="window.location.href='#'" /></td>
-								<!--<a href="/registerAttendance?status=decline&fromPage=events" class="registerDecline">Register Decline</a>-->
-						</tr>
-						<tr>
-								<td><span class="eventItemName">Fortnightly Endurance Training</span></td>
+								<td><span class="eventItemName">Fake Endurance Training</span></td>
 								<td><span class="eventItemDatetime">14/09/2015 17:00</span></td>
 								<td><span class="eventItemLocation">Brisbane Athletics Centre</span></td>
 								<td><span class="eventItemDesc">Build up and maintain your dive times</span></td>

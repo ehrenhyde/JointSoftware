@@ -95,9 +95,14 @@ class Session:
             return None
         if tmp.Password != p: return None
         return tmp
+    
+class Attendiees(ndb.Model):
+        EventID = ndb.IntegerProperty()
+        UserID = ndb.IntegerProperty()
+        AttendingStatus = ndb.StringProperty()
 
 class Account(ndb.Model):
-	name = ndb.StringProperty()
+	Name = ndb.StringProperty()
 	Email = ndb.StringProperty()
 	Emergency_Contact = ndb.StringProperty()
 	Emergency_Phone= ndb.StringProperty()
@@ -110,7 +115,7 @@ class Account(ndb.Model):
 	session_id = ndb.StringProperty()
 
 class Event(ndb.Model):
-	name = ndb.StringProperty()
+	Name = ndb.StringProperty()
 	Description  = ndb.StringProperty()
 	Date= ndb.DateProperty(auto_now_add=True)
 	Time = ndb.TimeProperty(auto_now_add=True)
@@ -156,7 +161,7 @@ class Users(webapp2.RequestHandler):
             nextPath = '='.join(('/login?continue',self.request.url))
             self.redirect(nextPath)
         else:
-            accounts = Account.query().order(Account.name)
+            accounts = Account.query().order(Account.Name)
             template_values = {
                 'Accounts' : accounts,
             }
@@ -169,14 +174,23 @@ class changeUserDetails(webapp2.RequestHandler):
         #Todo add security that checks logged in user is admin
 	ID = long(self.request.get('userId'))
 	a = Account.get_by_id(ID)
-	a.name =self.request.get('name')
+	a.Name =self.request.get('name')
 	a.Email =self.request.get('email')
 	a.Emergency_Contact =self.request.get('emergencyName')
 	a.Emergency_Phone =self.request.get('emergencyMobile')
 	a.Password =self.request.get('password')
-		#a.Admin = self.request.get('isAdmin')
-		#a.Treasurer = self.request.get('isTreasurer')
-		#a.EventManager = self.request.get('isEventManager')
+##	if 'isAdmin' in self.request.POST:
+##            a.Admin = True
+##        else:
+##            a.Admin = False      
+##        if 'isTreasurer' in self.request.POST:
+##            a.Treasurer = True
+##        else:
+##            a.Treasurer = False
+##        if 'isEventManager' in self.request.POST:
+##            a.EventManager = True
+##        else:
+##            a.EventManager = False
 	a.put()
 	self.redirect('/users')
 
@@ -195,7 +209,7 @@ class CreateUser(webapp2.RequestHandler):
     def post(self):
         #Todo check login as extra security measure
 	a = Account()
-	a.name =self.request.get('name')
+	a.Name =self.request.get('name')
 	a.Email =self.request.get('email')
 	a.Emergency_Contact =self.request.get('emergencyName')
 	a.Emergency_Phone =self.request.get('emergencyMobile')
@@ -237,7 +251,10 @@ class EventsMain(webapp2.RequestHandler):
             nextPath = '='.join(('/login?continue',self.request.url))
             self.redirect(nextPath)
         else:
-	    template_values = {}
+            Events = Event.query()
+	    template_values = {
+                'Events' : Events,
+                }
 	    template = JINJA_ENVIRONMENT.get_template('events.html')
             self.response.write(template.render(template_values))	
 		
@@ -255,7 +272,7 @@ class CreateEvent(webapp2.RequestHandler):
     def post(self):
             #todo add security for create event( user is event manager)
 	a = Event()
-	a.name =self.request.get('name')
+	a.Name =self.request.get('name')
 	a.Description =self.request.get('desc')
 	a.Location = self.request.get('location')
 	a.put()
@@ -271,7 +288,16 @@ class EventDetails(webapp2.RequestHandler):
 	    template_values = {}
 	    template = JINJA_ENVIRONMENT.get_template('eventDetails.html')
 	    self.response.write(template.render(template_values))
-		
+
+class AddAttendiee(webapp2.RequestHandler):
+    def get(self):
+        a = Attendiees()
+        a.EventID = 5715999101812736
+        a.UserID = 5659313586569216
+        a.AttendingStatus = 'attending'
+	a.put()
+	self.redirect('/events')
+
 app = webapp2.WSGIApplication([
     ('/', MainPage),
 	('/users',Users),
@@ -281,6 +307,6 @@ app = webapp2.WSGIApplication([
 	('/events',EventsMain),
 	('/createevent',CreateEvent),
 	('/eventdetails',EventDetails),
+        ('/AddAttendiee',AddAttendiee),
 	('/login',Login)
-	
 ], debug=True)
