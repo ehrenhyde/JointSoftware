@@ -16,6 +16,7 @@ class MainHandler(webapp2.RequestHandler):
         }
         template = JINJA_ENVIRONMENT.get_template('home.html')
         self.response.write(template.render(variables))
+        
 class MonsterHandler(webapp2.RequestHandler):
     def post(self):
         data = json.loads(self.request.body)

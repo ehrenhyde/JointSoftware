@@ -5,10 +5,10 @@ function callWebservice(){
 		type: "POST",
 			url: "/monster",
             dataType: 'json',
-            data: JSON.stringify({ "name": "Fred"})
+            data: JSON.stringify({ "name": ""})
 	})
 	.done(function( data ) {
 		console.log('returned');
-		alert("Dear " + data.favouriteFood + "\nPrepare to be chewed by a " + data.colour + " monseter with " + data.teeth.num + " " + data.teeth.size + " teeth");
+		alert("Dear " + data.favouriteFood + "\nPrepare to be chewed by a " + data.colour + " monster with " + data.teeth.num + " " + data.teeth.size + " teeth");
 	});
 }
