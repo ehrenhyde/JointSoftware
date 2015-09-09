@@ -3,6 +3,7 @@
 	<head>
 		<title>Events</title>
 		<link type="text/css" rel="stylesheet" href="stylesheets/global.css"/>
+		{% include 'includes/jq_onload.js' %}
 	</head>
 	<body>
 		
@@ -42,15 +43,7 @@
 				
 				
 		 {% endfor %}
-						<tr>
-								<td><span class="eventItemName">Fake Endurance Training</span></td>
-								<td><span class="eventItemDatetime">14/09/2015 17:00</span></td>
-								<td><span class="eventItemLocation">Brisbane Athletics Centre</span></td>
-								<td><span class="eventItemDesc">Build up and maintain your dive times</span></td>
-								<td><input type="button" value="Attend" onclick="window.location.href='#'" /></td>
-								<td><input type="button" value="Maybe" onclick="window.location.href='#'" /></td>
-								<!--<a href="/registerAttendance?status=decline&fromPage=events" class="registerDecline">Register Decline</a>-->
-						</tr>
+						
 				</table>
 				<br>
 				<input type="button" value="Create Event" onclick="window.location.href='/createevent'" /><!--only visible to some accounts-->

@@ -33,8 +33,27 @@ class MonsterHandler(webapp2.RequestHandler):
         )
         #https://docs.python.org/2/library/json.html
         self.response.out.write(jsonRetVal)
+	
+class ToggleAttendance(webapp2.RequestHandler):
+	def post(self):
+		data = json.loads(self.request.body)
+		status = data['status']
+		eventId = data['eventId']
+		
+		#Update server with values
+		
+		success = True
+		
+		jsonRetVal = json.dumps(
+            {
+                'success':success          
+            }
+        )
+		
+		self.response.write(jsonRetVal)
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
-    ('/monster',MonsterHandler)
+    ('/monster',MonsterHandler),
+	('/toggleAttendance',ToggleAttendance)
 ], debug=True)

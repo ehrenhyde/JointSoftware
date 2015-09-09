@@ -112,6 +112,9 @@ class Account(ndb.Model):
 	Admin= ndb.BooleanProperty()
 	Treasurer = ndb.BooleanProperty()
 	EventManager = ndb.BooleanProperty()
+	AdminActive = ndb.BooleanProperty()
+	TreasurerActive = ndb.BooleanProperty()
+	EventManagerActive = ndb.BooleanProperty()
 	session_id = ndb.StringProperty()
 
 class Event(ndb.Model):
@@ -127,6 +130,12 @@ class MainPage(webapp2.RequestHandler):
         template_values = {}
         template = JINJA_ENVIRONMENT.get_template('login.html')
 	self.response.write(template.render(template_values))
+
+class TogglePrivilege(webapp2.RequestHandler):
+     def get(self):
+        url = self.request.url
+        
+        self.redirect(str(self.request.get('url')))
 
 #Sesion Creation then redirect to events page		
 class Login(webapp2.RequestHandler):
@@ -164,6 +173,7 @@ class Users(webapp2.RequestHandler):
             accounts = Account.query().order(Account.Name)
             template_values = {
                 'Accounts' : accounts,
+                'user':user
             }
             template = JINJA_ENVIRONMENT.get_template('users.html')
             self.response.write(template.render(template_values))
@@ -217,6 +227,9 @@ class CreateUser(webapp2.RequestHandler):
 	a.Admin = False
 	a.Treasurer = False
 	a.EventManager = False
+	a.AdminActive = False
+	a.TreasurerActive = False
+	a.EventManagerActive = False
 	a.put()
 	self.redirect('/users')
 
@@ -254,6 +267,7 @@ class EventsMain(webapp2.RequestHandler):
             Events = Event.query()
 	    template_values = {
                 'Events' : Events,
+                'user': user
                 }
 	    template = JINJA_ENVIRONMENT.get_template('events.html')
             self.response.write(template.render(template_values))	
@@ -308,5 +322,6 @@ app = webapp2.WSGIApplication([
 	('/createevent',CreateEvent),
 	('/eventdetails',EventDetails),
         ('/AddAttendiee',AddAttendiee),
-	('/login',Login)
+	('/login',Login),
+        ('/togglePrivilege',TogglePrivilege)
 ], debug=True)
