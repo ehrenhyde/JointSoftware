@@ -4,6 +4,7 @@
 		<title>Events</title>
 		<link type="text/css" rel="stylesheet" href="stylesheets/global.css"/>
 		{% include 'includes/jq_onload.js' %}
+		<script src="js/webservice.js"></script>
 	</head>
 	<body>
 		
@@ -36,8 +37,8 @@
 								<td><span class="eventItemName">{{Event.Name}}</span></td>
 								<td><span class="eventItemDatetime">{{Event.Date}} {{Event.Time}}</span></td>
 								<td><span class="eventItemLocation">{{Event.Location}}</span></td>
-								<td><input type="button" value="Attend" onclick="window.location.href='{{Event.key.integer_id()}}'" /></td>
-								<td><input type="button" value="Maybe" onclick="window.location.href='{{Event.key.integer_id()}}'" /></td>
+								<td><input ID= 'Attendance' type="button" value="Attending" onclick="sendAttending('Attending',{{Event.key.integer_id()}},{{user.key.integer_id()}})" /></td>
+								<td><input ID= 'Attendance2' type="button" value="Maybe" onclick="sendAttending('Maybe',{{Event.key.integer_id()}},{{user.key.integer_id()}})" /></td>
 								<!--<a href="/registerAttendance?status=decline&fromPage=events" class="registerDecline">Register Decline</a>-->
 						</tr>
 				

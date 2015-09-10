@@ -1,14 +1,26 @@
-function callWebservice(){
+function sendAttending(status,eventId,userId){
 	console.log("calling webservice");
-	
+	console.log('status = ' +status);
+	console.log('eventId = ' + eventId);	
+	console.log('userId = ' + userId);
 	$.ajax({
 		type: "POST",
-			url: "/monster",
+			url: "/toggleAttendance",
             dataType: 'json',
-            data: JSON.stringify({ "name": "Fred"})
+            data: JSON.stringify({
+				"status": status,
+				"eventId":eventId,
+				"userId" : userId
+			})
 	})
 	.done(function( data ) {
 		console.log('returned');
-		alert("Dear " + data.favouriteFood + "\nPrepare to be chewed by a " + data.colour + " monseter with " + data.teeth.num + " " + data.teeth.size + " teeth");
+		if (data.success == true){
+			console.log('was a success');
+		}else{
+			console.log('fail');
+			console.log(data.success);
+		}
+		
 	});
 }

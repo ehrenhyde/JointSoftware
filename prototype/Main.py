@@ -302,15 +302,27 @@ class EventDetails(webapp2.RequestHandler):
 	    template_values = {}
 	    template = JINJA_ENVIRONMENT.get_template('eventDetails.html')
 	    self.response.write(template.render(template_values))
+       
+class ToggleAttendance(webapp2.RequestHandler):
+    def post(self):
+        data = json.loads(self.request.body)
+        status = data['status']
+        eventId = data['eventId']
+        userId = data['userId']
+        #Update server with values
+##        a = Attendiees()
+##        a.EventID = eventId
+##        a.UserID = userId
+##        a.AttendingStatus = status
+##	a.put()
 
-class AddAttendiee(webapp2.RequestHandler):
-    def get(self):
-        a = Attendiees()
-        a.EventID = 5715999101812736
-        a.UserID = 5659313586569216
-        a.AttendingStatus = 'attending'
-	a.put()
-	self.redirect('/events')
+        success = True    
+        jsonRetVal = json.dumps(
+            {
+                'success':success          
+            }
+        )
+        self.response.write(jsonRetVal)
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
@@ -321,7 +333,7 @@ app = webapp2.WSGIApplication([
 	('/events',EventsMain),
 	('/createevent',CreateEvent),
 	('/eventdetails',EventDetails),
-        ('/AddAttendiee',AddAttendiee),
 	('/login',Login),
+        ('/toggleAttendance',ToggleAttendance),
         ('/togglePrivilege',TogglePrivilege)
 ], debug=True)
