@@ -8,6 +8,14 @@
 	<body>
 		{% include 'includes/mainHeader.html' %}
 			
+		{% if local_testing == True%}
+			<h2>Local Testing Mode enabled</h2>
+			<h6>To Disable change the global LOCAL_TESTING in Main.py</h6>
+			<a href='/events'>Bypass the Login</a>
+		{% else %}
+			<h1>Live Move</h1>
+		{% endif %}
+		
 		<!--Login Box (needs some work)-->
 		<div id="login">	
 				<!--<form action="/login" method="post">-->
@@ -22,7 +30,7 @@
 							<input name="Password" type="password">
 						</label>
 						<br><br>
-						<input type="submit" value="Login"> <input type="submit" value="Register">
+						<input type="submit" value="Login">
 				</form>
 			<!--<a href="/forgotPassword">Forgot Password?</a>-->
 		</div>

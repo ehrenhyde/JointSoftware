@@ -11,6 +11,7 @@ import jinja2
 import webapp2
 import json
 
+LOCAL_TESTING = False
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -34,8 +35,32 @@ class Session:
 
         self._sync_user(tmp)
 
+    def _generate_test_user(self):
+        newUser = Account.query(Account.Name == 'Test').get()
+        if not newUser:
+            newUser = Account()
+            newUser.Name = "Test"
+            newUser.Email = "test@email.com"
+            newUser.Emergency_Contact = "Superman"
+            newUser.Emergency_Phone= "04 5932 2343"
+            newUser.Password = "test"
+            newUser.Picture = None
+            newUser.Credits = 4
+            newUser.Admin= True
+            newUser.Treasurer = True
+            newUser.EventManager = True
+            newUser.put()
+	
+	return newUser
+
     def get_current_user(self):
         #Returns the currently logged in user or "None" if no session
+
+        #test environment
+        if LOCAL_TESTING:
+            #return dummy user
+            return self._generate_test_user()
+        
         return self._fetch_user_by_cookie()
 
     def grab_login(self,username,password):
@@ -125,15 +150,16 @@ class Event(ndb.Model):
 	
 class MainPage(webapp2.RequestHandler):
     def get(self):
-        template_values = {}
-        template = JINJA_ENVIRONMENT.get_template('login.html')
-	self.response.write(template.render(template_values))
+        self.redirect('/login')
 
 #Sesion Creation then redirect to events page		
 class Login(webapp2.RequestHandler):
     #provides a login form
     def get(self):
-        variables = {'callback_url':self.request.get('continue')} 
+        variables = {
+                        'callback_url':self.request.get('continue'),
+                        'local_testing': LOCAL_TESTING
+                    } 
         template = JINJA_ENVIRONMENT.get_template('login.html')
         self.response.write(template.render(variables))
         
@@ -204,7 +230,9 @@ class CreateUser(webapp2.RequestHandler):
             self.redirect(nextPath)
         else:
             #Todo check if user is admin else don't show
-	    template_values = {}
+	    template_values = {
+                'user':user
+            }
 	    template = JINJA_ENVIRONMENT.get_template('createUser.html')
 	    self.response.write(template.render(template_values))
 
@@ -234,14 +262,14 @@ class profile(webapp2.RequestHandler):
             #if the page was passed a userId look at that profile instead
             #Todo
             #If user.Id == ID (user looks at self) or user.isAdmin
-            if isinstance(self.request.get('userId'),(int, long)):
+            if self.request.get('userId'):
                 targetUserId = long(self.request.get('userId'))
-                targetUser = Account.get_by_id(ID)
+                targetUser = Account.get_by_id(targetUserId)
             #else the logged in user
             else:
                 targetUser = user
             template_values = {
-                'user' : user,
+                'user' : targetUser
 	    }
             template = JINJA_ENVIRONMENT.get_template('profile.html')
             self.response.write(template.render(template_values))	
@@ -290,7 +318,9 @@ class EventDetails(webapp2.RequestHandler):
             nextPath = '='.join(('/login?continue',self.request.url))
             self.redirect(nextPath)
         else:
-	    template_values = {}
+	    template_values = {
+                'user':user
+            }
 	    template = JINJA_ENVIRONMENT.get_template('eventDetails.html')
 	    self.response.write(template.render(template_values))
        

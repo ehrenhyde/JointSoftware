@@ -1,11 +1,18 @@
 var permissions = {
 	
+	getAdminActive: function(){
+		if (localStorage.adminActive !== "undefined"){
+			return (localStorage.adminActive == "true");
+		}else{
+			return false;
+		}
+	},
+	
 	applyToUI: function(speed){
 		
 		//admin
 		
-		var adminActive = (localStorage.adminActive == "true");
-		if (adminActive == true){
+		if (this.getAdminActive() == true){
 			console.log("showing");
 			$('[adminOnly]').show(speed);
 		}else{
@@ -13,7 +20,7 @@ var permissions = {
 			$('[adminOnly]').hide(speed);
 		}
 		
-		if (adminActive==true){
+		if (this.getAdminActive()==true){
 			$('#permissionButtonAdmin').text("Deactivate Admin");
 		}else{
 			$('#permissionButtonAdmin').text("Activate Admin");
@@ -23,14 +30,10 @@ var permissions = {
 	toggleAdminActive: function(){
 		console.log('toggleAdminActive');
 		
-		if (localStorage.adminActive !== "undefined"){
-			if (localStorage.adminActive == "false"){
-				localStorage.adminActive =  "true";
-			}else{
-				localStorage.adminActive = "false";
-			}
+		if (this.getAdminActive()== false){
+			localStorage.adminActive =  "true";
 		}else{
-			localStorage.adminActive = "true";
+			localStorage.adminActive = "false";
 		}
 		console.log(localStorage.adminActive);
 		
