@@ -1,25 +1,19 @@
 <!--Admin Menu-->
 <div id="privliges">
 	
-	<a  id='permissionButtonTreasurer' href="/togglePrivilege?type=treasurer" class="button privligeButton">
-	{% if user.TreasurerActive %}
-		Deactivate Treasurer
-	{% else %}
-		Activate Treasurer
+	{% if user.Treasurer %}
+		<a id='permissionButtonTreasurer' href="#" class="button privligeButton">
+			Activate Treasurer
+		</a>
 	{% endif %}
-	</a>
-	<a id='permissionButtonEventManager' href="/togglePrivilege?type=eventManager" class="button privligeButton">
-	{% if user.EventManagerActive %}
-		Deactivate Event Manager
-	{% else %}
-		Activate Event Manager
+	{% if user.EventManger %}
+		<a id='permissionButtonEventManager' href="#" class="button privligeButton">
+			Activate Event Manager
+		</a>
 	{% endif %}
-	</a>
-	<a id='permissionButtonAdmin' href="/togglePrivilege?type=admin" class="button privligeButton">
-	{% if user.AdminActive %}
-		Deactivate Admin
-	{% else %}
-		Activate Event Admin
+	{% if user.Admin %}
+		<a id='permissionButtonAdmin' href="#" class="button privligeButton" onclick="permissions.toggleAdminActive()">
+			Deactive Admin
+		</a>
 	{% endif %}
-	</a>
 </div>

@@ -63,14 +63,20 @@
 /* General Menu */
 #nav {
 	position: relative;
-	line-height:30px;
 	background-color:#EAEFF9;
 	height:400px;
 	width:20%;
 	max-width:150px;
 	float:left;
 	text-align: center;
-	}	
+    list-style-type: none;
+	margin:0px;
+	padding:0px;
+}
+
+.generalNavItem{
+	margin-top:6px;
+}
 /* Menus FINISH */	
 	
 /* Content Containers START*/	

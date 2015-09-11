@@ -9,6 +9,7 @@ from google.appengine.api import memcache
 
 import jinja2
 import webapp2
+import json
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -112,9 +113,6 @@ class Account(ndb.Model):
 	Admin= ndb.BooleanProperty()
 	Treasurer = ndb.BooleanProperty()
 	EventManager = ndb.BooleanProperty()
-	AdminActive = ndb.BooleanProperty()
-	TreasurerActive = ndb.BooleanProperty()
-	EventManagerActive = ndb.BooleanProperty()
 	session_id = ndb.StringProperty()
 
 class Event(ndb.Model):
@@ -130,12 +128,6 @@ class MainPage(webapp2.RequestHandler):
         template_values = {}
         template = JINJA_ENVIRONMENT.get_template('login.html')
 	self.response.write(template.render(template_values))
-
-class TogglePrivilege(webapp2.RequestHandler):
-     def get(self):
-        url = self.request.url
-        
-        self.redirect(str(self.request.get('url')))
 
 #Sesion Creation then redirect to events page		
 class Login(webapp2.RequestHandler):
@@ -227,9 +219,6 @@ class CreateUser(webapp2.RequestHandler):
 	a.Admin = False
 	a.Treasurer = False
 	a.EventManager = False
-	a.AdminActive = False
-	a.TreasurerActive = False
-	a.EventManagerActive = False
 	a.put()
 	self.redirect('/users')
 
@@ -279,7 +268,9 @@ class CreateEvent(webapp2.RequestHandler):
             nextPath = '='.join(('/login?continue',self.request.url))
             self.redirect(nextPath)
         else:
-	    template_values = {}
+	    template_values = {
+                'user':user
+            }
             template = JINJA_ENVIRONMENT.get_template('createEvent.html')
 	    self.response.write(template.render(template_values))			
 		
@@ -334,6 +325,5 @@ app = webapp2.WSGIApplication([
 	('/createevent',CreateEvent),
 	('/eventdetails',EventDetails),
 	('/login',Login),
-        ('/toggleAttendance',ToggleAttendance),
-        ('/togglePrivilege',TogglePrivilege)
+        ('/toggleAttendance',ToggleAttendance)
 ], debug=True)

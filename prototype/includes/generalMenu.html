@@ -1,9 +1,7 @@
 <!--General Menu-->
-<div id="nav">
-	<a id='btnEvents' href="/events" class="button">Events</a><br>
-	<a id='btnProfile' href="/profile" class="button">Profile</a><br>
-	{% if user.AdminActive %}
-		<a id='btnUsers' href="/users" class="button">Users</a><br>
-	{% endif %}
-	<a id='btnLogout' href="/logout" class="button">Logout</a><br>
-</div>
+<ul id="nav">
+	<li class="generalNavItem"><a id='btnEvents' href="/events" class="button">Events</a></li>
+	<li class="generalNavItem"><a id='btnProfile' href="/profile" class="button">Profile</a></li>
+	<li class="generalNavItem"><a id='btnUsers' href="/users" class="button" adminOnly>Users</a></li>
+	<li class="generalNavItem"><a id='btnLogout' href="/logout" class="button">Logout</a></li>
+</ul>
