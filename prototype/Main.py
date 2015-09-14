@@ -282,8 +282,11 @@ class EventsMain(webapp2.RequestHandler):
             self.redirect(nextPath)
         else:
             AttendingEvents = Event.query(Event.Attendiees.UserID == user.key.integer_id())
-            UpcomingEvent = Event.query(Event.key.integer_id() != user.key.integer_id())
-          
+            UpcomingEvent = Event.query()
+
+            for X in AttendingEvents:
+                UpcomingEvent = UpcomingEvent.filter(Event.Name != X.Name)
+
 	    template_values = {
                 'Events' : AttendingEvents,
                 'Events2' : UpcomingEvent,

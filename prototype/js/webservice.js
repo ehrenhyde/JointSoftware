@@ -21,7 +21,7 @@ function sendAttending(status,eventId,userId){
 			console.log('fail');
 			console.log(data.success);
 		}
-		
+		location.reload();
 	});
 }
 
@@ -46,6 +46,6 @@ function removeAttending(eventId,userId){
 			console.log('fail');
 			console.log(data.success);
 		}
-		
+		location.reload();
 	});
 }
