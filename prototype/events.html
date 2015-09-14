@@ -36,18 +36,28 @@
 						
 		{% for Event in Events %}		
 						<tr>
-				
 								<td><span class="eventItemName">{{Event.Name}}</span></td>
 								<td><span class="eventItemDatetime">{{Event.Date}} {{Event.Time}}</span></td>
 								<td><span class="eventItemLocation">{{Event.Location}}</span></td>
-								<td><input ID= 'Attendance' type="button" value="Attending" onclick="sendAttending('Attending',{{Event.key.integer_id()}},{{user.key.integer_id()}})" /></td>
-								<td><input ID= 'Attendance2' type="button" value="Maybe" onclick="sendAttending('Maybe',{{Event.key.integer_id()}},{{user.key.integer_id()}})" /></td>
+								<td><input ID= 'Attendance2' type="button" value="Unattend" onclick="removeAttending({{Event.key.integer_id()}},{{user.key.integer_id()}})" /></td>
 								<!--<a href="/registerAttendance?status=decline&fromPage=events" class="registerDecline">Register Decline</a>-->
 						</tr>
 				
 				
 		 {% endfor %}
-						
+		{% for Event in Events2 %}		
+						<tr>
+								<td><span class="eventItemName">{{Event.Name}}</span></td>
+								<td><span class="eventItemDatetime">{{Event.Date}} {{Event.Time}}</span></td>
+								<td><span class="eventItemLocation">{{Event.Location}}</span></td>
+								<td><input ID= 'Attendance' type="button" value="Attending" onclick="sendAttending('Attending',{{Event.key.integer_id()}},{{user.key.integer_id()}})" /></td>
+								<td><input ID= 'Attendance2' type="button" value="Maybe" onclick="sendAttending('Maybe',{{Event.key.integer_id()}},{{user.key.integer_id()}})" /></td>
+
+								<!--<a href="/registerAttendance?status=decline&fromPage=events" class="registerDecline">Register Decline</a>-->
+						</tr>
+				
+				
+		 {% endfor %}
 				</table>
 				<br>
 				<input type="button" value="Create Event" onclick="window.location.href='/createevent'" /><!--only visible to some accounts-->

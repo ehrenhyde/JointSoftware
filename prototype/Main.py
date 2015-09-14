@@ -123,7 +123,6 @@ class Session:
         return tmp
     
 class Attendiees(ndb.Model):
-        EventID = ndb.IntegerProperty()
         UserID = ndb.IntegerProperty()
         AttendingStatus = ndb.StringProperty()
 
@@ -147,6 +146,7 @@ class Event(ndb.Model):
 	Time = ndb.TimeProperty(auto_now_add=True)
 	Duration = ndb.IntegerProperty()
 	Location = ndb.StringProperty()
+	Attendiees = ndb.StructuredProperty(Attendiees, repeated=True)
 	
 class MainPage(webapp2.RequestHandler):
     def get(self):
@@ -281,9 +281,12 @@ class EventsMain(webapp2.RequestHandler):
             nextPath = '='.join(('/login?continue',self.request.url))
             self.redirect(nextPath)
         else:
-            Events = Event.query()
+            AttendingEvents = Event.query(Event.Attendiees.UserID == user.key.integer_id())
+            UpcomingEvent = Event.query(Event.key.integer_id() != user.key.integer_id())
+          
 	    template_values = {
-                'Events' : Events,
+                'Events' : AttendingEvents,
+                'Events2' : UpcomingEvent,
                 'user': user
                 }
 	    template = JINJA_ENVIRONMENT.get_template('events.html')
@@ -304,11 +307,16 @@ class CreateEvent(webapp2.RequestHandler):
 		
     def post(self):
             #todo add security for create event( user is event manager)
+        user = Session(self).get_current_user()
 	a = Event()
 	a.Name =self.request.get('name')
 	a.Description =self.request.get('desc')
 	a.Location = self.request.get('location')
+	#a.Attendiees = Attendiees(UserID = user.key.integer_id(),AttendingStatus = 'Attending')
 	a.put()
+	Attedie = Attendiees(UserID = 5169618595348480,AttendingStatus = 'Attending')
+        a.Attendiees.append(Attedie)
+        a.put()
 	self.redirect('/events')		
 		
 class EventDetails(webapp2.RequestHandler):
@@ -331,12 +339,27 @@ class ToggleAttendance(webapp2.RequestHandler):
         eventId = data['eventId']
         userId = data['userId']
         #Update server with values
-##        a = Attendiees()
-##        a.EventID = eventId
-##        a.UserID = userId
-##        a.AttendingStatus = status
-##	a.put()
+        ThisEvent = Event.get_by_id(eventId)
+        Attedie = Attendiees(UserID = userId,AttendingStatus = status)
+        ThisEvent.Attendiees.append(Attedie)
+        ThisEvent.put()
+        success = True    
+        jsonRetVal = json.dumps(
+            {
+                'success':success          
+            }
+        )
+        self.response.write(jsonRetVal)
 
+class RemoveAttendance(webapp2.RequestHandler):
+    def post(self):
+        data = json.loads(self.request.body)
+        eventId = data['eventId']
+        userId = data['userId']
+        #Update server with values
+        a = Event.get_by_id(eventId)
+        a.Attendiees = [i for i in a.Attendiees if i.UserID != userId]
+        a.put()
         success = True    
         jsonRetVal = json.dumps(
             {
@@ -355,5 +378,6 @@ app = webapp2.WSGIApplication([
 	('/createevent',CreateEvent),
 	('/eventdetails',EventDetails),
 	('/login',Login),
-        ('/toggleAttendance',ToggleAttendance)
+        ('/toggleAttendance',ToggleAttendance),
+        ('/RemoveAttendance',RemoveAttendance)
 ], debug=True)
