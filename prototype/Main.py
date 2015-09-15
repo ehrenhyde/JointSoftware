@@ -250,6 +250,11 @@ class CreateUser(webapp2.RequestHandler):
 	a.put()
 	self.redirect('/users')
 
+class Logout(webapp2.RequestHandler):
+    def get(self):
+        Session(self).logout()
+        self.redirect('/login')
+
 class profile(webapp2.RequestHandler):
     def get(self):
         user = Session(self).get_current_user()
@@ -373,14 +378,15 @@ class RemoveAttendance(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
-	('/users',Users),
-	('/createUser', CreateUser),
-	('/changeUserDetails', changeUserDetails),
-	('/profile', profile),
-	('/events',EventsMain),
-	('/createevent',CreateEvent),
-	('/eventdetails',EventDetails),
-	('/login',Login),
-        ('/toggleAttendance',ToggleAttendance),
-        ('/RemoveAttendance',RemoveAttendance)
+    ('/users',Users),
+    ('/createUser', CreateUser),
+    ('/changeUserDetails', changeUserDetails),
+    ('/profile', profile),
+    ('/events',EventsMain),
+    ('/createevent',CreateEvent),
+    ('/eventdetails',EventDetails),
+    ('/login',Login),
+    ('/toggleAttendance',ToggleAttendance),
+    ('/removeAttendance',RemoveAttendance),
+    ('/logout',Logout)
 ], debug=True)

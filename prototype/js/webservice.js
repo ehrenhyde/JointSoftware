@@ -31,7 +31,7 @@ function removeAttending(eventId,userId){
 	console.log('userId = ' + userId);
 	$.ajax({
 		type: "POST",
-			url: "/RemoveAttendance",
+			url: "/removeAttendance",
             dataType: 'json',
             data: JSON.stringify({
 				"eventId":eventId,
