@@ -21,9 +21,9 @@ function hasPermissionTag(element,attrName){
 }
 
 var allPermissionTypes = {
-	admin:new permissionType('adminActive','adminOnly','Deactivate Admin','Activate Admin','permissionButtonAdmin'),
-	treasurer:new permissionType('treasurerActive','treasurerOnly','Deactivate Treasurer','Activate Treasurer','permissionButtonTreasurer'),
-	eventManager: new permissionType('eventManagerActive','eventManagerOnly','Deactivate Event Manager','Activate Event Manager','permissionButtonEventManager'),
+	admin:new permissionType('adminActive','adminAllowed','Deactivate Admin','Activate Admin','permissionButtonAdmin'),
+	treasurer:new permissionType('treasurerActive','treasurerAllowed','Deactivate Treasurer','Activate Treasurer','permissionButtonTreasurer'),
+	eventManager: new permissionType('eventManagerActive','eventManagerAllowed','Deactivate Event Manager','Activate Event Manager','permissionButtonEventManager'),
 	
 	toArray: function (){
 		//console.log('casting allPermissionTypes to array');

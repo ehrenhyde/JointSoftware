@@ -22,7 +22,7 @@
          <li class="userItem">
 				<a href="/profile?userId={{account.key.integer_id()}}" class="userItemName">{{ account.Name }}</a>
 				<span>{{ account.Email }}</span>
-				<span treasurerOnly>
+				<span treasurerAllowed>
 					<span>Credits: {{ account.Credits }} Add:</span>
 					<!--these are not hyperlinks because we will use AJAX (javascript)to send the webservice-->
 					<span class="add1Credit" onclick="addCredits(3,1)">+1</span>
