@@ -22,20 +22,21 @@
 			<input type="hidden" name="userId" value="{{user.key.integer_id()}}"> 
 			<br>
 			
-			<label for="name"> Name </label>
-			<input name="name" type="text" value="{{user.Name}}"><br/>
-						
-			<label for="email"> Email </label>
-			<input name="email" type="text" value="{{user.Email}}"><br/>
-
-			<label for="emergencyName"> Emergency Name </label>
-			<input name="emergencyName" type="text" value="{{user.Emergency_Contact}}"><br/>
+			<input name="name" type="text" value="{{user.Name}}">
+			<label for="name"> Name </label> <br>
 			
-			<label for="emergencyMobile"> Emergency Mobile </label>
-			<input name="emergencyMobile" type="text" value="{{user.Emergency_Phone}}"><br/>
+			<input name="email" type="text" value="{{user.Email}}">			
+			<label for="email"> Email </label> <br>
 			
-			<label for="password"> Password </label>
-			<input name="password" type="password" value="{{user.Password}}"><br/>
+			<input name="emergencyName" type="text" value="{{user.Emergency_Contact}}">
+			<label for="emergencyName"> Emergency Name </label> <br>
+			
+			<input name="emergencyMobile" type="text" value="{{user.Emergency_Phone}}">
+			<label for="emergencyMobile"> Emergency Mobile </label> <br>
+			
+			<input name="password" type="password" value="{{user.Password}}">
+			<label for="password"> Password </label> <br>
+			
 						
 			<!--only visisble to admin-->
 			<input id="isAdmin" type="checkbox" name="isAdmin" {%if user.Admin %}  checked="checked"  {% endif %}>

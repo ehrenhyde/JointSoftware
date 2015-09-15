@@ -1,3 +1,4 @@
 *.pyc
 prototype/app.yaml
 prototype/app.yaml
+*.yaml
