@@ -18,35 +18,25 @@
 		<!--Profile - We'll put this in a container-->
 		<img src="myProfilePhoto.dynamic" alt="Profile Photo" onclick="uploadPhoto()">
 		<form id="userDetails" action="/changeUserDetails" method="post">
-			<span id="userCredits">Credits: {{user.Credits}}</span>
-			 <input type="hidden" name="userId" value="{{user.key.integer_id()}}"> 
+			<span id="userCredits">Credits: {{user.Credits}}</span>			
+			<input type="hidden" name="userId" value="{{user.key.integer_id()}}"> 
 			<br>
-			<label for="name">
-				Name
-				<input name="name" type="text" value="{{user.Name}}"><br/>
-			</label>
 			
+			<label for="name"> Name </label>
+			<input name="name" type="text" value="{{user.Name}}"><br/>
+						
+			<label for="email"> Email </label>
+			<input name="email" type="text" value="{{user.Email}}"><br/>
+
+			<label for="emergencyName"> Emergency Name </label>
+			<input name="emergencyName" type="text" value="{{user.Emergency_Contact}}"><br/>
 			
-			<label for="email">
-				Email
-				<input name="email" type="text" value="{{user.Email}}"><br/>
-			</label>
+			<label for="emergencyMobile"> Emergency Mobile </label>
+			<input name="emergencyMobile" type="text" value="{{user.Emergency_Phone}}"><br/>
 			
-			<label for="emergencyName">
-				Emergency Name
-				<input name="emergencyName" type="text" value="{{user.Emergency_Contact}}"><br/>
-			</label>
-			
-			<label for="emergencyMobile">
-				Emergency Mobile
-				<input name="emergencyMobile" type="text" value="{{user.Emergency_Phone}}"><br/>
-			</label>
-			
-			<label for="password">
-				Password
-				<input name="password" type="password" value="{{user.Password}}"><br/>
-			</label>
-			
+			<label for="password"> Password </label>
+			<input name="password" type="password" value="{{user.Password}}"><br/>
+						
 			<!--only visisble to admin-->
 			<input id="isAdmin" type="checkbox" name="isAdmin" {%if user.Admin %}  checked="checked"  {% endif %}>
 			<label for="isAdmin">Admin</label>
@@ -56,6 +46,7 @@
 			
 			<input id="isEventManager" type="checkbox" name="isEventManager" {%if user.EventManager %}  checked="checked"  {% endif %} >
 			<label for="isEventManager">Event Manager</label>
+			
 			<br>
 			<input type="submit" value="Save Details">
 		</form>
