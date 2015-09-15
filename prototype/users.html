@@ -21,7 +21,7 @@
 		{% for account in Accounts %}		
          <li class="userItem">
 				<a href="/profile?userId={{account.key.integer_id()}}" class="userItemName">{{ account.Name }}</a>
-				<span>{{ account.Email }} Credits: {{ account.Credits }} Add:</span>
+				<span>{{ account.Email }}</span><span treasurerOnly>Credits: {{ account.Credits }} Add:</span>
 				<!--these are not hyperlinks because we will use AJAX (javascript)to send the webservice-->
 				<span class="add1Credit" onclick="addCredits(3,1)">+1</span>
 				<span class="add1Credit" onclick="addCredits(3,10)">+10</span>

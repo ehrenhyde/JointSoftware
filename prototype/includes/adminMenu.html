@@ -2,7 +2,7 @@
 <div id="privliges">
 	
 	{% if user.Treasurer %}
-		<a id='permissionButtonTreasurer' href="#" class="button privligeButton">
+		<a id='permissionButtonTreasurer' href="#" class="button privligeButton" onclick="permissions.toggleTreasurerActive()">
 			Activate Treasurer
 		</a>
 	{% endif %}
