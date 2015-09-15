@@ -6,6 +6,20 @@ function permissionType(activeName,htmlTag,buttonTextActive,buttonTextUnactive,b
 	this.buttonId = buttonId;
 }
 
+function hasPermissionTag(element,attrName){
+	var attr = element.attr(attrName);
+
+	// For some browsers, `attr` is undefined; for others,
+	// `attr` is false.  Check for both.
+	if (typeof attr !== typeof undefined && attr !== false){
+		//console.log('element ' + element.attr('id') + ' has attribute ' + attrName);
+		return true;
+	}else{
+		//console.log('not');
+		return false;
+	}
+}
+
 var allPermissionTypes = {
 	admin:new permissionType('adminActive','adminOnly','Deactivate Admin','Activate Admin','permissionButtonAdmin'),
 	treasurer:new permissionType('treasurerActive','treasurerOnly','Deactivate Treasurer','Activate Treasurer','permissionButtonTreasurer'),
@@ -28,14 +42,30 @@ var permissions = {
 		}
 	},
 	
-	togglePermissionDependantElements(permissionType,speed){
+	togglePermissionDependantElements(permissionTypes,permissionType,speed){
+		
+		
 		if (this.getPermissionTypeActive(permissionType.activeName) == true){
-			console.log("showing " + permissionType.htmlTag);
+			//console.log("showing " + permissionType.htmlTag);
 			//wrap in [] because that is the format for the jQuery selector
 			$('[' + permissionType.htmlTag + ']').show(speed);
 		}else{
-			console.log("hiding " + permissionType.htmlTag);
-			$('[' + permissionType.htmlTag + ']').hide(speed);
+			//test all permission types to check if another doesn't keep it shown
+			var getPermissionTypeActive = this.getPermissionTypeActive;
+			$('[' + permissionType.htmlTag + ']').each(function(){
+				var shouldHide = true;
+				for (var i = 0;i<permissionTypes.length;i++){
+					var elementHasPermissionTag = hasPermissionTag($(this),permissionTypes[i].htmlTag);
+					//check if the tag is present and that the user has the associated active permission
+					var activeName = permissionTypes[i].activeName
+					if (elementHasPermissionTag && getPermissionTypeActive(activeName)){
+						shouldHide = false;
+					}
+				}
+				if (shouldHide){
+					$(this).hide(speed);
+				}
+			})
 		}
 	},
 	
@@ -49,16 +79,15 @@ var permissions = {
 	
 	applyToUI: function(speed){
 		
-		//Permission dependant elements
 		var permissionTypes = allPermissionTypes.toArray();
 		for(var i = 0; i<permissionTypes.length;i++){
-			this.togglePermissionDependantElements(permissionTypes[i],speed);
+			this.togglePermissionDependantElements(permissionTypes,permissionTypes[i],speed);
 			this.togglePermissionButtons(permissionTypes[i]);
 		}
 	}, 
 	
 	togglePermissionTypeActive: function(activeName){
-		console.log('toggle ' + activeName + ' active');
+		//console.log('toggle ' + activeName + ' active');
 		
 		if (this.getPermissionTypeActive(activeName)== false){
 			localStorage[activeName] =  "true";
@@ -73,15 +102,15 @@ var permissions = {
 	},
 	
 	toggleTreasurerActive: function(){
-		console.log('toggleTreasurerActive');
+		//console.log('toggleTreasurerActive');
 		this.togglePermissionTypeActive(allPermissionTypes.treasurer.activeName);
 	},
 	toggleAdminActive: function(){
-		console.log('toggleAdminActive');
+		//console.log('toggleAdminActive');
 		this.togglePermissionTypeActive(allPermissionTypes.admin.activeName);
 	},
 	toggleEventMangerActive: function(){
-		console.log('toggleEventMangerActive');
+		//console.log('toggleEventMangerActive');
 		this.togglePermissionTypeActive(allPermissionTypes.eventManager.activeName);
 	}
 }
