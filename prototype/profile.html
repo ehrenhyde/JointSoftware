@@ -36,19 +36,21 @@
 			<input name="emergencyMobile" type="text" value="{{targetUser.Emergency_Phone}}">
 			<label for="emergencyMobile"> Emergency Mobile </label> <br>
 			
-			<input name="password" type="password" value="{{targetUser.Password}}">
+			<input name="password" type="text" value="{{targetUser.Password}}">
 			<label for="password"> Password </label> <br>
 			
 						
 			<!--only visisble to admin-->
-			<input id="isAdmin" type="checkbox" name="isAdmin" {%if user.Admin %}  checked="checked"  {% endif %}>
+			<div adminOnly>
+			<input id="isAdmin" type="checkbox" name="isAdmin" {%if targetUser.Admin %}  checked="checked"  {% endif %}>
 			<label for="isAdmin">Admin</label>
 			
-			<input id="isTreasurer" type="checkbox" name="isTreasurer" {%if user.Treasurer %}  checked="checked"  {% endif %}>
+			<input id="isTreasurer" type="checkbox" name="isTreasurer" {%if targetUser.Treasurer %}  checked="checked"  {% endif %}>
 			<label for="isTreasurer">Treasurer</label>
 			
-			<input id="isEventManager" type="checkbox" name="isEventManager" {%if user.EventManager %}  checked="checked"  {% endif %} >
+			<input id="isEventManager" type="checkbox" name="isEventManager" {%if targetUser.EventManager %}  checked="checked"  {% endif %} >
 			<label for="isEventManager">Event Manager</label>
+			</div>
 			
 			<input type='submit'>
 			

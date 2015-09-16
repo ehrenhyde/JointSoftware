@@ -207,18 +207,18 @@ class changeUserDetails(webapp2.RequestHandler):
 	a.Emergency_Contact =self.request.get('emergencyName')
 	a.Emergency_Phone =self.request.get('emergencyMobile')
 	a.Password =self.request.get('password')
-##	if 'isAdmin' in self.request.POST:
-##            a.Admin = True
-##        else:
-##            a.Admin = False      
-##        if 'isTreasurer' in self.request.POST:
-##            a.Treasurer = True
-##        else:
-##            a.Treasurer = False
-##        if 'isEventManager' in self.request.POST:
-##            a.EventManager = True
-##        else:
-##            a.EventManager = False
+	if 'isAdmin' in self.request.POST:
+            a.Admin = True
+        else:
+            a.Admin = False      
+        if 'isTreasurer' in self.request.POST:
+            a.Treasurer = True
+        else:
+            a.Treasurer = False
+        if 'isEventManager' in self.request.POST:
+            a.EventManager = True
+        else:
+            a.EventManager = False
 	a.put()
 	self.redirect('/users')
 
