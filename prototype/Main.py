@@ -360,8 +360,14 @@ class ToggleAttendance(webapp2.RequestHandler):
         userId = data['userId']
         #Update server with values
         ThisEvent = Event.get_by_id(eventId)
-        Attedie = Attendiees(UserID = userId,AttendingStatus = status)
-        ThisEvent.Attendiees.append(Attedie)
+        attendie = Attendiees(UserID = userId,AttendingStatus = status)
+        ThisEvent.Attendiees.append(attendie)
+
+        if status == 'Attending':
+            user = Account.get_by_id(userId)
+            user.Credits = user.Credits - 1
+            user.put()
+        
         ThisEvent.put()
         success = True    
         jsonRetVal = json.dumps(
@@ -380,6 +386,11 @@ class RemoveAttendance(webapp2.RequestHandler):
         a = Event.get_by_id(eventId)
         a.Attendiees = [i for i in a.Attendiees if i.UserID != userId]
         a.put()
+
+        user = Account.get_by_id(userId)
+        user.Credits = user.Credits + 1
+        user.put()
+        
         success = True    
         jsonRetVal = json.dumps(
             {
