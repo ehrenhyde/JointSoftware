@@ -274,7 +274,8 @@ class profile(webapp2.RequestHandler):
             else:
                 targetUser = user
             template_values = {
-                'user' : targetUser
+                'user' : user,
+                'targetUser': targetUser
 	    }
             template = JINJA_ENVIRONMENT.get_template('profile.html')
             self.response.write(template.render(template_values))	

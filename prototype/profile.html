@@ -2,11 +2,13 @@
 <html>
 	<head>
 		<title>Profile</title>
-		<link type="text/css" rel="stylesheet" href="stylesheets/global.css"/>
+		
+		{% include 'includes/meta-tags.html' %}
+		
+		{% include 'includes/css-links.html' %}
 		
 		{% include 'includes/js-libraries.html' %}
 		
-		<script src="js/permissions.js"></script>
 	</head>
 	<body>
 		{% include 'includes/mainHeader.html' %}
@@ -18,23 +20,23 @@
 		<!--Profile - We'll put this in a container-->
 		<img src="..." alt="..." class="img-thumbnail">
 		<form id="userDetails" action="/changeUserDetails" method="post">
-			<span id="userCredits">Credits: {{user.Credits}}</span>			
-			<input type="hidden" name="userId" value="{{user.key.integer_id()}}"> 
+			<span id="userCredits">Credits: {{targetUser.Credits}}</span>			
+			<input type="hidden" name="userId" value="{{targetUser.key.integer_id()}}"> 
 			<br>
 			
-			<input name="name" type="text" value="{{user.Name}}">
+			<input name="name" type="text" value="{{targetUser.Name}}">
 			<label for="name"> Name </label> <br>
 			
-			<input name="email" type="text" value="{{user.Email}}">			
+			<input name="email" type="text" value="{{targetUser.Email}}">			
 			<label for="email"> Email </label> <br>
 			
-			<input name="emergencyName" type="text" value="{{user.Emergency_Contact}}">
+			<input name="emergencyName" type="text" value="{{targetUser.Emergency_Contact}}">
 			<label for="emergencyName"> Emergency Name </label> <br>
 			
-			<input name="emergencyMobile" type="text" value="{{user.Emergency_Phone}}">
+			<input name="emergencyMobile" type="text" value="{{targetUser.Emergency_Phone}}">
 			<label for="emergencyMobile"> Emergency Mobile </label> <br>
 			
-			<input name="password" type="password" value="{{user.Password}}">
+			<input name="password" type="password" value="{{targetUser.Password}}">
 			<label for="password"> Password </label> <br>
 			
 						
@@ -48,7 +50,7 @@
 			<input id="isEventManager" type="checkbox" name="isEventManager" {%if user.EventManager %}  checked="checked"  {% endif %} >
 			<label for="isEventManager">Event Manager</label>
 			
-			<br>
+			<input type='submit'>
 			
 		</form>	
 

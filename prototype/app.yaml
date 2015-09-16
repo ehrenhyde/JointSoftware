@@ -1,13 +1,13 @@
 application: freedivers-1032
-version: luke
+version: ehren
 runtime: python27
 api_version: 1
 threadsafe: true
 
 # [START handlers]
 handlers:
-- url: /stylesheets
-  static_dir: stylesheets
+- url: /css
+  static_dir: css
 - url: /js
   static_dir: js
 - url: /.*
