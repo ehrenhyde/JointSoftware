@@ -377,6 +377,22 @@ class RemoveAttendance(webapp2.RequestHandler):
         )
         self.response.write(jsonRetVal)
 
+class ChangeCredits(webapp2.RequestHandler):
+    def post(self):
+        data = json.loads(self.request.body)
+        userId = data['userId']
+        creditsChange = data['creditsChange']
+        account = Account.get_by_id(userId)
+        account.Credits = account.Credits + int(creditsChange)
+        account.put()
+        success = True
+        jsonRetVal = json.dumps(
+            {
+                'success':success
+            }
+        )
+        self.response.write(jsonRetVal)
+
 app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/users',Users),
@@ -389,5 +405,6 @@ app = webapp2.WSGIApplication([
     ('/login',Login),
     ('/toggleAttendance',ToggleAttendance),
     ('/removeAttendance',RemoveAttendance),
-    ('/logout',Logout)
+    ('/logout',Logout),
+    ('/changeCredits',ChangeCredits)
 ], debug=True)
