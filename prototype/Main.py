@@ -105,11 +105,13 @@ class Session:
         else:
             sid = self.session_id
 
-        data = memcache.get(sid)
+        #data = memcache.get(sid)
+        data = None #Remove the caching feature (causes bad behaviour in profile 16/09/2015)
         if data is None:
         
             data = Account.query(Account.session_id == sid).get()
-            if data is not None: memcache.add(sid,data)
+            #if data is not None: memcache.add(sid,data)
+            #Remove the caching feature (causes bad behaviour in profile 16/09/2015)
 
         return data
 
@@ -200,7 +202,7 @@ class Users(webapp2.RequestHandler):
 class changeUserDetails(webapp2.RequestHandler):
     def post(self):
         #Todo add security that checks logged in user is admin
-	ID = long(self.request.get('userId'))
+	ID = long(self.request.get('targetUserId'))
 	a = Account.get_by_id(ID)
 	a.Name =self.request.get('name')
 	a.Email =self.request.get('email')
@@ -244,9 +246,18 @@ class CreateUser(webapp2.RequestHandler):
 	a.Emergency_Contact =self.request.get('emergencyName')
 	a.Emergency_Phone =self.request.get('emergencyMobile')
 	a.Password =self.request.get('password')
-	a.Admin = False
-	a.Treasurer = False
-	a.EventManager = False
+	if 'isAdmin' in self.request.POST:
+            a.Admin = True
+        else:
+            a.Admin = False      
+        if 'isTreasurer' in self.request.POST:
+            a.Treasurer = True
+        else:
+            a.Treasurer = False
+        if 'isEventManager' in self.request.POST:
+            a.EventManager = True
+        else:
+            a.EventManager = False
 	a.put()
 	self.redirect('/users')
 

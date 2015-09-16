@@ -21,7 +21,7 @@
 		<img src="..." alt="..." class="img-thumbnail">
 		<form id="userDetails" action="/changeUserDetails" method="post">
 			<span id="userCredits">Credits: {{targetUser.Credits}}</span>			
-			<input type="hidden" name="userId" value="{{targetUser.key.integer_id()}}"> 
+			<input type="hidden" name="targetUserId" value="{{targetUser.key.integer_id()}}"> 
 			<br>
 			
 			<input name="name" type="text" value="{{targetUser.Name}}">
