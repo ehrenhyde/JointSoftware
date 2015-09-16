@@ -52,6 +52,8 @@ var permissions = {
 		}else{
 			//test all permission types to check if another doesn't keep it shown
 			var getPermissionTypeActive = this.getPermissionTypeActive;
+			
+			
 			$('[' + permissionType.htmlTag + ']').each(function(){
 				var shouldHide = true;
 				for (var i = 0;i<permissionTypes.length;i++){

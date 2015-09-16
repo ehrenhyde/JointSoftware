@@ -6,8 +6,9 @@
 			Activate Treasurer
 		</a>
 	{% endif %}
-	{% if user.EventManger %}
-		<a id='permissionButtonEventManager' href="#" class="button privligeButton">
+
+	{% if user.EventManager %}
+		<a id='permissionButtonEventManager' href="#" class="button privligeButton" onclick="permissions.toggleEventManagerActive()">
 			Activate Event Manager
 		</a>
 	{% endif %}
