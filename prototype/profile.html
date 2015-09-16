@@ -16,7 +16,7 @@
 		{% include 'includes/generalMenu.html' %}	
 		
 		<!--Profile - We'll put this in a container-->
-		<img src="myProfilePhoto.dynamic" alt="Profile Photo" onclick="uploadPhoto()">
+		<img src="..." alt="..." class="img-thumbnail">
 		<form id="userDetails" action="/changeUserDetails" method="post">
 			<span id="userCredits">Credits: {{user.Credits}}</span>			
 			<input type="hidden" name="userId" value="{{user.key.integer_id()}}"> 
@@ -49,10 +49,8 @@
 			<label for="isEventManager">Event Manager</label>
 			
 			<br>
-			<input type="submit" value="Save Details">
-		</form>
-		<a href="/deleteUser" class="button">Delete User</a>
-		<ul id="usersList"> 
+			
+		</form>	
 
 		
 	</body>
