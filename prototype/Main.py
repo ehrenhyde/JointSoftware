@@ -353,6 +353,7 @@ class EventDetails(webapp2.RequestHandler):
             targetEvent = Event.get_by_id(targetEventId)
             AdttendieName=[]
             AdttendieStatus=[]
+            Accounts = Account.query()
             for AdttendieNum in range(targetEvent.Attendiees_count):
                 Attendie =  Account.get_by_id(targetEvent.Attendiees[AdttendieNum].UserID)
                 if targetEvent.Attendiees[AdttendieNum].UserID == user.key.integer_id():
@@ -362,6 +363,7 @@ class EventDetails(webapp2.RequestHandler):
 	    template_values = {
                 'user':user,
                 'Event':targetEvent,
+                'Accounts' : Accounts,
                 'UserAttending': UserAttending,
                 'AttendieNames': AdttendieName,
                 'AttendieStatus': AdttendieStatus

@@ -40,14 +40,20 @@
 		{% endfor %}
 		</div>
 		<div>
-		
-		
+		<span> Add Attendie</span>
+			<select name="Adduser">
+			  {% for Account in Accounts %}
+				<option value="{{Account.key.integer_id()}}">{{Account.Name}}</option>
+			  {% endfor %}
+			</select>
+<input ID= 'AddAttendiee' type="button" value="AddAttendiee" onclick="addAttending('Attending',{{Event.key.integer_id()}})" />		</div>
+		<div>
 			<label for="desc">
 				Description
 				</br><textarea id= "Comment" type="textarea" rows="10" cols="30">{{Event.Comment}}</textarea>
 			</label>
 			</br>
-<input ID= 'SaveComment' type="button" value="Save" onclick="SaveComment({{Event.key.integer_id()}} )" />			
+			<input ID= 'SaveComment' type="button" value="Save" onclick="SaveComment({{Event.key.integer_id()}} )" />			
 		</div>
 		{% include 'includes/footer.html' %}
 	</body>
