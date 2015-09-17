@@ -35,7 +35,7 @@
 						
 		{% for Event in Events %}		
 						<tr>
-								<td><span class="eventItemName">{{Event.Name}}</span></td>
+								<td><a href="/eventdetails?eventId={{Event.key.integer_id()}}" >{{ Event.Name }}</a></td>
 								<td><span class="eventItemDatetime">{{Event.Date}} {{Event.Time}}</span></td>
 								<td><span class="eventItemLocation">{{Event.Location}}</span></td>
 								<td><input ID= 'Attendance2' type="button" value="Unattend" onclick="removeAttending({{Event.key.integer_id()}},{{user.key.integer_id()}})" /></td>
@@ -46,7 +46,7 @@
 		 {% endfor %}
 		{% for Event in Events2 %}		
 						<tr>
-								<td><span class="eventItemName">{{Event.Name}}</span></td>
+								<td><a href="/eventdetails?eventId={{Event.key.integer_id()}}" >{{ Event.Name }}</a></td>
 								<td><span class="eventItemDatetime">{{Event.Date}} {{Event.Time}}</span></td>
 								<td><span class="eventItemLocation">{{Event.Location}}</span></td>
 								<td><input ID= 'Attendance' type="button" value="Attending" onclick="sendAttending('Attending',{{Event.key.integer_id()}},{{user.key.integer_id()}})" /></td>

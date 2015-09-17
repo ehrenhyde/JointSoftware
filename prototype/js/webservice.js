@@ -25,6 +25,32 @@ function sendAttending(status,eventId,userId){
 	});
 }
 
+function SaveComment(eventId){
+	console.log("calling SaveComment");
+	console.log('eventId = ' + eventId);	
+	var Input = $("#Comment");
+	var comment = Input.val();
+	$.ajax({
+		type: "POST",
+		url: "/SaveComment",
+		dataType: 'json',
+		data: JSON.stringify({
+			"Comment": comment,
+			"eventId":eventId,
+		})
+	})
+	.done(function( data ) {
+		console.log('returned');
+		if (data.success == true){
+			console.log('was a success');
+		}else{
+			console.log('fail');
+			console.log(data.success);
+		}
+		location.reload();
+	});
+}
+
 function removeAttending(eventId,userId){
 	console.log("calling removeAttending");
 	console.log('eventId = ' + eventId);	

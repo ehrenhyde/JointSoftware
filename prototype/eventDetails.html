@@ -18,18 +18,37 @@
 		{% include 'includes/generalMenu.html' %}	
 			
 		<!--Create Event - We'll put this in a container-->
-		<span id="eventName">Fortnightly Endurance Training</span>
-		<a id="viewAttendees" href="/viewAttendees" class="button">View Attendees</a>
-		<a id="editEvent" href="/editEvent" class="button">Edit Event</a>
-		<div id="eventDetails">
-			<span id="eventDatetime">03/08/2015 17:00</span>
-			<a href="/registerAttendance?status=going&fromPage=eventDetails" class="registerGoing">Register Going</a>
-			<a href="/registerAttendance?status=maybe&fromPage=eventDetails" class="registerMaybe">Register Maybe</a>
-			<!--<a href="/registerAttendance?status=decline&fromPage=events" class="registerDecline">Register Decline</a>-->
-			<span id="eventLocation">Brisbane Athletics Centre 23 Healthy Way Chermside 4034</span>
-			<span id="eventDesc">Build up and maintain your dive times. We start by doing a 30 second dive to warm up and then build up by 5 seconds each time until we can useually do a two minute dive by the end of the event. Take turns spotting and diving. Bring your own gear and see you there.</span>
-		</div>
+		<h2 id="eventName">{{Event.Name}}</h2><a id="editEvent" href="/editEvent" class="button">Edit Event</a></br>	
+		{% if UserAttending %}
+			<input ID= 'Attendance2' type="button" value="Unattend" onclick="removeAttending({{Event.key.integer_id()}},{{user.key.integer_id()}})" />
+
+		{% else %}
+			<input ID= 'Attendance' type="button" value="Attending" onclick="sendAttending('Attending',{{Event.key.integer_id()}},{{user.key.integer_id()}})" />
+			<input ID= 'Attendance2' type="button" value="Maybe" onclick="sendAttending('Maybe',{{Event.key.integer_id()}},{{user.key.integer_id()}})" />
+		{% endif %}
 		
+		<div id="eventDetails">
+			<span id="eventDatetime">{{Event.Date}}</span></br>
+			<span id="eventDatetime">{{Event.Time}}</span></br>
+			<span id="eventLocation">Location: {{Event.Location}}</span></br>
+			<span id="eventDesc">Description: {{Event.Description}}</span></br>
+		</div>
+		<div>
+		<span>Adttendies</span></br>
+		{% for AdttendieNum in range(Event.Attendiees_count)%}
+		<span>{{AttendieNames[AdttendieNum]}} : {{AttendieStatus[AdttendieNum]}}</span></br>
+		{% endfor %}
+		</div>
+		<div>
+		
+		
+			<label for="desc">
+				Description
+				</br><textarea id= "Comment" type="textarea" rows="10" cols="30">{{Event.Comment}}</textarea>
+			</label>
+			</br>
+<input ID= 'SaveComment' type="button" value="Save" onclick="SaveComment({{Event.key.integer_id()}} )" />			
+		</div>
 		{% include 'includes/footer.html' %}
 	</body>
 </html>

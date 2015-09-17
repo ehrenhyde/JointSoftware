@@ -149,6 +149,8 @@ class Event(ndb.Model):
 	Duration = ndb.IntegerProperty()
 	Location = ndb.StringProperty()
 	Attendiees = ndb.StructuredProperty(Attendiees, repeated=True)
+	Attendiees_count = ndb.ComputedProperty(lambda e: len(e.Attendiees))
+	Comment = ndb.TextProperty()
 	
 class MainPage(webapp2.RequestHandler):
     def get(self):
@@ -346,8 +348,23 @@ class EventDetails(webapp2.RequestHandler):
             nextPath = '='.join(('/login?continue',self.request.url))
             self.redirect(nextPath)
         else:
+            UserAttending = False
+            targetEventId = long(self.request.get('eventId'))
+            targetEvent = Event.get_by_id(targetEventId)
+            AdttendieName=[]
+            AdttendieStatus=[]
+            for AdttendieNum in range(targetEvent.Attendiees_count):
+                Attendie =  Account.get_by_id(targetEvent.Attendiees[AdttendieNum].UserID)
+                if targetEvent.Attendiees[AdttendieNum].UserID == user.key.integer_id():
+                    UserAttending = True
+                AdttendieName.insert(AdttendieNum, Attendie.Name)
+                AdttendieStatus.insert(AdttendieNum, targetEvent.Attendiees[AdttendieNum].AttendingStatus)
 	    template_values = {
-                'user':user
+                'user':user,
+                'Event':targetEvent,
+                'UserAttending': UserAttending,
+                'AttendieNames': AdttendieName,
+                'AttendieStatus': AdttendieStatus
             }
 	    template = JINJA_ENVIRONMENT.get_template('eventDetails.html')
 	    self.response.write(template.render(template_values))
@@ -399,6 +416,23 @@ class RemoveAttendance(webapp2.RequestHandler):
         )
         self.response.write(jsonRetVal)
 
+class SaveComment(webapp2.RequestHandler):
+    def post(self):
+        data = json.loads(self.request.body)
+        eventId = data['eventId']
+        comment = data['Comment']
+        #Update server with values
+        a = Event.get_by_id(eventId)
+        a.Comment = comment
+        a.put()
+        success = True    
+        jsonRetVal = json.dumps(
+            {
+                'success':success          
+            }
+        )
+        self.response.write(jsonRetVal)
+
 class ChangeCredits(webapp2.RequestHandler):
     def post(self):
         data = json.loads(self.request.body)
@@ -427,6 +461,7 @@ app = webapp2.WSGIApplication([
     ('/login',Login),
     ('/toggleAttendance',ToggleAttendance),
     ('/removeAttendance',RemoveAttendance),
+    ('/SaveComment',SaveComment),
     ('/logout',Logout),
     ('/changeCredits',ChangeCredits)
 ], debug=True)
