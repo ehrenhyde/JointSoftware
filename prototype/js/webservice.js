@@ -28,7 +28,7 @@ function sendAttending(status,eventId,userId){
 function addAttending(status,eventId){
 	console.log("calling addAttending");
 	var Input = $("#Adduser");
-	var userId = Input.val();
+	var userId = +Input.val();
 	console.log('userId = ' + userId);
 	sendAttending(status,eventId,userId);
 }

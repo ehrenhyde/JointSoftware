@@ -418,6 +418,26 @@ class RemoveAttendance(webapp2.RequestHandler):
         )
         self.response.write(jsonRetVal)
 
+class CancleEvent(webapp2.RequestHandler):
+    def get(self):
+        user = Session(self).get_current_user()
+        if not user:
+            nextPath = '='.join(('/login?continue',self.request.url))
+            self.redirect(nextPath)
+        else:
+            UserAttending = False
+            targetEventId = long(self.request.get('eventId'))
+            targetEvent = Event.get_by_id(targetEventId)
+            Accounts = Account.query()
+            for AdttendieNum in range(targetEvent.Attendiees_count):#loops all attendies
+                Attendie =  Account.get_by_id(targetEvent.Attendiees[AdttendieNum].UserID)#gets account of attendie
+                targetEvent.Attendiees = [i for i in targetEvent.Attendiees if i.UserID != Attendie.key.integer_id()]#removes attendie for event
+                targetEvent.put()#saves event
+                Attendie.Credits = user.Credits + 1 #refunds credit
+                Attendie.put()#saves user
+            targetEvent.key.delete()#removes the event
+            self.redirect('/events')   
+
 class SaveComment(webapp2.RequestHandler):
     def post(self):
         data = json.loads(self.request.body)
@@ -465,5 +485,6 @@ app = webapp2.WSGIApplication([
     ('/removeAttendance',RemoveAttendance),
     ('/SaveComment',SaveComment),
     ('/logout',Logout),
-    ('/changeCredits',ChangeCredits)
+    ('/changeCredits',ChangeCredits),
+    ('/CancleEvent',CancleEvent)
 ], debug=True)
