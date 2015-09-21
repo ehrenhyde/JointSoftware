@@ -336,7 +336,7 @@ class CreateEvent(webapp2.RequestHandler):
 	a.Location = self.request.get('location')
 	#a.Attendiees = Attendiees(UserID = user.key.integer_id(),AttendingStatus = 'Attending')
 	a.put()
-	Attedie = Attendiees(UserID = 5169618595348480,AttendingStatus = 'Attending')
+	Attedie = Attendiees(UserID = user.key.integer_id(),AttendingStatus = 'Attending')
         a.Attendiees.append(Attedie)
         a.put()
 	self.redirect('/events')		
