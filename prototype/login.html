@@ -1,45 +1,55 @@
 <!DOCTYPE HTML>
 <html>
-	<head>
-		<title>Login</title>
-		
-		{% include 'includes/meta-tags.html' %}
-		
-		{% include 'includes/css-links.html' %}
-		
-		{% include 'includes/js-libraries.html' %}
-		
-	</head>
-	<body>
-		{% include 'includes/mainHeader.html' %}
-			
-		{% if local_testing == True%}
-			<h2>Local Testing Mode enabled</h2>
-			<h6>To Disable change the global LOCAL_TESTING in Main.py</h6>
-			<a href='/events'>Bypass the Login</a>
-		{% else %}
-			<h1>Live Mode</h1>
-		{% endif %}
-		
-		<!--Login Box (needs some work)-->
-		<div id="login">	
-				<!--<form action="/login" method="post">-->
-				<form action="/login" method="post">
-						<br>
-						<label for="Email">
-							Email:
-							<input name="Email" type="text"><br/>
-						</label><br>
-						<label for="Password">
-							Password:
-							<input name="Password" type="password">
-						</label>
-						<br><br>
-						<input type="submit" value="Login">
-				</form>
-			<!--<a href="/forgotPassword">Forgot Password?</a>-->
-		</div>
-	</body>
-	
+
+<head>
+	<title>
+		Login
+	</title>
+	{% include 'includes/meta-tags.html' %} {% include 'includes/css-links.html' %} {% include 'includes/js-libraries.html' %}
+
+</head>
+
+<body>
+
+	{% if local_testing == True%}
+	<h2>
+        Local Testing Mode enabled
+      </h2>
+	<h6>
+        To Disable change the global LOCAL_TESTING in Main.py
+      </h6>
+	<a href='/events'>
+        Bypass the Login
+      </a> {% else %}
+	<h1>
+        Live Mode
+      </h1> {% endif %}
+	<!-- Page Content -->
+	<div class="container">
+
+		<form action="/login" method="post" class="form-signin">
+			<h2 class="form-signin-heading">
+            Freedivers
+          </h2>
+
+			<label for="inputEmail" class="sr-only">
+				Email address
+			</label>
+			<input type="email" name="Email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+
+			<label for="inputPassword" class="sr-only">
+				Password
+			</label>
+			<input type="password" name="Password" id="inputPassword" class="form-control" placeholder="Password" required>
+
+			<button class="btn btn-sm btn-primary btn-block" type="submit">
+				Sign in
+			</button>
+		</form>
+
+
+	</div>
 	{% include 'includes/footer.html' %}
+</body>
+
 </html>

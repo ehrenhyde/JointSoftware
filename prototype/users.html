@@ -1,43 +1,50 @@
 <!DOCTYPE HTML>
 <html>
-	<head>
-		<title>Users</title>
-		
-		{% include 'includes/meta-tags.html' %}
-		
-		{% include 'includes/css-links.html' %}
-		
-		{% include 'includes/js-libraries.html' %}
-		
-	</head>
-	<body>
-		{% include 'includes/mainHeader.html' %}
-		
-		{% include 'includes/adminMenu.html' %}
 
-		{% include 'includes/generalMenu.html' %}	
-		
-		<!--Users - We'll put this in a container-->		
-		
-		<ul id="usersList"> 
-		{% for account in Accounts %}		
-         <li class="userItem">
-				<a href="/profile?userId={{account.key.integer_id()}}" class="userItemName">{{ account.Name }}</a>
-				<span>{{ account.Email }}</span>
-				<span treasurerAllowed>
-					<span>Credits: {{ account.Credits }} Add:</span>
-					<!--these are not hyperlinks because we will use AJAX (javascript)to send the webservice-->
-					<span class="add1Credit" onclick="changeCredits({{account.key.integer_id()}},1)">+1</span>
-					<span class="add1Credit" onclick="changeCredits({{account.key.integer_id()}},10)">+10</span>
-					<span class="take1Credit" onclick="changeCredits({{account.key.integer_id()}},-1)">-1</span>
-				</span>
-			</li>
-		 {% endfor %}
-		 <li>
-			<a id='createUser' href="/createUser" class="button" adminAllowed>Add New Member</a>
-		</li>
-		</ul>
-		
-		{% include 'includes/footer.html' %}
-	</body>
+<head>
+	<title>Users</title>
+
+	{% include 'includes/meta-tags.html' %} {% include 'includes/css-links.html' %} {% include 'includes/js-libraries.html' %}
+
+</head>
+
+<body>
+	<!-- Header -->
+	{% include 'includes/navbar.html' %}
+
+	<!--Content-->
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3">
+				<p class="lead">Users</p>
+			</div>
+			<div class="col-md-9">
+				<center>
+					<ul id="usersList">
+						{% for account in Accounts %}
+						<li class="userItem">
+							<a href="/profile?userId={{account.key.integer_id()}}" class="userItemName">{{ account.Name }}</a>
+							<span>{{ account.Email }}</span>
+							<span treasurerAllowed>
+								<span>Credits: {{ account.Credits }} Add:</span>
+							<!--these are not hyperlinks because we will use AJAX (javascript)to send the webservice-->
+							<span class="add1Credit" onclick="changeCredits({{account.key.integer_id()}},1)">+1</span>
+							<span class="add1Credit" onclick="changeCredits({{account.key.integer_id()}},10)">+10</span>
+							<span class="take1Credit" onclick="changeCredits({{account.key.integer_id()}},-1)">-1</span>
+							</span>
+						</li>
+						{% endfor %}
+						<li>
+							<a id='createUser' href="/createUser" class="button" adminAllowed>Add New Member</a>
+						</li>
+					</ul>
+				</center>
+			</div>
+
+		</div>
+
+	</div>
+
+	{% include 'includes/footer.html' %}
+</body>
 </html>

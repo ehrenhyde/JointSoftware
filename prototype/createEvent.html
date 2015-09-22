@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html>
+<html lang="en">
 	<head>
 		<title>Create Event</title>
 		
@@ -11,11 +11,7 @@
 		
 	</head>
 	<body>
-		{% include 'includes/mainHeader.html' %}
-		
-		{% include 'includes/adminMenu.html' %}
-
-		{% include 'includes/generalMenu.html' %}	
+		{% include 'includes/navbar.html' %}
 		
 		<!--Create Event - We'll put this in a container-->
 		<form id="eventDetails" action="/createevent" method="post">
