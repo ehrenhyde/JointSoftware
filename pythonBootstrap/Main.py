@@ -11,7 +11,7 @@ import jinja2
 import webapp2
 import json
 
-LOCAL_TESTING = False
+LOCAL_TESTING = True
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -336,7 +336,7 @@ class CreateEvent(webapp2.RequestHandler):
 	a.Location = self.request.get('location')
 	#a.Attendiees = Attendiees(UserID = user.key.integer_id(),AttendingStatus = 'Attending')
 	a.put()
-	Attedie = Attendiees(UserID = 5169618595348480,AttendingStatus = 'Attending')
+	Attedie = Attendiees(UserID = user.key.integer_id(),AttendingStatus = 'Attending')
         a.Attendiees.append(Attedie)
         a.put()
 	self.redirect('/events')		
