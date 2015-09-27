@@ -10,6 +10,7 @@ from google.appengine.api import memcache
 import jinja2
 import webapp2
 import json
+import datetime
 
 LOCAL_TESTING = False
 
@@ -142,11 +143,11 @@ class Account(ndb.Model):
 	session_id = ndb.StringProperty()
 
 class Event(ndb.Model):
+        EventNum =ndb.IntegerProperty()
 	Name = ndb.StringProperty()
 	Description  = ndb.StringProperty()
 	Date= ndb.DateProperty(auto_now_add=True)
 	Time = ndb.TimeProperty(auto_now_add=True)
-	Duration = ndb.IntegerProperty()
 	Location = ndb.StringProperty()
 	Attendiees = ndb.StructuredProperty(Attendiees, repeated=True)
 	Attendiees_count = ndb.ComputedProperty(lambda e: len(e.Attendiees))
@@ -301,13 +302,25 @@ class EventsMain(webapp2.RequestHandler):
             self.redirect(nextPath)
         else:
             AttendingEvents = Event.query(Event.Attendiees.UserID == user.key.integer_id())
+            PastEvents = Event.query(Event.Date < datetime.datetime.today())
             UpcomingEvent = Event.query()
+            AttendingUpcomingEvent = Event.query()
+            for X in AttendingEvents: #removes events that user is attending from all events
+               UpcomingEvent = UpcomingEvent.filter(Event.EventNum != X.key.integer_id())
 
-            for X in AttendingEvents:
-                UpcomingEvent = UpcomingEvent.filter(Event.Name != X.Name)
+            for X in UpcomingEvent: #removes events that user isnt attending: creating a query pased on Event num.
+               AttendingUpcomingEvent = AttendingUpcomingEvent.filter(Event.EventNum != X.key.integer_id())
+            
+            for X in PastEvents:#removes any event that have passed
+               AttendingUpcomingEvent = AttendingUpcomingEvent.filter(Event.EventNum != X.key.integer_id())
+            
+            for X in PastEvents:#removes any event that have passed
+               UpcomingEvent = UpcomingEvent.filter(Event.EventNum != X.key.integer_id())
 
+
+            UpcomingEvent =UpcomingEvent.order(Event.EventNum,-Event.Date)
 	    template_values = {
-                'Events' : AttendingEvents,
+                'Events' : AttendingUpcomingEvent,
                 'Events2' : UpcomingEvent,
                 'user': user
                 }
@@ -334,8 +347,12 @@ class CreateEvent(webapp2.RequestHandler):
 	a.Name =self.request.get('name')
 	a.Description =self.request.get('desc')
 	a.Location = self.request.get('location')
+	#a.Date = self.request.get('date')
+	a.Date = datetime.datetime.strptime(self.request.get('date'),"%d-%m-%Y")
+	#a.Time = self.request.get('time')
 	#a.Attendiees = Attendiees(UserID = user.key.integer_id(),AttendingStatus = 'Attending')
 	a.put()
+	a.EventNum = a.key.integer_id()
 	Attedie = Attendiees(UserID = user.key.integer_id(),AttendingStatus = 'Attending')
         a.Attendiees.append(Attedie)
         a.put()
