@@ -316,9 +316,6 @@ class EventsMain(webapp2.RequestHandler):
             
             for X in PastEvents:#removes any event that have passed
                UpcomingEvent = UpcomingEvent.filter(Event.EventNum != X.key.integer_id())
-
-
-            UpcomingEvent =UpcomingEvent.order(Event.EventNum,-Event.Date)
 	    template_values = {
                 'Events' : AttendingUpcomingEvent,
                 'Events2' : UpcomingEvent,
