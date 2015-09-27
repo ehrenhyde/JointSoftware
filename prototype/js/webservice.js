@@ -25,6 +25,32 @@ function sendAttending(status,eventId,userId){
 	});
 }
 
+function toggleAttendance(eventId,userId,htmlCaller){
+	console.log('called toggleAttendance eventId: ' + eventId + ' userId: ' + userId);
+	
+	$.ajax({
+		type: "POST",
+		url: "/toggleAttendance",
+		dataType: 'json',
+		data: JSON.stringify({
+			"eventId":eventId,
+			"userId" : userId
+		})
+	})
+	.done(function( data ) {
+		console.log('toggleAttendance returned');
+		if (data.success == true){
+			console.log('toggleAttendance was a success. version: ' + data.version + ' oldStatus: ' + data.oldStatus +' newStatus: ' + data.newStatus);
+			$(htmlCaller).text(data.newButtonMsg);
+		}else{
+			console.log('toggleAttendance fail');
+			console.log(data.success);
+		}
+		//location.reload();
+	});
+	
+}
+
 function addAttending(status,eventId){
 	console.log("calling addAttending");
 	var Input = $("#Adduser");
@@ -45,31 +71,6 @@ function SaveComment(eventId){
 		data: JSON.stringify({
 			"Comment": comment,
 			"eventId":eventId,
-		})
-	})
-	.done(function( data ) {
-		console.log('returned');
-		if (data.success == true){
-			console.log('was a success');
-		}else{
-			console.log('fail');
-			console.log(data.success);
-		}
-		location.reload();
-	});
-}
-
-function removeAttending(eventId,userId){
-	console.log("calling removeAttending");
-	console.log('eventId = ' + eventId);	
-	console.log('userId = ' + userId);
-	$.ajax({
-		type: "POST",
-		url: "/removeAttendance",
-		dataType: 'json',
-		data: JSON.stringify({
-			"eventId":eventId,
-			"userId" : userId
 		})
 	})
 	.done(function( data ) {

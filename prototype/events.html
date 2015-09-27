@@ -38,13 +38,10 @@
                   <th colspan="2">
                     Attendance
                   </th>
-                  <th>
-                    Details
-                  </th>
                 </tr>
                 
                 
-				{% for Event in Events %}
+				{% for Event in UpcomingEvents %}
                   <tr>
                     <td>
                       <a href="/eventdetails?eventId={{Event.key.integer_id()}}" >
@@ -57,16 +54,25 @@
                       </span>
                     </td>
                     
-                    
-                    <td>
-                      <input ID= 'Attendance2' type="button" value="Unattend" onclick="removeAttending({{Event.key.integer_id()}},{{user.key.integer_id()}})" />
-                    </td>
-                    <td>
-                      <input type="button" value="Maybe" onclick="window.location.href='#'" />
+					<td>
+						<button id="attendanceToggle-{{Event.key.integer_id()}}" onclick = 'toggleAttendance({{Event.key.integer_id()}},{{user.key.integer_id()}},this)'>My Button Text</button>
                     </td>
                   </tr>
                   {% endfor %}	
-                  {% for Event in Events2 %}	
+				</table>
+			  <div class="panel-heading">
+				Past Events
+			  </div>
+			  <table class="table">
+				<tr>
+                  <th>
+                    Event
+                  </th>
+                  <th>
+                    Time
+                  </th>
+                </tr>
+                  {% for Event in PastEvents %}	
                   <tr>
                     <td>
                       <a href="/eventdetails?eventId={{Event.key.integer_id()}}" >
@@ -77,13 +83,6 @@
                       <span class="eventItemDatetime">
                         {{Event.Date}} {{Event.Time}}
                       </span>
-                    </td>
-                    
-                    <td>
-                      <input ID= 'Attendance' type="button" value="Attending" onclick="sendAttending('Attending',{{Event.key.integer_id()}},{{user.key.integer_id()}})" />
-                    </td>
-                    <td>
-                      <input ID= 'Attendance2' type="button" value="Maybe" onclick="sendAttending('Maybe',{{Event.key.integer_id()}},{{user.key.integer_id()}})"/>
                     </td>
                     
                   </tr>

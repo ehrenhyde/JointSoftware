@@ -11,6 +11,8 @@ import jinja2
 import webapp2
 import json
 
+from datetime import *
+
 LOCAL_TESTING = False
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -124,7 +126,7 @@ class Session:
         if tmp.Password != p: return None
         return tmp
     
-class Attendiees(ndb.Model):
+class Attendees(ndb.Model):
         UserID = ndb.IntegerProperty()
         AttendingStatus = ndb.StringProperty()
 
@@ -144,12 +146,12 @@ class Account(ndb.Model):
 class Event(ndb.Model):
 	Name = ndb.StringProperty()
 	Description  = ndb.StringProperty()
-	Date= ndb.DateProperty(auto_now_add=True)
-	Time = ndb.TimeProperty(auto_now_add=True)
+	Date= ndb.DateProperty()
+	Time = ndb.TimeProperty()
 	Duration = ndb.IntegerProperty()
 	Location = ndb.StringProperty()
-	Attendiees = ndb.StructuredProperty(Attendiees, repeated=True)
-	Attendiees_count = ndb.ComputedProperty(lambda e: len(e.Attendiees))
+	Attendees = ndb.StructuredProperty(Attendees, repeated=True)
+	Attendees_count = ndb.ComputedProperty(lambda e: len(e.Attendees))
 	Comment = ndb.TextProperty()
 	
 class MainPage(webapp2.RequestHandler):
@@ -300,15 +302,19 @@ class EventsMain(webapp2.RequestHandler):
             nextPath = '='.join(('/login?continue',self.request.url))
             self.redirect(nextPath)
         else:
-            AttendingEvents = Event.query(Event.Attendiees.UserID == user.key.integer_id())
-            UpcomingEvent = Event.query()
+            
+            query_date = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+            
+            UpcomingEvents = Event.query(Event.Date>=query_date).order(Event.Date)
 
-            for X in AttendingEvents:
-                UpcomingEvent = UpcomingEvent.filter(Event.Name != X.Name)
-
+            PastEvents = Event.query()
+            
+            for X in UpcomingEvents:
+                PastEvents = PastEvents.filter(Event.Name != X.Name)
+            
 	    template_values = {
-                'Events' : AttendingEvents,
-                'Events2' : UpcomingEvent,
+                'UpcomingEvents' : UpcomingEvents,
+                'PastEvents' : PastEvents,
                 'user': user
                 }
 	    template = JINJA_ENVIRONMENT.get_template('events.html')
@@ -334,10 +340,19 @@ class CreateEvent(webapp2.RequestHandler):
 	a.Name =self.request.get('name')
 	a.Description =self.request.get('desc')
 	a.Location = self.request.get('location')
-	#a.Attendiees = Attendiees(UserID = user.key.integer_id(),AttendingStatus = 'Attending')
+
+        strDate = self.request.get('date')
+	yearMonthDay = strDate.split('-')
+        a.Date =  date(int(yearMonthDay[0]),int(yearMonthDay[1]), int(yearMonthDay[2]))
+
+        strTime = self.request.get('time')
+        hoursMins = strTime.split(':')
+        a.Time = time(int(hoursMins[0]),int(hoursMins[1]))
+        
+	#a.Attendees = Attendees(UserID = user.key.integer_id(),AttendingStatus = 'Attending')
 	a.put()
-	Attedie = Attendiees(UserID = user.key.integer_id(),AttendingStatus = 'Attending')
-        a.Attendiees.append(Attedie)
+	Attendee = Attendees(UserID = user.key.integer_id(),AttendingStatus = 'Attending')
+        a.Attendees.append(Attendee)
         a.put()
 	self.redirect('/events')		
 		
@@ -351,74 +366,101 @@ class EventDetails(webapp2.RequestHandler):
             UserAttending = False
             targetEventId = long(self.request.get('eventId'))
             targetEvent = Event.get_by_id(targetEventId)
-            AdttendieName=[]
-            AdttendieStatus=[]
+            attendeeName=[]
+            attendeeStatus=[]
             Accounts = Account.query()
-            for AdttendieNum in range(targetEvent.Attendiees_count):
-                Attendie =  Account.get_by_id(targetEvent.Attendiees[AdttendieNum].UserID)
-                if targetEvent.Attendiees[AdttendieNum].UserID == user.key.integer_id():
+            for attendeeNum in range(targetEvent.Attendees_count):
+                attendee =  Account.get_by_id(targetEvent.Attendees[attendeeNum].UserID)
+                if targetEvent.Attendees[attendeeNum].UserID == user.key.integer_id():
                     UserAttending = True
-                AdttendieName.insert(AdttendieNum, Attendie.Name)
-                AdttendieStatus.insert(AdttendieNum, targetEvent.Attendiees[AdttendieNum].AttendingStatus)
+                attendeeName.insert(attendeeNum, attendee.Name)
+                attendeeStatus.insert(attendeeNum, targetEvent.Attendees[attendeeNum].AttendingStatus)
 	    template_values = {
                 'user':user,
                 'Event':targetEvent,
                 'Accounts' : Accounts,
                 'UserAttending': UserAttending,
-                'AttendieNames': AdttendieName,
-                'AttendieStatus': AdttendieStatus
+                'AttendeeNames': AttendeeName,
+                'AttendeeStatus': AttendeeStatus
             }
 	    template = JINJA_ENVIRONMENT.get_template('eventDetails.html')
 	    self.response.write(template.render(template_values))
        
 class ToggleAttendance(webapp2.RequestHandler):
-    def post(self):
-        data = json.loads(self.request.body)
-        status = data['status']
-        eventId = data['eventId']
-        userId = data['userId']
+    def removeAttendee(self,event,user):
         #Update server with values
-        ThisEvent = Event.get_by_id(eventId)
-        attendie = Attendiees(UserID = userId,AttendingStatus = status)
-        ThisEvent.Attendiees.append(attendie)
+       
+        event.Attendees = [i for i in event.Attendees if i.UserID != user.key.integer_id()]
+        event.put()
 
-        if status == 'Attending':
-            user = Account.get_by_id(userId)
-            user.Credits = user.Credits - 1
-            user.put()
-        
-        ThisEvent.put()
-        success = True    
-        jsonRetVal = json.dumps(
-            {
-                'success':success          
-            }
-        )
-        self.response.write(jsonRetVal)
+        #Already refunded when switched to Maybe
+        #user.Credits = user.Credits + 1 
+        #user.put()
 
-class RemoveAttendance(webapp2.RequestHandler):
-    def post(self):
-        data = json.loads(self.request.body)
-        eventId = data['eventId']
-        userId = data['userId']
-        #Update server with values
-        a = Event.get_by_id(eventId)
-        a.Attendiees = [i for i in a.Attendiees if i.UserID != userId]
-        a.put()
+    def addAttendee(self,event,user):
+        Attendee = Attendees(UserID = user.key.integer_id(),AttendingStatus = 'Attending')
+        event.Attendees.append(Attendee)
+        event.put()
 
-        user = Account.get_by_id(userId)
+        user.Credits = user.Credits - 1
+        user.put()
+
+    def makeAttendeeMaybe(self,event,user):
+
+        for attendeeNum in range(event.Attendees_count):#loops all attendees
+            if event.Attendees[attendeeNum].UserID == user.key.integer_id():
+                event.Attendees[attendeeNum].AttendingStatus = "Maybe"
+        event.put()
+            
+
         user.Credits = user.Credits + 1
         user.put()
         
+    def post(self):
+        data = json.loads(self.request.body)
+        eventId = data['eventId']
+        userId = data['userId']
+
+        event = Event.get_by_id(eventId)
+        user = Account.get_by_id(userId)
+
+        currentAttendStatus = 'Decline'
+        newStatus = 'none'
+        newButtonMsg = "none set"
+        
+        for attendee in event.Attendees:
+            if attendee.UserID == userId:
+                currentAttendStatus = attendee.AttendingStatus
+
+        if currentAttendStatus == 'Attending':
+            #Make Maybe
+            self.makeAttendeeMaybe(event,user)
+            newStatus = "Maybe"
+            newButtonMsg = 'Unregister'
+        elif currentAttendStatus == 'Maybe':
+            #Make Decline
+            self.removeAttendee(event,user)
+            newStatus = "Decline"
+            newButtonMsg = 'Register'
+        else:
+            #Make Attending
+            self.addAttendee(event,user)
+            newStatus = "Attending"
+            newButtonMsg = 'Change to Maybe'
+        
         success = True    
         jsonRetVal = json.dumps(
             {
-                'success':success          
+                'success':success,
+                'oldStatus':currentAttendStatus,
+                'newStatus':newStatus,
+                'newButtonMsg':newButtonMsg,
+                'version':'10'
             }
         )
         self.response.write(jsonRetVal)
 
-class CancleEvent(webapp2.RequestHandler):
+class CancelEvent(webapp2.RequestHandler):
     def get(self):
         user = Session(self).get_current_user()
         if not user:
@@ -429,12 +471,12 @@ class CancleEvent(webapp2.RequestHandler):
             targetEventId = long(self.request.get('eventId'))
             targetEvent = Event.get_by_id(targetEventId)
             Accounts = Account.query()
-            for AdttendieNum in range(targetEvent.Attendiees_count):#loops all attendies
-                Attendie =  Account.get_by_id(targetEvent.Attendiees[AdttendieNum].UserID)#gets account of attendie
-                targetEvent.Attendiees = [i for i in targetEvent.Attendiees if i.UserID != Attendie.key.integer_id()]#removes attendie for event
+            for attendeeNum in range(targetEvent.Attendees_count):#loops all attendees
+                attendee =  Account.get_by_id(targetEvent.Attendees[attendeeNum].UserID)#gets account of attendee
+                targetEvent.Attendees = [i for i in targetEvent.Attendees if i.UserID != attendee.key.integer_id()]#removes attendie for event
                 targetEvent.put()#saves event
-                Attendie.Credits = user.Credits + 1 #refunds credit
-                Attendie.put()#saves user
+                attendee.Credits = user.Credits + 1 #refunds credit
+                attendee.put()#saves user
             targetEvent.key.delete()#removes the event
             self.redirect('/events')   
 
@@ -482,9 +524,8 @@ app = webapp2.WSGIApplication([
     ('/eventdetails',EventDetails),
     ('/login',Login),
     ('/toggleAttendance',ToggleAttendance),
-    ('/removeAttendance',RemoveAttendance),
     ('/SaveComment',SaveComment),
     ('/logout',Logout),
     ('/changeCredits',ChangeCredits),
-    ('/CancleEvent',CancleEvent)
+    ('/CancelEvent',CancelEvent)
 ], debug=True)
