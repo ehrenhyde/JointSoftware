@@ -10,7 +10,6 @@ from google.appengine.api import memcache
 import jinja2
 import webapp2
 import json
-import datetime
 
 from datetime import *
 
@@ -145,17 +144,11 @@ class Account(ndb.Model):
 	session_id = ndb.StringProperty()
 
 class Event(ndb.Model):
-        EventNum =ndb.IntegerProperty()
+        #EventNum =ndb.IntegerProperty()
 	Name = ndb.StringProperty()
 	Description  = ndb.StringProperty()
-<<<<<<< HEAD
 	Date= ndb.DateProperty()
 	Time = ndb.TimeProperty()
-	Duration = ndb.IntegerProperty()
-=======
-	Date= ndb.DateProperty(auto_now_add=True)
-	Time = ndb.TimeProperty(auto_now_add=True)
->>>>>>> origin/master
 	Location = ndb.StringProperty()
 	Attendees = ndb.StructuredProperty(Attendees, repeated=True)
 	Attendees_count = ndb.ComputedProperty(lambda e: len(e.Attendees))
@@ -309,8 +302,6 @@ class EventsMain(webapp2.RequestHandler):
             nextPath = '='.join(('/login?continue',self.request.url))
             self.redirect(nextPath)
         else:
-<<<<<<< HEAD
-            
             query_date = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
             
             UpcomingEvents = Event.query(Event.Date>=query_date).order(Event.Date)
@@ -323,26 +314,6 @@ class EventsMain(webapp2.RequestHandler):
 	    template_values = {
                 'UpcomingEvents' : UpcomingEvents,
                 'PastEvents' : PastEvents,
-=======
-            AttendingEvents = Event.query(Event.Attendiees.UserID == user.key.integer_id())
-            PastEvents = Event.query(Event.Date < datetime.datetime.today())
-            UpcomingEvent = Event.query()
-            AttendingUpcomingEvent = Event.query()
-            for X in AttendingEvents: #removes events that user is attending from all events
-               UpcomingEvent = UpcomingEvent.filter(Event.EventNum != X.key.integer_id())
-
-            for X in UpcomingEvent: #removes events that user isnt attending: creating a query pased on Event num.
-               AttendingUpcomingEvent = AttendingUpcomingEvent.filter(Event.EventNum != X.key.integer_id())
-            
-            for X in PastEvents:#removes any event that have passed
-               AttendingUpcomingEvent = AttendingUpcomingEvent.filter(Event.EventNum != X.key.integer_id())
-            
-            for X in PastEvents:#removes any event that have passed
-               UpcomingEvent = UpcomingEvent.filter(Event.EventNum != X.key.integer_id())
-	    template_values = {
-                'Events' : AttendingUpcomingEvent,
-                'Events2' : UpcomingEvent,
->>>>>>> origin/master
                 'user': user
                 }
 	    template = JINJA_ENVIRONMENT.get_template('events.html')
@@ -363,36 +334,41 @@ class CreateEvent(webapp2.RequestHandler):
 		
     def post(self):
             #todo add security for create event( user is event manager)
-        user = Session(self).get_current_user()
-	a = Event()
-	a.Name =self.request.get('name')
-	a.Description =self.request.get('desc')
-	a.Location = self.request.get('location')
-<<<<<<< HEAD
-
-        strDate = self.request.get('date')
-	yearMonthDay = strDate.split('-')
-        a.Date =  date(int(yearMonthDay[0]),int(yearMonthDay[1]), int(yearMonthDay[2]))
-
-        strTime = self.request.get('time')
-        hoursMins = strTime.split(':')
-        a.Time = time(int(hoursMins[0]),int(hoursMins[1]))
         
-	#a.Attendees = Attendees(UserID = user.key.integer_id(),AttendingStatus = 'Attending')
-	a.put()
-	Attendee = Attendees(UserID = user.key.integer_id(),AttendingStatus = 'Attending')
-        a.Attendees.append(Attendee)
-=======
-	#a.Date = self.request.get('date')
-	a.Date = datetime.datetime.strptime(self.request.get('date'),"%d-%m-%Y")
-	#a.Time = self.request.get('time')
-	#a.Attendiees = Attendiees(UserID = user.key.integer_id(),AttendingStatus = 'Attending')
-	a.put()
-	a.EventNum = a.key.integer_id()
-	Attedie = Attendiees(UserID = user.key.integer_id(),AttendingStatus = 'Attending')
-        a.Attendiees.append(Attedie)
->>>>>>> origin/master
-        a.put()
+        if 'isRepeat' in self.request.POST:
+            intervaltype = int(self.request.get('intervaltype'))
+            if intervaltype == 1:
+                delay = timedelta(days=7)
+            elif intervaltype == 2:
+                delay = timedelta(days=14)
+            elif intervaltype == 3:
+                delay = timedelta(month=1)    
+        strDate = self.request.get('date')
+        yearMonthDay = strDate.split('-')
+        datevalue = date(int(yearMonthDay[0]),int(yearMonthDay[1]), int(yearMonthDay[2]))
+       
+        if 'isRepeat' in self.request.POST:
+             repeats = int(self.request.get('intervalnum'))
+        else:
+            repeats = 1
+        
+        for eventnum in range(repeats):
+            user = Session(self).get_current_user()
+            a = Event()
+            a.Name =self.request.get('name')
+            a.Description =self.request.get('desc')
+            a.Location = self.request.get('location')
+            a.Date =  datevalue
+            if 'isRepeat' in self.request.POST:
+                datevalue = datevalue + delay
+            strTime = self.request.get('time')
+            hoursMins = strTime.split(':')
+            a.Time = time(int(hoursMins[0]),int(hoursMins[1]))
+            #a.Attendees = Attendees(UserID = user.key.integer_id(),AttendingStatus = 'Attending')
+            a.put()
+            Attendee = Attendees(UserID = user.key.integer_id(),AttendingStatus = 'Attending')
+            a.Attendees.append(Attendee)
+            a.put()    
 	self.redirect('/events')		
 		
 class EventDetails(webapp2.RequestHandler):
@@ -405,15 +381,15 @@ class EventDetails(webapp2.RequestHandler):
             UserAttending = False
             targetEventId = long(self.request.get('eventId'))
             targetEvent = Event.get_by_id(targetEventId)
-            attendeeName=[]
-            attendeeStatus=[]
+            AttendeeName=[]
+            AttendeeStatus=[]
             Accounts = Account.query()
             for attendeeNum in range(targetEvent.Attendees_count):
                 attendee =  Account.get_by_id(targetEvent.Attendees[attendeeNum].UserID)
                 if targetEvent.Attendees[attendeeNum].UserID == user.key.integer_id():
                     UserAttending = True
-                attendeeName.insert(attendeeNum, attendee.Name)
-                attendeeStatus.insert(attendeeNum, targetEvent.Attendees[attendeeNum].AttendingStatus)
+                AttendeeName.insert(attendeeNum, attendee.Name)
+                AttendeeStatus.insert(attendeeNum, targetEvent.Attendees[attendeeNum].AttendingStatus)
 	    template_values = {
                 'user':user,
                 'Event':targetEvent,
