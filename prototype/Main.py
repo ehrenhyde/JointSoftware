@@ -437,42 +437,73 @@ class ToggleAttendance(webapp2.RequestHandler):
         userId = data['userId']
 
         event = Event.get_by_id(eventId)
-        user = Account.get_by_id(userId)
+        validDate = False
+        if event.Date> date.today():
 
-        currentAttendStatus = 'Decline'
-        newStatus = 'none'
-        newButtonMsg = "none set"
+            validDate = True 
+            
+        elif event.Date == date.today():
+             #TODO if it is today make sure its not with in hour
+           # if event.Date != date.today():
+            validDate = True 
+            #else:
+                #hour_delay = timedelta(hours=1)#time 1 hour before event
+                #valid_time = event.Time - hour_delay
+                #if valid_time < time.localtime(time.time()):
+                    #validDate = true
+                #else:
+                    #success = False
+                    #comment = 'attendence can not be changed 1 hour before event'    
         
-        for attendee in event.Attendees:
-            if attendee.UserID == userId:
-                currentAttendStatus = attendee.AttendingStatus
-
-        if currentAttendStatus == 'Attending':
-            #Make Maybe
-            self.makeAttendeeMaybe(event,user)
-            newStatus = "Maybe"
-            newButtonMsg = 'Unregister'
-        elif currentAttendStatus == 'Maybe':
-            #Make Decline
-            self.removeAttendee(event,user)
-            newStatus = "Decline"
-            newButtonMsg = 'Register'
         else:
-            #Make Attending
-            self.addAttendee(event,user)
-            newStatus = "Attending"
-            newButtonMsg = 'Change to Maybe'
-        
-        success = True    
-        jsonRetVal = json.dumps(
-            {
-                'success':success,
-                'oldStatus':currentAttendStatus,
-                'newStatus':newStatus,
-                'newButtonMsg':newButtonMsg,
-                'version':'10'
-            }
-        )
+            success = False
+            comment = 'attendence can not be changed to past events'
+
+        if validDate:       
+            user = Account.get_by_id(userId)
+            currentAttendStatus = 'Decline'
+            newStatus = 'none'
+            newButtonMsg = "none set"
+            
+            for attendee in event.Attendees:
+                if attendee.UserID == userId:
+                    currentAttendStatus = attendee.AttendingStatus
+
+            if currentAttendStatus == 'Attending':
+                #Make Maybe
+                self.makeAttendeeMaybe(event,user)
+                newStatus = "Maybe"
+                newButtonMsg = 'Unregister'
+            elif currentAttendStatus == 'Maybe':
+                #Make Decline
+                self.removeAttendee(event,user)
+                newStatus = "Decline"
+                newButtonMsg = 'Register'
+            else:
+                #Make Attending
+                self.addAttendee(event,user)
+                newStatus = "Attending"
+                newButtonMsg = 'Change to Maybe'
+            success = True
+                
+       
+        if success:
+            jsonRetVal = json.dumps(
+                {
+                    'success':success,
+                    'oldStatus':currentAttendStatus,
+                    'newStatus':newStatus,
+                    'newButtonMsg':newButtonMsg,
+                    'version':'10'
+                }
+            )
+        else:
+            jsonRetVal = json.dumps(
+                {
+                    'success':success,
+                    'comment':comment
+                } 
+            )
         self.response.write(jsonRetVal)
 
 class CancelEvent(webapp2.RequestHandler):
