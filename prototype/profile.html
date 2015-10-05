@@ -23,14 +23,18 @@
 			<div class="col-md-3">
                 <center>
 					{% include 'includes/sideProfile.html' %}
-					<button>Upload Photo</button>
-					<br><br>
+					<form action="{{uploadURL}}" method="POST" enctype="multipart/form-data">
+						Upload Photo: <input type="file" name="ProfilePic"><br>
+						<input type="submit" name="submit" value="Submit">
+					</form>
+					<!--<button>Upload Photo</button>
+					<br><br>-->
 				</center>
             </div>
 			<div class="col-md-9">
-				<!--<img src="..." alt="..." class="img-thumbnail">-->
+				<img style="height:200px;width:250px;" alt="ProfilePic" class="img-thumbnail" src="/ViewProfilePhoto/{{targetUser.ProfilePicBlobKey}}" />></img>
 				<center>
-					<form action="/changeUserDetails" id="userDetails" class="form-horizontal" method="post">
+					<form action="/changeUserDetails" id="userDetails" class="form-horizontal" method="post" enctype="multipart/form-data">
 
 						<input type="hidden" name="targetUserId" value="{{targetUser.key.integer_id()}}">
 
@@ -75,13 +79,7 @@
 								<input type="text" class="form-control" id="emergencyMobile" value="{{targetUser.Emergency_Phone}}">
 							</div>
 						</div>
-
-
-
-
-						<!--<div class="form-group">-->
-						<!--<div class="col-sm-offset-2 col-sm-10">-->
-						<!--<div class="checkbox">-->
+						
 						<label class="checkbox-inline">
 							<input type="checkbox" id="isAdmin" {%if targetUser.Admin %} checked="checked" {% endif %}> Administrator
 						</label>
@@ -91,15 +89,15 @@
 						<label class="checkbox-inline">
 							<input type="checkbox" id="isEventManager" {%if targetUser.EventManager %} checked="checked" {% endif %}> Event Manager
 						</label>
-						<!--</div>-->
-						<!--</div>-->
-						<!--</div>-->
+					
 						<div class="form-group">
 							<div class="col-sm-offset-2 col-sm-10">
 								<button type="submit" class="btn btn-default">Submit</button>
 							</div>
 						</div>
 					</form>
+					
+					
 				</center>
 			</div>
 

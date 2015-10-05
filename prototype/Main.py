@@ -3,9 +3,11 @@ import os
 import urllib
 import uuid
 
-#depreciated from google.appengine.api import users
 from google.appengine.ext import ndb
+from google.appengine.ext import blobstore
 from google.appengine.api import memcache
+from google.appengine.ext.webapp import blobstore_handlers
+from google.appengine.ext.webapp.util import run_wsgi_app
 
 import jinja2
 import webapp2
@@ -141,7 +143,9 @@ class Account(ndb.Model):
 	Admin= ndb.BooleanProperty()
 	Treasurer = ndb.BooleanProperty()
 	EventManager = ndb.BooleanProperty()
+	ProfilePicBlobKey = ndb.BlobKeyProperty()
 	session_id = ndb.StringProperty()
+	TestField = ndb.StringProperty()
 
 class Event(ndb.Model):
         #EventNum =ndb.IntegerProperty()
@@ -174,7 +178,7 @@ class Login(webapp2.RequestHandler):
         if not c: c = '/events' 
         u = self.request.get('Email') 
         p = self.request.get('Password') 
-        tmp = Session(self).grab_login(u,p) 
+        tmp = Session(self).grab_login(u,p)
         if not tmp: 
             if tmp is None: msg = 'Bad username and/or password' 
             variables = {
@@ -225,8 +229,39 @@ class changeUserDetails(webapp2.RequestHandler):
             a.EventManager = True
         else:
             a.EventManager = False
+            
 	a.put()
+
+	user = Session(self).get_current_user()
+	user.ProfilePic =None
+        user.put()
 	self.redirect('/users')
+
+#https://cloud.google.com/appengine/docs/python/blobstore/
+class ProfilePhotoUpload(blobstore_handlers.BlobstoreUploadHandler):
+    def post(self):
+        try:
+            upload = self.get_uploads()[0]
+            user = Session(self).get_current_user()
+            user.ProfilePicBlobKey = upload.key()
+            user.put()
+            #user_photo = UserPhoto(user=users.get_current_user().user_id(),
+            #                       blob_key=upload.key())
+            #user_photo.put()
+            #self.response.write("Key is : ")
+            #self.response.write(upload.key())
+            #self.redirect('/ViewProfilePhoto/%s' % upload.key())
+            self.redirect('/users')
+
+        except:
+            self.error(500)
+            
+class ViewProfilePhoto(blobstore_handlers.BlobstoreDownloadHandler):
+    def get(self, photo_key):
+        if not blobstore.get(photo_key):
+            self.error(404)
+        else:
+            self.send_blob(photo_key)
 
 class CreateUser(webapp2.RequestHandler):
     def get(self):
@@ -288,9 +323,12 @@ class profile(webapp2.RequestHandler):
             #else the logged in user
             else:
                 targetUser = user
+
+            uploadURL = blobstore.create_upload_url('/ProfilePhotoUpload')
             template_values = {
                 'user' : user,
-                'targetUser': targetUser
+                'targetUser': targetUser,
+                'uploadURL':uploadURL
 	    }
             template = JINJA_ENVIRONMENT.get_template('profile.html')
             self.response.write(template.render(template_values))	
@@ -573,5 +611,7 @@ app = webapp2.WSGIApplication([
     ('/SaveComment',SaveComment),
     ('/logout',Logout),
     ('/changeCredits',ChangeCredits),
-    ('/CancelEvent',CancelEvent)
+    ('/CancelEvent',CancelEvent),
+    ('/ProfilePhotoUpload',ProfilePhotoUpload),
+    ('/ViewProfilePhoto/([^/]+)?', ViewProfilePhoto),
 ], debug=True)
