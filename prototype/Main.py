@@ -207,7 +207,7 @@ class Users(webapp2.RequestHandler):
             self.response.write(template.render(template_values))
 
             
-class changeUserDetails(webapp2.RequestHandler):
+class changeUserDetails(blobstore_handlers.BlobstoreUploadHandler):
     def post(self):
         #Todo add security that checks logged in user is admin
 	ID = long(self.request.get('targetUserId'))
@@ -229,28 +229,24 @@ class changeUserDetails(webapp2.RequestHandler):
             a.EventManager = True
         else:
             a.EventManager = False
+
+        if self.get_uploads():
+            upload = self.get_uploads()[0]
+            a.ProfilePicBlobKey = upload.key()
             
 	a.put()
 
-	user = Session(self).get_current_user()
-	user.ProfilePic =None
-        user.put()
 	self.redirect('/users')
 
 #https://cloud.google.com/appengine/docs/python/blobstore/
-class ProfilePhotoUpload(blobstore_handlers.BlobstoreUploadHandler):
+class myProfilePhotoUpload(blobstore_handlers.BlobstoreUploadHandler):
     def post(self):
         try:
             upload = self.get_uploads()[0]
             user = Session(self).get_current_user()
             user.ProfilePicBlobKey = upload.key()
             user.put()
-            #user_photo = UserPhoto(user=users.get_current_user().user_id(),
-            #                       blob_key=upload.key())
-            #user_photo.put()
-            #self.response.write("Key is : ")
-            #self.response.write(upload.key())
-            #self.redirect('/ViewProfilePhoto/%s' % upload.key())
+            
             self.redirect('/users')
 
         except:
@@ -324,11 +320,13 @@ class profile(webapp2.RequestHandler):
             else:
                 targetUser = user
 
-            uploadURL = blobstore.create_upload_url('/ProfilePhotoUpload')
+            userUploadURL = blobstore.create_upload_url('/myProfilePhotoUpload')
+            targetUserUploadURL = blobstore.create_upload_url('/changeUserDetails')
             template_values = {
                 'user' : user,
                 'targetUser': targetUser,
-                'uploadURL':uploadURL
+                'userUploadURL':userUploadURL,
+                'targetUserUploadURL':targetUserUploadURL
 	    }
             template = JINJA_ENVIRONMENT.get_template('profile.html')
             self.response.write(template.render(template_values))	
@@ -612,6 +610,6 @@ app = webapp2.WSGIApplication([
     ('/logout',Logout),
     ('/changeCredits',ChangeCredits),
     ('/CancelEvent',CancelEvent),
-    ('/ProfilePhotoUpload',ProfilePhotoUpload),
+    ('/myProfilePhotoUpload',myProfilePhotoUpload),
     ('/ViewProfilePhoto/([^/]+)?', ViewProfilePhoto),
 ], debug=True)
