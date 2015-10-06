@@ -19,7 +19,44 @@
 				{% include 'includes/sideProfile.html' %}
 			</div>
 			<div class="col-md-9">
-				<center>
+				    <div class="panel panel-default">
+					<div class="panel-heading">
+						Users
+					</div> 
+					 <table class="table">
+									<tr>
+									  <th>
+										Name
+									  </th>
+									  <th>
+										Email
+									  </th>
+									  <th>
+										Credits
+									  </th>
+									</tr>
+						{% for account in Accounts %}
+						<tr>
+							<td>
+								<a href="/profile?userId={{account.key.integer_id()}}" class="userItemName">{{ account.Name }}</a>			
+							</td>
+							<td>
+								<span>{{ account.Email }}</span>
+							</td>
+							<td>
+								<span treasurerAllowed>
+									<span>Credits: {{ account.Credits }} Add:</span>
+									<!--these are not hyperlinks because we will use AJAX (javascript)to send the webservice-->
+									<span class="add1Credit" onclick="changeCredits({{account.key.integer_id()}},1)">+1</span>
+									<span class="add1Credit" onclick="changeCredits({{account.key.integer_id()}},10)">+10</span>
+									<span class="take1Credit" onclick="changeCredits({{account.key.integer_id()}},-1)">-1</span>
+								</span>
+							</td>	
+						</tr>
+						{% endfor %}
+					</table>
+					<a id='createUser' href="/createUser" class="button" adminAllowed>Add New Member</a>
+					<!--
 					<ul id="usersList">
 						{% for account in Accounts %}
 						<li class="userItem">
@@ -27,7 +64,7 @@
 							<span>{{ account.Email }}</span>
 							<span treasurerAllowed>
 								<span>Credits: {{ account.Credits }} Add:</span>
-							<!--these are not hyperlinks because we will use AJAX (javascript)to send the webservice-->
+							these are not hyperlinks because we will use AJAX (javascript)to send the webservice
 							<span class="add1Credit" onclick="changeCredits({{account.key.integer_id()}},1)">+1</span>
 							<span class="add1Credit" onclick="changeCredits({{account.key.integer_id()}},10)">+10</span>
 							<span class="take1Credit" onclick="changeCredits({{account.key.integer_id()}},-1)">-1</span>
@@ -38,11 +75,10 @@
 							<a id='createUser' href="/createUser" class="button" adminAllowed>Add New Member</a>
 						</li>
 					</ul>
-				</center>
+					-->
 			</div>
-
+			</div>
 		</div>
-
 	</div>
 
 	{% include 'includes/footer.html' %}

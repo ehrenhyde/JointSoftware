@@ -32,13 +32,11 @@
 				</center>
             </div>
 			<div class="col-md-9">
-				<img style="height:200px;width:250px;" alt="ProfilePic" class="img-thumbnail" src="/ViewProfilePhoto/{{targetUser.ProfilePicBlobKey}}" /></img>
-				
 				<center>
+				<img style="height:220px;width:220px;" alt="ProfilePic" class="img-thumbnail" src="/ViewProfilePhoto/{{targetUser.ProfilePicBlobKey}}" /></img>
+				<br><br>
 					<form action="{{targetUserUploadURL}}" id="userDetails" class="form-horizontal" method="post" enctype="multipart/form-data">
-
 						<input type="hidden" name="targetUserId" value="{{targetUser.key.integer_id()}}">
-
 						<div class="form-group">
 							<label for="email" class="col-sm-2 control-label">Email</label>
 							<div class="col-sm-10">
@@ -90,24 +88,16 @@
 						<label class="checkbox-inline">
 							<input type="checkbox" id="isEventManager" {%if targetUser.EventManager %} checked="checked" {% endif %}> Event Manager
 						</label>
-						
+						<br><br>
 						Upload Photo: <input type="file" name="ProfilePic"><br>
-					
 						<div class="form-group">
-							<div class="col-sm-offset-2 col-sm-10">
 								<button type="submit" class="btn btn-default">Submit</button>
-							</div>
 						</div>
 					</form>
-					
-					
 				</center>
 			</div>
-
 		</div>
-
 	</div>
 	{% include 'includes/footer.html' %}
 </body>
-
 </html>
