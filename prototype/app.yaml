@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 application: freedivers-1032
 version: ehren
+=======
+application: jointsoftwaretest
+version: 3
+>>>>>>> origin/master
 runtime: python27
 api_version: 1
 threadsafe: true

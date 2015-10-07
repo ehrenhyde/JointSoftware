@@ -154,8 +154,7 @@ class Event(ndb.Model):
         #EventNum =ndb.IntegerProperty()
 	Name = ndb.StringProperty()
 	Description  = ndb.StringProperty()
-	Date= ndb.DateProperty()
-	Time = ndb.TimeProperty()
+	DateTime = ndb.DateTimeProperty()
 	Location = ndb.StringProperty()
 	Attendees = ndb.StructuredProperty(Attendees, repeated=True)
 	Attendees_count = ndb.ComputedProperty(lambda e: len(e.Attendees))
@@ -343,7 +342,7 @@ class EventsMain(webapp2.RequestHandler):
         else:
             query_date = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
             
-            UpcomingEvents = Event.query(Event.Date>=query_date).order(Event.Date)
+            UpcomingEvents = Event.query(Event.DateTime>=query_date).order(Event.DateTime)
 
             PastEvents = Event.query()
             
@@ -397,14 +396,12 @@ class CreateEvent(webapp2.RequestHandler):
             a.Name =self.request.get('name')
             a.Description =self.request.get('desc')
             a.Location = self.request.get('location')
-            a.Date =  datevalue
-            if 'isRepeat' in self.request.POST:
-                datevalue = datevalue + delay
             strTime = self.request.get('time')
             hoursMins = strTime.split(':')
-            a.Time = time(int(hoursMins[0]),int(hoursMins[1]))
-            #a.Attendees = Attendees(UserID = user.key.integer_id(),AttendingStatus = 'Attending')
+            a.DateTime = datetime.combine( datevalue,time(int(hoursMins[0]),int(hoursMins[1])))
             a.put()
+            if 'isRepeat' in self.request.POST:
+                datevalue = datevalue + delay
             Attendee = Attendees(UserID = user.key.integer_id(),AttendingStatus = 'Attending')
             a.Attendees.append(Attendee)
             a.put()    
@@ -477,23 +474,9 @@ class ToggleAttendance(webapp2.RequestHandler):
 
         event = Event.get_by_id(eventId)
         validDate = False
-        if event.Date> date.today():
-
+        #NOTE: Not fully functional 
+        if event.DateTime>( datetime.now()-timedelta(hours=1)):
             validDate = True 
-            
-        elif event.Date == date.today():
-             #TODO if it is today make sure its not with in hour
-           # if event.Date != date.today():
-            validDate = True 
-            #else:
-                #hour_delay = timedelta(hours=1)#time 1 hour before event
-                #valid_time = event.Time - hour_delay
-                #if valid_time < time.localtime(time.time()):
-                    #validDate = true
-                #else:
-                    #success = False
-                    #comment = 'attendence can not be changed 1 hour before event'    
-        
         else:
             success = False
             comment = 'attendence can not be changed to past events'
