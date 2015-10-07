@@ -31,7 +31,7 @@
 									  <th>
 										Email
 									  </th>
-									  <th treasurerAllowed>
+									  <th treasurerAllowed adminAllowed>
 										Credits
 									  </th>
 									</tr>
@@ -44,18 +44,21 @@
 								<span>{{ account.Email }}</span>
 							</td>
 							<td>
-								<span treasurerAllowed>
-									<span>Credits: {{ account.Credits }} Add:</span>
-									<!--these are not hyperlinks because we will use AJAX (javascript)to send the webservice-->
-									<span class="add1Credit" onclick="changeCredits({{account.key.integer_id()}},1)">+1</span>
-									<span class="add1Credit" onclick="changeCredits({{account.key.integer_id()}},10)">+10</span>
-									<span class="take1Credit" onclick="changeCredits({{account.key.integer_id()}},-1)">-1</span>
+								<span treasurerAllowed adminAllowed>
+									<span>Credits: {{ account.Credits }}</span>
+									<span treasurerAllowed>
+										<span treasurerAllowed> Add:</span>
+										<!--these are not hyperlinks because we will use AJAX (javascript)to send the webservice-->
+										<span class="add1Credit" onclick="changeCredits({{account.key.integer_id()}},1)">+1</span>
+										<span class="add1Credit" onclick="changeCredits({{account.key.integer_id()}},10)">+10</span>
+										<span class="take1Credit" onclick="changeCredits({{account.key.integer_id()}},-1)">-1</span>
+									</span>
 								</span>
 							</td>	
 						</tr>
 						{% endfor %}
 					</table>
-					<a id='createUser' href="/createUser" class="button" adminAllowed>Add New Member</a>
+					
 					<!--
 					<ul id="usersList">
 						{% for account in Accounts %}
@@ -80,7 +83,7 @@
 			</div>
 		</div>
 	</div>
-
+	<a id='createUser' href="/createUser" class="button" adminAllowed>Add New Member</a>
 	{% include 'includes/footer.html' %}
 </body>
 </html>
