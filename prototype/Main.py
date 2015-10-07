@@ -475,7 +475,7 @@ class ToggleAttendance(webapp2.RequestHandler):
         event = Event.get_by_id(eventId)
         validDate = False
         #NOTE: Not fully functional 
-        if event.DateTime>( datetime.now()-timedelta(hours=1)):
+        if datetime.now()<( event.DateTime-timedelta(hours=1)):
             validDate = True 
         else:
             success = False
