@@ -1,0 +1,110 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<title>Profile</title>
+	{% include 'includes/meta-tags.html' %} {% include 'includes/css-links.html' %} {% include 'includes/js-libraries.html' %}
+	<!-- Temporary for removal of horizontal scroll bar -->
+	<style type="text/css">
+		html, body {
+			max-width: 100%;
+			overflow-x: hidden;
+		}
+	</style>
+</head>
+
+<body>
+	<!-- Header -->
+	{% include 'includes/navbar.html' %}
+
+	<!--Profile-->
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3">
+                <center>
+					{% include 'includes/sideProfile.html' %}
+					<form action="{{userUploadURL}}" method="POST" enctype="multipart/form-data">
+						Upload Photo: <input type="file" name="ProfilePic"><br>
+						<input type="submit" name="submit" value="Submit">
+					</form>
+					<!--<button>Upload Photo</button>
+					<br><br>-->
+				</center>
+            </div>
+			<div class="col-md-9">
+<<<<<<< HEAD
+				
+				
+				<center>
+					<img style="height:200px;width:250px;" alt="ProfilePic" class="img-thumbnail" src="/ViewProfilePhoto/{{targetUser.ProfilePicBlobKey}}" /></img>
+=======
+				<center>
+				<img style="height:220px;width:220px;" alt="ProfilePic" class="img-thumbnail" src="/ViewProfilePhoto/{{targetUser.ProfilePicBlobKey}}" /></img>
+				<br><br>
+>>>>>>> origin/master
+					<form action="{{targetUserUploadURL}}" id="userDetails" class="form-horizontal" method="post" enctype="multipart/form-data">
+						<input type="hidden" name="targetUserId" value="{{targetUser.key.integer_id()}}">
+						<div class="form-group">
+							<label for="email" class="col-sm-2 control-label">Email</label>
+							<div class="col-sm-10">
+								<input name="email" type="email" class="form-control" id="email" value="{{targetUser.Email}}">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="credits" class="col-sm-2 control-label">Credits</label>
+							<div class="col-sm-10">
+								<input name="credits" type="number" class="form-control" id="userCredits" value="{{targetUser.Credits}}" readonly>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="name" class="col-sm-2 control-label">Name</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" name="name" id="name" value="{{targetUser.Name}}">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="password" class="col-sm-2 control-label">Password</label>
+							<div class="col-sm-10">
+								<input type="password" name="password" class="form-control" id="password" value="{{targetUser.Password}}">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="emergencyName" class="col-sm-2 control-label">Emergency Contact</label>
+							<div class="col-sm-10">
+								<input type="text" name="emergencyName" class="form-control" id="emergencyContact" value="{{targetUser.Emergency_Contact}}">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="emergencyMobile" class="col-sm-2 control-label">Emergency Number</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="emergencyMobile" value="{{targetUser.Emergency_Phone}}">
+							</div>
+						</div>
+						
+						<label class="checkbox-inline">
+							<input type="checkbox" id="isAdmin" {%if targetUser.Admin %} checked="checked" {% endif %}> Administrator
+						</label>
+						<label class="checkbox-inline">
+							<input type="checkbox" id="isTreasurer" {%if targetUser.Treasurer %} checked="checked" {% endif %}> Treasurer
+						</label>
+						<label class="checkbox-inline">
+							<input type="checkbox" id="isEventManager" {%if targetUser.EventManager %} checked="checked" {% endif %}> Event Manager
+						</label>
+						<br><br>
+						Upload Photo: <input type="file" name="ProfilePic"><br>
+						<div class="form-group">
+								<button type="submit" class="btn btn-default">Submit</button>
+						</div>
+					</form>
+				</center>
+			</div>
+		</div>
+	</div>
+	{% include 'includes/footer.html' %}
+</body>
+</html>

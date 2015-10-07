@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>
+		Dashboard
+    </title>
+    {% include 'includes/meta-tags.html' %}
+    {% include 'includes/css-links.html' %}
+    {% include 'includes/js-libraries.html' %}
+    
+    
+  </head>
+  <body>
+	
+      <!-- Header -->
+      {% include 'includes/navbar.html' %}
+      
+      <!-- Page Content -->
+      <div class="container">
+        
+        <div class="row">
+          	<div class="col-md-3">
+				{% include 'includes/sideProfile.html' %}
+            </div>
+          <div class="col-md-9">
+            <div class="panel panel-default">
+              <!-- Default panel contents -->
+              <div class="panel-heading">
+                Events
+              </div>
+              <table class="table">
+                <tr>
+                  <th>
+                    Event
+                  </th>
+                  <th>
+                    Time
+                  </th>
+                  
+                  <th colspan="2">
+                    Attendance
+                  </th>
+                </tr>
+                
+                
+				{% for Event in UpcomingEvents %}
+                  <tr>
+                    <td>
+                      <a href="/eventdetails?eventId={{Event.key.integer_id()}}" >
+                        {{ Event.Name }}
+                      </a>
+                    </td>
+                    <td>
+                      <span class="eventItemDatetime">
+                        {{Event.DateTime}}
+                      </span>
+                    </td>
+                    
+					<td>
+						<button id="attendanceToggle-{{Event.key.integer_id()}}" onclick = 'toggleAttendance({{Event.key.integer_id()}},{{user.key.integer_id()}},this)'>My Button Text</button>
+                    </td>
+                  </tr>
+                  {% endfor %}	
+				</table>
+			  <div class="panel-heading">
+				Past Events
+			  </div>
+			  <table class="table">
+				<tr>
+                  <th>
+                    Event
+                  </th>
+                  <th>
+                    Time
+                  </th>
+                </tr>
+                  {% for Event in PastEvents %}	
+                  <tr>
+                    <td>
+                      <a href="/eventdetails?eventId={{Event.key.integer_id()}}" >
+                        {{ Event.Name }}
+                      </a>
+                    </td>
+                    <td>
+                      <span class="eventItemDatetime">
+                        {{Event.Date}} {{Event.Time}}
+                      </span>
+                    </td>
+                    
+                  </tr>
+                  {% endfor %}				
+                  </table>
+              </div>
+              <br>
+              <input type="button" value="Create Event" onclick="window.location.href='/createevent'" />
+              <!--only visible to some accounts-->
+
+          </div>
+          
+      </div>
+      
+  </div>
+    
+    {% include 'includes/footer.html' %}
+  
+</body>
+</html>

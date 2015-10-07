@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+
+	{% include 'includes/meta-tags.html' %}
+	
+	{% include 'includes/css-links.html' %}
+	
+	{% include 'includes/js-libraries.html' %}
+		
+</head>
+<body>
+	{% include 'includes/mainHeader.html' %}
+		
+	{% include 'includes/adminMenu.html' %}
+
+	{% include 'includes/generalMenu.html' %}	
+	
+	<form id="eventDetails" action="/createEvent" method="post">
+	
+		<label for="name">
+			Event Name
+			<input name="name" type="text"><br/>
+		</label>
+		
+		<label for="date">
+			Date
+			<input name="date" type="date"><br/>
+		</label>
+		
+		<label for="time">
+			Time
+			<input name="time" type="time"><br/>
+		</label>
+		
+		<label for="location">
+			Location
+			<input name="location" type="text"><br/>
+		</label>
+		
+		<label for="desc">
+			Description
+			<textarea name="desc" type="textarea" rows="10" cols="30"></textarea>
+		</label>
+		
+		<input type="submit" value="Create Event">
+
+	</form>
+
+	{% include 'includes/footer.html' %}
+</body>
+</html>
