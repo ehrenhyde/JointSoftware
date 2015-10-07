@@ -20,13 +20,10 @@
 		<!--Create Event - We'll put this in a container-->
 		<h2 id="eventName">{{Event.Name}}</h2>
 		<a id="editEvent" href="/editEvent" class="button">Edit Event</a><a id="CancelEvent" href="/CancelEvent?eventId={{Event.key.integer_id()}}" class="button">Cancel Event</a></br>	
-		{% if UserAttending %}
-			<input ID= 'Attendance2' type="button" value="Unattend" onclick="removeAttending({{Event.key.integer_id()}},{{user.key.integer_id()}})" />
-
-		{% else %}
-			<input ID= 'Attendance' type="button" value="Attending" onclick="sendAttending('Attending',{{Event.key.integer_id()}},{{user.key.integer_id()}})" />
-			<input ID= 'Attendance2' type="button" value="Maybe" onclick="sendAttending('Maybe',{{Event.key.integer_id()}},{{user.key.integer_id()}})" />
-		{% endif %}
+		
+		<button id="attendanceToggle" onclick = 'toggleAttendance({{Event.key.integer_id()}},{{user.key.integer_id()}},this);location.reload();'>
+			{{ buttonMsg }}
+		</button>
 		
 		<div id="eventDetails">
 			<span id="eventDatetime">{{Event.DateTime}}</span></br>

@@ -28,6 +28,28 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 DEFAULT_ORG_NAME = "freedivers_brisbane"
 
+class Attendance:
+    def getToggleButtonMsg(self,event,user):
+        userId = user.key.integer_id()
+        currentAttendStatus = 'Decline'
+        buttonMsg = ""
+
+        #get the users attending status
+        for attendee in event.Attendees:
+            if attendee.UserID == userId:
+                currentAttendStatus = attendee.AttendingStatus
+
+        #use status to detmine button text
+        if currentAttendStatus == 'Attending':
+            buttonMsg = 'Make Maybe'
+        elif currentAttendStatus == 'Maybe':
+            buttonMsg = 'Unregister'
+        else:
+            buttonMsg = 'Register'
+
+        return buttonMsg
+
+
 class Session:
     def __init__(self,handler):
         #Requires a webapp requesthandler to be passed as a contructor
@@ -331,7 +353,7 @@ class Profile(webapp2.RequestHandler):
                 'targetUserUploadURL':targetUserUploadURL
 	    }
             template = JINJA_ENVIRONMENT.get_template('profile.html')
-            self.response.write(template.render(template_values))	
+            self.response.write(template.render(template_values))
 		
 class EventsMain(webapp2.RequestHandler):
     def get(self):
@@ -449,11 +471,13 @@ class EventDetails(webapp2.RequestHandler):
                     UserAttending = True
                 AttendeeName.insert(attendeeNum, attendee.Name)
                 AttendeeStatus.insert(attendeeNum, targetEvent.Attendees[attendeeNum].AttendingStatus)
+
+            buttonMsg = Attendance().getToggleButtonMsg(targetEvent,user)
 	    template_values = {
                 'user':user,
                 'Event':targetEvent,
                 'Accounts' : Accounts,
-                'UserAttending': UserAttending,
+                'buttonMsg': buttonMsg,
                 'AttendeeNames': AttendeeName,
                 'AttendeeStatus': AttendeeStatus
             }
