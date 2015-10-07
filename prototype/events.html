@@ -57,7 +57,9 @@
                     </td>
                     
 					<td>
-						<button id="attendanceToggle-{{Event.key.integer_id()}}" onclick = 'toggleAttendance({{Event.key.integer_id()}},{{user.key.integer_id()}},this)'>My Button Text</button>
+						<button id="attendanceToggle-{{Event.key.integer_id()}}" onclick = 'toggleAttendance({{Event.key.integer_id()}},{{user.key.integer_id()}},this)'>
+							{{ Event.ButtonMsg }}
+						</button>
                     </td>
                   </tr>
                   {% endfor %}	

@@ -345,9 +345,32 @@ class EventsMain(webapp2.RequestHandler):
             UpcomingEvents = Event.query(Event.DateTime>=query_date).order(Event.DateTime)
 
             PastEvents = Event.query()
-            
-            for X in UpcomingEvents:
-                PastEvents = PastEvents.filter(Event.Name != X.Name)
+
+            #Remove the UpcomingEvents from the PastEvents
+            for event in UpcomingEvents:
+                PastEvents = PastEvents.filter(Event.Name != event.Name)
+
+            #Get correct text for attendance button
+            for event in UpcomingEvents:
+                userId = user.key.integer_id()
+                currentAttendStatus = 'Decline'
+                buttonMsg = ""
+
+                #get the users attending status
+                for attendee in event.Attendees:
+                    if attendee.UserID == userId:
+                        currentAttendStatus = attendee.AttendingStatus
+
+                #use status to detmine button text
+                if currentAttendStatus == 'Attending':
+                    buttonMsg = 'Make Maybe'
+                elif currentAttendStatus == 'Maybe':
+                    buttonMsg = 'Unregister'
+                else:
+                    buttonMsg = 'Register'
+
+                event.ButtonMsg = buttonMsg
+
             
 	    template_values = {
                 'UpcomingEvents' : UpcomingEvents,
@@ -505,7 +528,7 @@ class ToggleAttendance(webapp2.RequestHandler):
                 #Make Attending
                 self.addAttendee(event,user)
                 newStatus = "Attending"
-                newButtonMsg = 'Change to Maybe'
+                newButtonMsg = 'Make Maybe'
             success = True
                 
        
