@@ -77,18 +77,18 @@
 						<div class="form-group">
 							<label for="emergencyMobile" class="col-sm-2 control-label">Emergency Number</label>
 							<div class="col-sm-10">
-								<input type="text" class="form-control" id="emergencyMobile" value="{{targetUser.Emergency_Phone}}">
+								<input type="text" name="emergencyMobile" class="form-control" id="emergencyMobile" value="{{targetUser.Emergency_Phone}}">
 							</div>
 						</div>
 						
 						<label class="checkbox-inline">
-							<input type="checkbox" id="isAdmin" {%if targetUser.Admin %} checked="checked" {% endif %}> Administrator
+							<input type="checkbox" name="isAdmin" id="isAdmin" {%if targetUser.Admin %} checked="checked" {% endif %}> Administrator
 						</label>
 						<label class="checkbox-inline">
-							<input type="checkbox" id="isTreasurer" {%if targetUser.Treasurer %} checked="checked" {% endif %}> Treasurer
+							<input type="checkbox" name="isTreasurer" id="isTreasurer" {%if targetUser.Treasurer %} checked="checked" {% endif %}> Treasurer
 						</label>
 						<label class="checkbox-inline">
-							<input type="checkbox" id="isEventManager" {%if targetUser.EventManager %} checked="checked" {% endif %}> Event Manager
+							<input type="checkbox" name="isEventManager" id="isEventManager" {%if targetUser.EventManager %} checked="checked" {% endif %}> Event Manager
 						</label>
 						<br><br>
 						Upload Photo: <input type="file" name="ProfilePic"><br>
