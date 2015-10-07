@@ -25,7 +25,7 @@ function sendAttending(status,eventId,userId){
 	});
 }
 
-function toggleAttendance(eventId,userId,htmlCaller){
+function toggleAttendance(eventId,userId,htmlCaller,reload){
 	console.log('called toggleAttendance eventId: ' + eventId + ' userId: ' + userId);
 	
 	$.ajax({
@@ -42,6 +42,9 @@ function toggleAttendance(eventId,userId,htmlCaller){
 		if (data.success == true){
 			console.log('toggleAttendance was a success. version: ' + data.version + ' oldStatus: ' + data.oldStatus +' newStatus: ' + data.newStatus);
 			$(htmlCaller).text(data.newButtonMsg);
+			if (reload){
+				location.reload();
+			}
 		}else{
 			console.log('toggleAttendance fail');
 			console.log(data.success);

@@ -21,7 +21,7 @@
 		<h2 id="eventName">{{Event.Name}}</h2>
 		<a id="editEvent" href="/editEvent" class="button">Edit Event</a><a id="CancelEvent" href="/CancelEvent?eventId={{Event.key.integer_id()}}" class="button">Cancel Event</a></br>	
 		
-		<button id="attendanceToggle" onclick = 'toggleAttendance({{Event.key.integer_id()}},{{user.key.integer_id()}},this);location.reload();'>
+		<button id="attendanceToggle" onclick = 'toggleAttendance({{Event.key.integer_id()}},{{user.key.integer_id()}},this,true);'>
 			{{ buttonMsg }}
 		</button>
 		
