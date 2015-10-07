@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Print Attendees</title>
+		
+		{% include 'includes/meta-tags.html' %}
+		
+		{% include 'includes/css-links.html' %}
+		
+		{% include 'includes/js-libraries.html' %}
+		
+		<style>
+			@media print{
+				#buttons{
+					visibility:hidden;
+				}
+			}
+		</style>
+		
+	</head>
+	<body>
+		{% include 'includes/mainHeader.html' %}	
+			
+		<!--Create Event - We'll put this in a container-->
+		<h2 id="eventName">{{event.Name}}</h2>
+		
+		<center id ="buttons">
+			<button onclick="window.print()">Print</button>
+			
+		</center>
+		<div id="eventDetails">
+			<span id="eventDatetime">{{event.DateTime}}</span></br>
+			<span id="eventLocation">Location: {{event.Location}}</span></br>
+			<span id="eventDesc">Description: {{event.Description}}</span></br>
+		</div>
+		<div>
+			<h3>Attendees: {{event.Attendees_count}}</h3></br>
+			
+			<div>
+				<h2>Attending</h2>
+				{% for attendeeNum in range(event.Attendees_count)%}
+					{% if attendeeStatus[attendeeNum] == "Attending" %}
+						<span>{{attendeeNames[attendeeNum]}}</span></br>
+					{% endif %}
+				{% endfor %}
+			</div>
+			
+			<div>
+				<h2>Maybe</h2>
+				{% for attendeeNum in range(event.Attendees_count)%}
+					{% if attendeeStatus[attendeeNum] == "Maybe" %}
+						<span>{{attendeeNames[attendeeNum]}}</span></br>
+					{% endif %}
+				{% endfor %}
+			</div>
+			
+		</div>
+		{% include 'includes/footer.html' %}
+	</body>
+</html>

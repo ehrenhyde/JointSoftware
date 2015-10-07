@@ -612,6 +612,25 @@ class ChangeCredits(webapp2.RequestHandler):
         )
         self.response.write(jsonRetVal)
 
+class PrintAttendees(webapp2.RequestHandler):
+    def get(self):
+        targetEventId = long(self.request.get('eventId'))
+        targetEvent = Event.get_by_id(targetEventId)
+        attendeeName=[]
+        attendeeStatus=[]
+        for attendeeNum in range(targetEvent.Attendees_count):
+            attendee =  Account.get_by_id(targetEvent.Attendees[attendeeNum].UserID)
+            attendeeName.insert(attendeeNum, attendee.Name)
+            attendeeStatus.insert(attendeeNum, targetEvent.Attendees[attendeeNum].AttendingStatus)
+            
+        template_values = {
+            'event':targetEvent,
+            'attendeeNames': attendeeName,
+            'attendeeStatus': attendeeStatus
+        }
+        template = JINJA_ENVIRONMENT.get_template('printAttendees.html')
+        self.response.write(template.render(template_values))
+
 app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/users',Users),
@@ -629,4 +648,5 @@ app = webapp2.WSGIApplication([
     ('/CancelEvent',CancelEvent),
     ('/myProfilePhotoUpload',MyProfilePhotoUpload),
     ('/ViewProfilePhoto/([^/]+)?', ViewProfilePhoto),
+    ('/printAttendees',PrintAttendees)
 ], debug=True)

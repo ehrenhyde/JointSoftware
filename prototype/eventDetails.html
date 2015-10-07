@@ -66,6 +66,7 @@
 			</br>
 			<input ID= 'SaveComment' type="button" value="Save" onclick="SaveComment({{Event.key.integer_id()}} )" />			
 		</div>
+		<a href="/printAttendees?eventId={{Event.key.integer_id()}}">Print Attendees</a>
 		{% include 'includes/footer.html' %}
 	</body>
 </html>
