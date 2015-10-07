@@ -209,7 +209,7 @@ class Users(webapp2.RequestHandler):
             self.response.write(template.render(template_values))
 
             
-class changeUserDetails(blobstore_handlers.BlobstoreUploadHandler):
+class ChangeUserDetails(blobstore_handlers.BlobstoreUploadHandler):
     def post(self):
         #Todo add security that checks logged in user is admin
 	ID = long(self.request.get('targetUserId'))
@@ -241,7 +241,7 @@ class changeUserDetails(blobstore_handlers.BlobstoreUploadHandler):
 	self.redirect('/users')
 
 #https://cloud.google.com/appengine/docs/python/blobstore/
-class myProfilePhotoUpload(blobstore_handlers.BlobstoreUploadHandler):
+class MyProfilePhotoUpload(blobstore_handlers.BlobstoreUploadHandler):
     def post(self):
         try:
             upload = self.get_uploads()[0]
@@ -303,7 +303,7 @@ class Logout(webapp2.RequestHandler):
         Session(self).logout()
         self.redirect('/login')
 
-class profile(webapp2.RequestHandler):
+class Profile(webapp2.RequestHandler):
     def get(self):
         user = Session(self).get_current_user()
         if not user:
@@ -585,8 +585,8 @@ app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/users',Users),
     ('/createUser', CreateUser),
-    ('/changeUserDetails', changeUserDetails),
-    ('/profile', profile),
+    ('/changeUserDetails', ChangeUserDetails),
+    ('/profile', Profile),
     ('/events',EventsMain),
     ('/createevent',CreateEvent),
     ('/eventdetails',EventDetails),
@@ -596,6 +596,6 @@ app = webapp2.WSGIApplication([
     ('/logout',Logout),
     ('/changeCredits',ChangeCredits),
     ('/CancelEvent',CancelEvent),
-    ('/myProfilePhotoUpload',myProfilePhotoUpload),
+    ('/myProfilePhotoUpload',MyProfilePhotoUpload),
     ('/ViewProfilePhoto/([^/]+)?', ViewProfilePhoto),
 ], debug=True)
