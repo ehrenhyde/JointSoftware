@@ -1,60 +1,103 @@
 <!DOCTYPE HTML>
 <html>
-	<head>
-		<title>Create User</Title>
-		
-		{% include 'includes/meta-tags.html' %}
-		
-		{% include 'includes/css-links.html' %}
-		
-		{% include 'includes/js-libraries.html' %}
-		
-	</head>
-	<body>
-		{% include 'includes/mainHeader.html' %}
-		
-		{% include 'includes/adminMenu.html' %}
 
-		{% include 'includes/generalMenu.html' %}	
-			
-		<!-- Create User - We'll make a div for this-->	
-		<img src="theiProfilePhoto.dynamic" alt="Profile Photo" onclick="uploadPhoto()">
-		<form id="userDetails" action="/createUser" method="post">
-			<label for="name">
-				Name
-				<input name="name" type="text" value=""><br/>
-			</label>	
-			<label for="email">
-				Email
-				<input name="email" type="text" value=""><br/>
-			</label>		
-			<label for="emergencyName">
-				Emergency Name
-				<input name="emergencyName" type="text" value=""><br/>
-			</label>	
-			<label for="emergencyMobile">
-				Emergency Mobile
-				<input name="emergencyMobile" type="text" value=""><br/>
-			</label>		
-			<label for="password">
-				Password
-				<input name="password" type="text" value=""><br/>
-			</label>
-			
-			<div adminOnly>
-			<input id="isAdmin" type="checkbox" name="isAdmin">
-			<label for="isAdmin">Admin</label>
-			
-			<input id="isTreasurer" type="checkbox" name="isTreasurer">
-			<label for="isTreasurer">Treasurer</label>
-			
-			<input id="isEventManager" type="checkbox" name="isEventManager">
-			<label for="isEventManager">Event Manager</label>
+<head>
+	<title>Add User</title>
+	{% include 'includes/meta-tags.html' %} {% include 'includes/css-links.html' %} {% include 'includes/js-libraries.html' %}
+	<!-- Temporary for removal of horizontal scroll bar -->
+	<style type="text/css">
+		html, body {
+			max-width: 100%;
+			overflow-x: hidden;
+		}
+	</style>
+</head>
+
+<body>
+	<!-- Header -->
+	{% include 'includes/navbar.html' %}
+
+	<!--Profile-->
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3">
+                <center>
+					{% include 'includes/sideProfile.html' %}
+					<!--<form action="{{userUploadURL}}" method="POST" enctype="multipart/form-data">
+						Upload Photo: <input type="file" name="ProfilePic"><br>
+						<input type="submit" name="submit" value="Submit">
+					</form>-->
+					<!--<button>Upload Photo</button>
+					<br><br>-->
+				</center>
+            </div>
+			<div class="col-md-9">
+
+				<center>
+
+					<form action="/createUser" id="userDetails" class="form-horizontal" method="post" enctype="multipart/form-data">
+
+						<div class="form-group">
+							<label for="email" class="col-sm-2 control-label">Email</label>
+							<div class="col-sm-10">
+								<input name="email" type="email" class="form-control" id="email" placeholder="Email">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="credits" class="col-sm-2 control-label">Credits</label>
+							<div class="col-sm-10">
+								<input name="credits" type="number" class="form-control" id="userCredits" placeholder="0" readonly>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="name" class="col-sm-2 control-label">Name</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" name="name" id="name" placeholder="Name">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="password" class="col-sm-2 control-label">Password</label>
+							<div class="col-sm-10">
+								<input type="password" name="password" class="form-control" id="password" placeholder="Password">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="emergencyName" class="col-sm-2 control-label">Emergency Contact</label>
+							<div class="col-sm-10">
+								<input type="text" name="emergencyName" class="form-control" id="emergencyContact" placeholder="Emergency Contact">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="emergencyMobile" class="col-sm-2 control-label">Emergency Number</label>
+							<div class="col-sm-10">
+								<input type="number" ""name="emergencyMobile" class="form-control" id="emergencyMobile" placeholder="Emergency Number">
+							</div>
+						</div>
+						
+						<label class="checkbox-inline">
+							<input type="checkbox" name="isAdmin" id="isAdmin"> Administrator
+						</label>
+						<label class="checkbox-inline">
+							<input type="checkbox" name="isTreasurer" id="isTreasurer"> Treasurer
+						</label>
+						<label class="checkbox-inline">
+							<input type="checkbox" name="isEventManager" id="isEventManager" > Event Manager
+						</label>
+						<br><br>
+						Upload Photo: <input type="file" name="ProfilePic"><br>
+						<div class="form-group">
+								<button type="submit" class="btn btn-default">Submit</button>
+						</div>
+					</form>
+				</center>
 			</div>
-			
-			<input type="submit" value="Create User">
-		</form>
-
-		{% include 'includes/footer.html' %}
-	</body>
+		</div>
+	</div>
+	{% include 'includes/footer.html' %}
+</body>
 </html>
