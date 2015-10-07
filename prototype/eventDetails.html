@@ -34,10 +34,24 @@
 			<span id="eventDesc">Description: {{Event.Description}}</span></br>
 		</div>
 		<div>
-		<span>Adttendies: {{Event.Attendees_count}}</span></br>
-		{% for AdttendieNum in range(Event.Attendees_count)%}
-		<span>{{AttendeeNames[AdttendieNum]}} : {{AttendeeStatus[AdttendeeNum]}}</span></br>
-		{% endfor %}
+		<span>Attendees: {{Event.Attendees_count}}</span></br>
+		
+		<div><div>Attending</div>
+			{% for attendeeNum in range(Event.Attendees_count)%}
+				{% if AttendeeStatus[attendeeNum] == "Attending" %}
+					<span>{{AttendeeNames[attendeeNum]}}</span></br>
+				{% endif %}
+			{% endfor %}
+		</div>
+		
+		<div><div>Maybe</div>
+			{% for attendeeNum in range(Event.Attendees_count)%}
+				{% if AttendeeStatus[attendeeNum] == "Maybe" %}
+					<span>{{AttendeeNames[attendeeNum]}}</span></br>
+				{% endif %}
+			{% endfor %}
+		</div>
+		
 		</div>
 		<div>
 		<span> Add Attendee</span>
