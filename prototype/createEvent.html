@@ -14,52 +14,78 @@
 		{% include 'includes/navbar.html' %}
 		
 		<!--Create Event - We'll put this in a container-->
-		<form id="eventDetails" action="/createevent" method="post">
-		
-			<label for="name">
-				Event Name
-				<input name="name" type="text"><br/>
-			</label>
-			
-			<label for="date">
-				Date
-				<input name="date" type="date"><br/>
-			</label>
-			
-			<label for="time">
-				Time
-				<input name="time" type="time"><br/>
-			</label>
-			
-			<label for="location">
-				Location
-				<input name="location" type="text"><br/>
-			</label>
-			
-			<input id="isRepeat" type="checkbox" name="isRepeat">
-			<label for="isRepeat">Is Repeated</label>
-			
-			<select name="intervalnum"><!--Javacript will hide this when the isRepeat checkbox is unchecked-->
-				<option value=1>1</option>
-				<option value=2>2</option>
-				<option value=3>3</option>
-				<option value=4>4</option>
-			</select>
-			<select name="intervaltype"><!--Javacript will hide this when the isRepeat checkbox is unchecked-->
-				<option value=1>Weeks</option>
-				<option value=2>Fortnight</option>
-				<option value=3>Month</option>
-			</select>
-			
-			<label for="desc">
-				Description
-				<textarea name="desc" type="textarea" rows="10" cols="30"></textarea>
-			</label>
-			
-			<input type="submit" value="Create Event">
-		
-		</form>
+		<div class="container">	
+			<div class="row">
+				<div class="col-md-3">
+					<center>
+						{% include 'includes/sideProfile.html' %}
+						<!--<form action="{{userUploadURL}}" method="POST" enctype="multipart/form-data">
+							Upload Photo: <input type="file" name="ProfilePic"><br>
+							<input type="submit" name="submit" value="Submit">
+						</form>-->
+						<!--<button>Upload Photo</button>
+						<br><br>-->
+					</center>
+				</div>
+				<div class="col-md-9">
+					<form id="eventDetails" action="/createevent" method="post" class="form-horizontal" enctype="multipart/form-data">
+						
+						<div class="form-group">
+							<label for="name" class="col-sm-2 control-label"> Event Name </label>
+							<div class="col-sm-10">	
+								<input name="name" type="text" class="form-control" id="name" placeholder="Event">
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label for="date" class="col-sm-2 control-label"> Event Date </label>
+							<div class="col-sm-10">	
+								<input name="date" type="date" class="form-control" id="date" >
+							</div>
+						</div>			
 
+						<div class="form-group">
+							<label for="time" class="col-sm-2 control-label"> Event Time </label>
+							<div class="col-sm-10">	
+								<input name="time" type="time" class="form-control" id="time" >
+							</div>
+						</div>							
+
+						<div class="form-group">
+							<label for="location" class="col-sm-2 control-label"> Location </label>
+							<div class="col-sm-10">	
+								<input name="location" type="text" class="form-control" id="location" placeholder="Australia">
+							</div>
+						</div>								
+							
+						<label class="checkbox-inline"> Repeating? </label>
+							<input type="checkbox" name="isRepeat" id="isRepeat">
+																
+								<select name="intervalnum"><!--Javacript will hide this when the isRepeat checkbox is unchecked-->
+									<option value=1>1</option>
+									<option value=2>2</option>
+									<option value=3>3</option>
+									<option value=4>4</option>
+								</select>
+								<select name="intervaltype"><!--Javacript will hide this when the isRepeat checkbox is unchecked-->
+									<option value=1>Weeks</option>
+									<option value=2>Fortnight</option>
+									<option value=3>Month</option>
+								</select>
+						<div class="form-group">				
+							<label for="desc"> Description </label>
+							<div class="col-sm-10">
+								<textarea name="desc" class="form-control" rows="5"></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+								<button type="submit" class="btn btn-default">Submit</button>
+						</div>
+
+					</form>
+				</div>
+			</div>
+		</div>
 		{% include 'includes/footer.html' %}
 	</body>
 </html>
