@@ -372,26 +372,10 @@ class EventsMain(webapp2.RequestHandler):
             for event in UpcomingEvents:
                 PastEvents = PastEvents.filter(Event.Name != event.Name)
 
+           
             #Get correct text for attendance button
             for event in UpcomingEvents:
-                userId = user.key.integer_id()
-                currentAttendStatus = 'Decline'
-                buttonMsg = ""
-
-                #get the users attending status
-                for attendee in event.Attendees:
-                    if attendee.UserID == userId:
-                        currentAttendStatus = attendee.AttendingStatus
-
-                #use status to detmine button text
-                if currentAttendStatus == 'Attending':
-                    buttonMsg = 'Make Maybe'
-                elif currentAttendStatus == 'Maybe':
-                    buttonMsg = 'Unregister'
-                else:
-                    buttonMsg = 'Register'
-
-                event.ButtonMsg = buttonMsg
+                event.ButtonMsg =  Attendance().getToggleButtonMsg(event,user)
 
             
 	    template_values = {
