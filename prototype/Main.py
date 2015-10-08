@@ -362,7 +362,8 @@ class EventsMain(webapp2.RequestHandler):
             nextPath = '='.join(('/login?continue',self.request.url))
             self.redirect(nextPath)
         else:
-            query_date = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+            #delay to alow for Time zones (server time is UTC, localtime is +10 hours)
+            query_date = datetime.now()+timedelta(hours=10)
             
             UpcomingEvents = Event.query(Event.DateTime>=query_date).order(Event.DateTime)
 
@@ -505,8 +506,9 @@ class ToggleAttendance(webapp2.RequestHandler):
 
         event = Event.get_by_id(eventId)
         validDate = False
-        #NOTE: Not fully functional 
-        if datetime.now()<( event.DateTime-timedelta(hours=1)):
+        #Timedelay to allow for TimeZones 
+        #plus 10 for brisbane time + 1 for hour checking event
+        if  Event.DateTime>datetime.now()+timedelta(hours=11):
             validDate = True 
         else:
             success = False
