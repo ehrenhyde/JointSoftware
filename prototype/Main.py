@@ -503,7 +503,6 @@ class ToggleAttendance(webapp2.RequestHandler):
         data = json.loads(self.request.body)
         eventId = data['eventId']
         userId = data['userId']
-
         event = Event.get_by_id(eventId)
         validDate = False
         #Timedelay to allow for TimeZones 
@@ -516,9 +515,11 @@ class ToggleAttendance(webapp2.RequestHandler):
             if ValidEvent.key.integer_id() == event.key.integer_id() :
                 validDate = True 
             else:
+                #add in catch for Event Manager to still toggle
+                #if user is Active Event Manager
+                #ValidDate = True
                 success = False
                 comment = 'attendence can not be changed to past events or with in 1 hour of Event'
-
         if validDate:       
             user = Account.get_by_id(userId)
             currentAttendStatus = 'Decline'
