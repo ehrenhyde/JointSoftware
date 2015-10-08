@@ -508,11 +508,16 @@ class ToggleAttendance(webapp2.RequestHandler):
         validDate = False
         #Timedelay to allow for TimeZones 
         #plus 10 for brisbane time + 1 for hour checking event
-        if  Event.DateTime>datetime.now()+timedelta(hours=11):
-            validDate = True 
-        else:
-            success = False
-            comment = 'attendence can not be changed to past events'
+        query_date = datetime.now()+timedelta(hours=11)
+            
+        ValidEvents = Event.query(Event.DateTime>=query_date)
+        #Remove the UpcomingEvents from the PastEvents
+        for ValidEvent in ValidEvents:
+            if ValidEvent.key.integer_id() == event.key.integer_id() :
+                validDate = True 
+            else:
+                success = False
+                comment = 'attendence can not be changed to past events or with in 1 hour of Event'
 
         if validDate:       
             user = Account.get_by_id(userId)

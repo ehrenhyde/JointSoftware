@@ -47,8 +47,11 @@ function toggleAttendance(eventId,userId,htmlCaller,reload){
 			}
 		}else{
 			console.log('toggleAttendance fail');
-			console.log(data.success);
-		}
+			$(htmlCaller).css("border-color", "red");
+			$(htmlCaller).css("color", "red");
+				window.alert(data.comment);
+				//console.log(data.success);
+			}
 		//location.reload();
 	});
 	
