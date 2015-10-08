@@ -41,7 +41,7 @@ class Attendance:
 
         #use status to detmine button text
         if currentAttendStatus == 'Attending':
-            buttonMsg = 'Make Maybe'
+            buttonMsg = 'Maybe'
         elif currentAttendStatus == 'Maybe':
             buttonMsg = 'Unregister'
         else:
@@ -538,7 +538,7 @@ class ToggleAttendance(webapp2.RequestHandler):
                 #Make Attending
                 self.addAttendee(event,user)
                 newStatus = "Attending"
-                newButtonMsg = 'Make Maybe'
+                newButtonMsg = 'Maybe'
             success = True
                 
        

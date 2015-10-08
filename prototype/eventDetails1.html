@@ -31,9 +31,6 @@
 					<br><br>-->
 				</center>
             </div>
-		
-		<center>
-		<form action="" id="eventDetails" class="form-horizontal" method="post" enctype="multipart/form-data">
 		<h2 id="eventName">{{Event.Name}}</h2>
 		<a id="editEvent" href="/editEvent" class="button">Edit Event</a><a id="CancelEvent" href="/CancelEvent?eventId={{Event.key.integer_id()}}" class="button">Cancel Event</a></br>	
 		
@@ -66,9 +63,9 @@
 		</div>
 		
 		</div>
-		<div eventManagerAllowed>
+		<div>
 		<span> Add Attendee</span>
-			<select ID = "Adduser" name="Adduser" >
+			<select ID = "Adduser" name="Adduser">
 			  {% for Account in Accounts %}
 				<option value={{Account.key.integer_id()}}>{{Account.Name}}</option>
 			  {% endfor %}
@@ -80,11 +77,11 @@
 				</br><textarea id= "Comment" type="textarea" rows="10" cols="30">{{Event.Comment}}</textarea>
 			</label>
 			</br>
-			<input ID= 'SaveComment' type="button" value="Save" onclick="SaveComment({{Event.key.integer_id()}} )" eventManagerAllowed/>			
+			<input ID= 'SaveComment' type="button" value="Save" onclick="SaveComment({{Event.key.integer_id()}} )" />			
 		</div>
-		</form>
-		</center>
-		<a href="/printAttendees?eventId={{Event.key.integer_id()}}" treasurerAllowed>Print Attendees</a>
+		<a href="/printAttendees?eventId={{Event.key.integer_id()}}">Print Attendees</a>
+		{% include 'includes/footer.html' %}
+	</body>
 		
 		</div>	
 	</div>

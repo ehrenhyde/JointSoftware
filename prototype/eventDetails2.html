@@ -1,39 +1,23 @@
 <!DOCTYPE HTML>
 <html>
-
-<head>
-	<title>Event Details</title>
-	{% include 'includes/meta-tags.html' %} {% include 'includes/css-links.html' %} {% include 'includes/js-libraries.html' %}
-	<!-- Temporary for removal of horizontal scroll bar -->
-	<style type="text/css">
-		html, body {
-			max-width: 100%;
-			overflow-x: hidden;
-		}
-	</style>
-</head>
-
-<body>
-	<!-- Header -->
-	{% include 'includes/navbar.html' %}
-
-<!--Create Event - We'll put this in a container-->
-	<div class="container">			
-		<div class="row">	
-			<div class="col-md-3">
-                <center>
-					{% include 'includes/sideProfile.html' %}
-					<!--<form action="{{userUploadURL}}" method="POST" enctype="multipart/form-data">
-						Upload Photo: <input type="file" name="ProfilePic"><br>
-						<input type="submit" name="submit" value="Submit">
-					</form>-->
-					<!--<button>Upload Photo</button>
-					<br><br>-->
-				</center>
-            </div>
+	<head>
+		<title>Event Details</title>
 		
-		<center>
-		<form action="" id="eventDetails" class="form-horizontal" method="post" enctype="multipart/form-data">
+		{% include 'includes/meta-tags.html' %}
+		
+		{% include 'includes/css-links.html' %}
+		
+		{% include 'includes/js-libraries.html' %}
+		
+	</head>
+	<body>
+		{% include 'includes/mainHeader.html' %}
+		
+		{% include 'includes/adminMenu.html' %}
+
+		{% include 'includes/generalMenu.html' %}	
+			
+		<!--Create Event - We'll put this in a container-->
 		<h2 id="eventName">{{Event.Name}}</h2>
 		<a id="editEvent" href="/editEvent" class="button">Edit Event</a><a id="CancelEvent" href="/CancelEvent?eventId={{Event.key.integer_id()}}" class="button">Cancel Event</a></br>	
 		
@@ -66,9 +50,9 @@
 		</div>
 		
 		</div>
-		<div eventManagerAllowed>
+		<div>
 		<span> Add Attendee</span>
-			<select ID = "Adduser" name="Adduser" >
+			<select ID = "Adduser" name="Adduser">
 			  {% for Account in Accounts %}
 				<option value={{Account.key.integer_id()}}>{{Account.Name}}</option>
 			  {% endfor %}
@@ -80,14 +64,9 @@
 				</br><textarea id= "Comment" type="textarea" rows="10" cols="30">{{Event.Comment}}</textarea>
 			</label>
 			</br>
-			<input ID= 'SaveComment' type="button" value="Save" onclick="SaveComment({{Event.key.integer_id()}} )" eventManagerAllowed/>			
+			<input ID= 'SaveComment' type="button" value="Save" onclick="SaveComment({{Event.key.integer_id()}} )" />			
 		</div>
-		</form>
-		</center>
-		<a href="/printAttendees?eventId={{Event.key.integer_id()}}" treasurerAllowed>Print Attendees</a>
-		
-		</div>	
-	</div>
-	{% include 'includes/footer.html' %}
-</body>
+		<a href="/printAttendees?eventId={{Event.key.integer_id()}}">Print Attendees</a>
+		{% include 'includes/footer.html' %}
+	</body>
 </html>

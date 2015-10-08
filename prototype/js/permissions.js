@@ -42,7 +42,7 @@ var permissions = {
 		}
 	},
 	
-	togglePermissionDependantElements(permissionTypes,permissionType,speed){
+	togglePermissionDependantElements: function(permissionTypes,permissionType,speed){
 		
 		
 		if (this.getPermissionTypeActive(permissionType.activeName) == true){
