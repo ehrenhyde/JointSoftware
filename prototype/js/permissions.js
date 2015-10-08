@@ -111,7 +111,7 @@ var permissions = {
 		//console.log('toggleAdminActive');
 		this.togglePermissionTypeActive(allPermissionTypes.admin.activeName);
 	},
-	toggleEventMangerActive: function(){
+	toggleEventManagerActive: function(){
 		//console.log('toggleEventMangerActive');
 		this.togglePermissionTypeActive(allPermissionTypes.eventManager.activeName);
 	}
