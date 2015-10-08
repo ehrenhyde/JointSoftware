@@ -633,6 +633,19 @@ class PrintAttendees(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('printAttendees.html')
         self.response.write(template.render(template_values))
 
+class DemoUsers(webapp2.RequestHandler):
+    def get(self):
+        #Create First User
+	a = Account()
+	a.Name ='DemoUser'
+	a.Email ='test@example.com'
+	a.Password ='1234'
+	a.Admin = True
+        a.Treasurer = True
+        a.EventManager = True
+	a.put()
+	self.redirect('/')
+
 app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/users',Users),
@@ -650,5 +663,6 @@ app = webapp2.WSGIApplication([
     ('/CancelEvent',CancelEvent),
     ('/myProfilePhotoUpload',MyProfilePhotoUpload),
     ('/ViewProfilePhoto/([^/]+)?', ViewProfilePhoto),
-    ('/printAttendees',PrintAttendees)
+    ('/printAttendees',PrintAttendees),
+    ('/DemoUsers',DemoUsers)
 ], debug=True)
