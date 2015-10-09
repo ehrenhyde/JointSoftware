@@ -35,7 +35,7 @@
 		<center>
 		<form action="" id="eventDetails" class="form-horizontal" method="post" enctype="multipart/form-data">
 		<h2 id="eventName">{{Event.Name}}</h2>
-		<a id="editEvent" href="/editEvent" class="button">Edit Event</a><a id="CancelEvent" href="/CancelEvent?eventId={{Event.key.integer_id()}}" class="button">Cancel Event</a></br>	
+		<a id="editEvent" href="/editEvent" class="button" eventManagerAllowed>Edit Event</a><a eventManagerAllowed id="CancelEvent" href="/CancelEvent?eventId={{Event.key.integer_id()}}" class="button">Cancel Event</a></br>	
 		
 		<button id="attendanceToggle" onclick = 'toggleAttendance({{Event.key.integer_id()}},{{user.key.integer_id()}},this,true);'>
 			{{ buttonMsg }}
@@ -76,7 +76,7 @@
 <input ID= 'AddAttendee' type="button" value="AddAttendee" onclick="addAttending('Attending',{{Event.key.integer_id()}})" />		</div>
 		<div>
 			<label for="desc">
-				Description
+				Additional Comments
 				</br><textarea id= "Comment" type="textarea" rows="10" cols="30">{{Event.Comment}}</textarea>
 			</label>
 			</br>
