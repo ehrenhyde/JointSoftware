@@ -45,13 +45,13 @@
 							</td>
 							<td>
 								<span treasurerAllowed adminAllowed>
-									<span>{{ account.Credits }}</span>
+									<span dynamic-credits-accountId-{{account.key.integer_id()}}>{{ account.Credits }}</span>
 									<span treasurerAllowed>
 										<span treasurerAllowed> Add:</span>
 										<!--these are not hyperlinks because we will use AJAX (javascript)to send the webservice-->
-										<span class="add1Credit" onclick="changeCredits({{account.key.integer_id()}},1)">+1</span>
-										<span class="add1Credit" onclick="changeCredits({{account.key.integer_id()}},10)">+10</span>
-										<span class="take1Credit" onclick="changeCredits({{account.key.integer_id()}},-1)">-1</span>
+										<span class="add1Credit" onclick="changeCredits({{account.key.integer_id()}},1,this)">+1</span>
+										<span class="add1Credit" onclick="changeCredits({{account.key.integer_id()}},10,this)">+10</span>
+										<span class="take1Credit" onclick="changeCredits({{account.key.integer_id()}},-1,this)">-1</span>
 									</span>
 								</span>
 							</td>	

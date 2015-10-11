@@ -615,7 +615,8 @@ class ChangeCredits(webapp2.RequestHandler):
         success = True
         jsonRetVal = json.dumps(
             {
-                'success':success
+                'success':success,
+                'newCredits' :account.Credits
             }
         )
         self.response.write(jsonRetVal)

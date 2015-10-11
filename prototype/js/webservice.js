@@ -91,10 +91,23 @@ function SaveComment(eventId){
 	});
 }
 
-function changeCredits(userId,creditsChange){
+function changeCredits(userId,creditsChange,triggerControl){
+	
+	//disable two clicks at the same time
+	if ($(triggerControl).attr("loading") == "true"){
+		return;
+	}
 	console.log('calling changeCredits');
 	console.log('userId = ' + userId);
 	console.log('creditsChange = ' + creditsChange);
+	
+	//disable control
+	if (triggerControl){
+		var oldColour = $(triggerControl).css('color');
+		$(triggerControl).attr("loading","true");
+		$(triggerControl).css('color','orange');
+	}
+	
 	$.ajax({
 		type:"POST",
 		url:'/changeCredits',
@@ -111,6 +124,23 @@ function changeCredits(userId,creditsChange){
 		}else{
 			console.log('fail');
 		}
-		location.reload();
+		
+		//re-enable control
+		if (triggerControl){
+			$(triggerControl).css('color',oldColour);
+			$(triggerControl).attr("loading","false");
+		}
+		
+		//update appropriate labels on the UI
+		$('[dynamic-credits-accountId-'+userId + ']').text(data.newCredits);
+		
+	})
+	.fail(function(jqXHR,textStatus) {
+		alert( "Oh dear! " + textStatus + " Better luck next time..." );
+		//re-enable control
+		if (triggerControl){
+			$(triggerControl).css('color',oldColour);
+			$(triggerControl).attr("loading","false");
+		}
 	});
 }
