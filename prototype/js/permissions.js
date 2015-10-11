@@ -33,8 +33,18 @@ var allPermissionTypes = {
 
 var permissions = {
 	
-	getPermissionTypeActive: function(activeName){
+	getPermissionTypeActive: function(permissionType){
 		//console.log('testing ' + activeName)
+		var activeName = permissionType.activeName;
+		//check that user holds ability to have permission active
+		//stops a permission being active after it has been denied
+		var permissionButton = document.getElementById(permissionType.buttonId);
+		if (!permissionButton){
+			localStorage[activeName] == "false"
+			return false;
+		}
+		
+		//check that permission is active
 		if (localStorage[activeName] !== "undefined"){
 			return (localStorage[activeName] == "true");
 		}else{
@@ -45,7 +55,7 @@ var permissions = {
 	togglePermissionDependantElements: function(permissionTypes,permissionType,speed){
 		
 		
-		if (this.getPermissionTypeActive(permissionType.activeName) == true){
+		if (this.getPermissionTypeActive(permissionType) == true){
 			//console.log("showing " + permissionType.htmlTag);
 			//wrap in [] because that is the format for the jQuery selector
 			$('[' + permissionType.htmlTag + ']').show(speed);
@@ -59,8 +69,7 @@ var permissions = {
 				for (var i = 0;i<permissionTypes.length;i++){
 					var elementHasPermissionTag = hasPermissionTag($(this),permissionTypes[i].htmlTag);
 					//check if the tag is present and that the user has the associated active permission
-					var activeName = permissionTypes[i].activeName
-					if (elementHasPermissionTag && getPermissionTypeActive(activeName)){
+					if (elementHasPermissionTag && getPermissionTypeActive(permissionTypes[i])){
 						shouldHide = false;
 					}
 				}
@@ -72,7 +81,7 @@ var permissions = {
 	},
 	
 	togglePermissionButtons: function(permissionType){
-		if (this.getPermissionTypeActive(permissionType.activeName)==true){
+		if (this.getPermissionTypeActive(permissionType)==true){
 			$('#' + permissionType.buttonId).text(permissionType.buttonTextActive);
 		}else{
 			$('#' + permissionType.buttonId).text(permissionType.buttonTextUnactive);
@@ -88,10 +97,12 @@ var permissions = {
 		}
 	}, 
 	
-	togglePermissionTypeActive: function(activeName){
+	togglePermissionTypeActive: function(permissionType){
 		//console.log('toggle ' + activeName + ' active');
 		
-		if (this.getPermissionTypeActive(activeName)== false){
+		var activeName = permissionType.activeName;
+		
+		if (this.getPermissionTypeActive(permissionType)== false){
 			localStorage[activeName] =  "true";
 		}else{
 			localStorage[activeName] = "false";
@@ -105,15 +116,15 @@ var permissions = {
 	
 	toggleTreasurerActive: function(){
 		//console.log('toggleTreasurerActive');
-		this.togglePermissionTypeActive(allPermissionTypes.treasurer.activeName);
+		this.togglePermissionTypeActive(allPermissionTypes.treasurer);
 	},
 	toggleAdminActive: function(){
 		//console.log('toggleAdminActive');
-		this.togglePermissionTypeActive(allPermissionTypes.admin.activeName);
+		this.togglePermissionTypeActive(allPermissionTypes.admin);
 	},
 	toggleEventManagerActive: function(){
 		//console.log('toggleEventMangerActive');
-		this.togglePermissionTypeActive(allPermissionTypes.eventManager.activeName);
+		this.togglePermissionTypeActive(allPermissionTypes.eventManager);
 	}
 }
 

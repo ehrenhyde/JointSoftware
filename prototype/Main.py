@@ -173,7 +173,7 @@ class Account(ndb.Model):
 	TestField = ndb.StringProperty()
 
 class Event(ndb.Model):
-        #EventNum =ndb.IntegerProperty()
+        #EventID =ndb.IntegerProperty()
 	Name = ndb.StringProperty()
 	Description  = ndb.StringProperty()
 	DateTime = ndb.DateTimeProperty()

@@ -40,7 +40,7 @@
 			  <ul class="dropdown-menu">
 				{% if user.Treasurer %}
 				<li><a id="permissionButtonTreasurer" class="button privligeButton" onclick="permissions.toggleTreasurerActive()" href="#">
-					Active Treasurer</a></li>
+					Activate Treasurer</a></li>
 				{% endif %}
 				
 				{% if user.EventManager %}
@@ -49,8 +49,8 @@
 				{% endif %}
 				
 				{% if user.Admin %}
-				<li><a id='permissionButtonAdmin' href="#" class="button privligeButton" onclick="permissions.toggleAdminActive()"
-					>Deactivate Admin</a></li>
+				<li><a id='permissionButtonAdmin' href="#" class="button privligeButton" onclick="permissions.toggleAdminActive()">
+					Activate Admin</a></li>
 				{% endif %}
 
 			  </ul>
