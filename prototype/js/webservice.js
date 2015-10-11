@@ -25,7 +25,7 @@ function sendAttending(status,eventId,userId){
 	});
 }
 
-function toggleAttendance(eventId,userId,htmlCaller,reload){
+function toggleAttendance(eventId,userId,htmlCaller){
 	console.log('called toggleAttendance eventId: ' + eventId + ' userId: ' + userId);
 	
 	$.ajax({
@@ -42,9 +42,6 @@ function toggleAttendance(eventId,userId,htmlCaller,reload){
 		if (data.success == true){
 			console.log('toggleAttendance was a success. version: ' + data.version + ' oldStatus: ' + data.oldStatus +' newStatus: ' + data.newStatus);
 			$(htmlCaller).text(data.newButtonMsg);
-			if (reload){
-				location.reload();
-			}
 		}else{
 			console.log('toggleAttendance fail');
 			$(htmlCaller).css("border-color", "red");
@@ -143,4 +140,12 @@ function changeCredits(userId,creditsChange,triggerControl){
 			$(triggerControl).attr("loading","false");
 		}
 	});
+}
+
+function fillAttendeesListItems(listId){
+	var lis = "";
+	for (var i = 0;i<5;i++){
+		lis = lis+"<li>"+"Jack"+"</li>";
+	}
+	$(listId).html(lis);
 }

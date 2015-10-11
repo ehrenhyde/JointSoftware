@@ -37,7 +37,7 @@
 		<h2 id="eventName">{{Event.Name}}</h2>
 		<a id="editEvent" href="/editEvent" class="button" eventManagerAllowed>Edit Event</a><a eventManagerAllowed id="CancelEvent" href="/CancelEvent?eventId={{Event.key.integer_id()}}" class="button">Cancel Event</a></br>	
 		
-		<button id="attendanceToggle" onclick = 'toggleAttendance({{Event.key.integer_id()}},{{user.key.integer_id()}},this,true);'>
+		<button id="attendanceToggle" onclick = 'toggleAttendance({{Event.key.integer_id()}},{{user.key.integer_id()}},this);'>
 			{{ buttonMsg }}
 		</button>
 		
@@ -50,11 +50,14 @@
 		<span>Attendees: {{Event.Attendees_count}}</span></br>
 		
 		<div><div>Attending</div>
-			{% for attendeeNum in range(Event.Attendees_count)%}
+			<ul id = "attendeesList">
+			<script>$(window).load(fillAttendeesListItems('attendeesList'))</script>
+			<!--{% for attendeeNum in range(Event.Attendees_count)%}
 				{% if AttendeeStatus[attendeeNum] == "Attending" %}
 					<span>{{AttendeeNames[attendeeNum]}}</span></br>
 				{% endif %}
-			{% endfor %}
+			{% endfor %}-->
+			</ul>
 		</div>
 		
 		<div><div>Maybe</div>

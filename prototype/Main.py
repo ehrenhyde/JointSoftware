@@ -325,6 +325,22 @@ class Logout(webapp2.RequestHandler):
         Session(self).logout()
         self.redirect('/login')
 
+class GetAttendees(webapp2.RequestHandler):
+    def get(self):
+        eventId = self.request.get('eventId');
+        event = Event.get_by_id(eventId)
+        lis = ''
+        for attendeeNum in range(event.Attendees_count):
+            attendee =  Account.get_by_id(event.Attendees[attendeeNum].UserID)
+            lis = lis + '<li>' + attendee.Name + '</li>'
+        jsonRetVal = json.dumps(
+            {
+                'lis':lis
+            } 
+        )
+        self.response.write(jsonRetVal)
+        
+        
 class Profile(webapp2.RequestHandler):
     def get(self):
         user = Session(self).get_current_user()
@@ -452,8 +468,6 @@ class EventDetails(webapp2.RequestHandler):
             Accounts = Account.query()
             for attendeeNum in range(targetEvent.Attendees_count):
                 attendee =  Account.get_by_id(targetEvent.Attendees[attendeeNum].UserID)
-                if targetEvent.Attendees[attendeeNum].UserID == user.key.integer_id():
-                    UserAttending = True
                 AttendeeName.insert(attendeeNum, attendee.Name)
                 AttendeeStatus.insert(attendeeNum, targetEvent.Attendees[attendeeNum].AttendingStatus)
 
@@ -671,5 +685,6 @@ app = webapp2.WSGIApplication([
     ('/myProfilePhotoUpload',MyProfilePhotoUpload),
     ('/ViewProfilePhoto/([^/]+)?', ViewProfilePhoto),
     ('/printAttendees',PrintAttendees),
-    ('/DemoUsers',DemoUsers)
+    ('/DemoUsers',DemoUsers),
+    ('/GetAttendees',GetAttendees)
 ], debug=True)
