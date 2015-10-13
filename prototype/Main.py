@@ -482,6 +482,22 @@ class EventDetails(webapp2.RequestHandler):
             }
 	    template = JINJA_ENVIRONMENT.get_template('eventDetails.html')
 	    self.response.write(template.render(template_values))
+
+    def post(self):
+        ID = long(self.request.get('targetUserId'))
+        a = Event.get_by_id(ID)
+        a.Name =self.request.get('name')
+        a.Description =self.request.get('desc')
+        a.Location = self.request.get('location')
+        strTime = self.request.get('time')
+        hoursMins = strTime.split(':')
+        strDate = self.request.get('date')
+        yearMonthDay = strDate.split('-')
+        datevalue = date(int(yearMonthDay[0]),int(yearMonthDay[1]), int(yearMonthDay[2]))
+        a.DateTime = datetime.combine( datevalue,time(int(hoursMins[0]),int(hoursMins[1])))
+        a.put()
+
+        self.redirect('/events')
        
 class ToggleAttendance(webapp2.RequestHandler):
     def removeAttendee(self,event,user):
@@ -654,6 +670,27 @@ class PrintAttendees(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('printAttendees.html')
         self.response.write(template.render(template_values))
 
+class DeleteAccount(webapp2.RequestHandler):
+    def post(self):
+        user = Session(self).get_current_user()
+        if not user:
+            nextPath = '='.join(('/login?continue',self.request.url))
+            self.redirect(nextPath)
+        else:
+            data = json.loads(self.request.body)
+            userId = data['userId']
+            #TODO: add Extra Security
+            targetAccount = Account.get_by_id(userId)
+            targetAccount.key.delete()#removes the event
+            success = True
+            jsonRetVal = json.dumps(
+                {
+                    'success':success
+                }
+            )
+            self.response.write(jsonRetVal)
+
+
 class DemoUsers(webapp2.RequestHandler):
     def get(self):
         #Create First User
@@ -682,6 +719,7 @@ app = webapp2.WSGIApplication([
     ('/logout',Logout),
     ('/changeCredits',ChangeCredits),
     ('/CancelEvent',CancelEvent),
+    ('/DeleteAccount',DeleteAccount),
     ('/myProfilePhotoUpload',MyProfilePhotoUpload),
     ('/ViewProfilePhoto/([^/]+)?', ViewProfilePhoto),
     ('/printAttendees',PrintAttendees),

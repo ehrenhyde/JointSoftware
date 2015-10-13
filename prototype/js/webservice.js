@@ -149,3 +149,31 @@ function fillAttendeesListItems(listId){
 	}
 	$(listId).html(lis);
 }
+
+function DeleteUser(UserID){
+	console.log('called DeleteUser userId: ' + UserID);
+	var r = confirm("Press OK, to Confirm Delete User");
+if (r == true) {
+	$.ajax({
+		type: "POST",
+		url: "/DeleteAccount",
+		dataType: 'json',
+		data: JSON.stringify({
+			"userId" : UserID
+		})
+	}).done(function( data ) {
+		console.log('DeleteUser returned');
+		if (data.success == true){
+			console.log('User Removed');
+			window.location.replace( '/users')
+		}else{
+			console.log('Delete Failed');
+				//console.log(data.success);
+			}
+		//location.reload();
+	});
+}else{
+	console.log('Aborted DeleteUser userId: ' + UserID);
+}
+
+}
