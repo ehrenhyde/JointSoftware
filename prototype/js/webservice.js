@@ -156,12 +156,9 @@ function fillAttendeesListItems(listId,eventId){
 	})
 	.done(function(data){
 		console.log('returned');
-		alert(data.lis);
-		console.log(data.lis);
 		if (data.success == true){
 			console.log('was a success');
 			//update appropriate labels on the UI
-			alert(data.lis);
 			$(data.lis).appendTo('#'+listId);
 		}else{
 			console.log('fail');
