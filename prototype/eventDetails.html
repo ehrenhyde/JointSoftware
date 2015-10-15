@@ -11,6 +11,14 @@
 			overflow-x: hidden;
 		}
 	</style>
+	<script>
+	function loadAllAttendees(){
+		fillAttendeesListItems('attendeesList-attending',{{Event.key.integer_id()}},"Attending");
+		fillAttendeesListItems('attendeesList-maybe',{{Event.key.integer_id()}},"Maybe");
+		updateAttendeesCount('attendeesCount',{{Event.key.integer_id()}});
+	}
+	$(window).load(function() {loadAllAttendees();});
+	</script>			
 </head>
 
 <body>
@@ -33,53 +41,49 @@
             </div>
 		
 		<center>
-		<form action="" id="eventDetails" class="form-horizontal" method="post" enctype="multipart/form-data">
-		<h2 id="eventName">{{Event.Name}}</h2>
-		<a id="editEvent" href="/editEvent" class="button" eventManagerAllowed>Edit Event</a><a eventManagerAllowed id="CancelEvent" href="/CancelEvent?eventId={{Event.key.integer_id()}}" class="button">Cancel Event</a></br>	
-		
-		<button id="attendanceToggle" onclick = 'toggleAttendance({{Event.key.integer_id()}},{{user.key.integer_id()}},this);'>
+		<button id="attendanceToggle" onclick = 'toggleAttendance({{Event.key.integer_id()}},{{user.key.integer_id()}},this,loadAllAttendees);'>
 			{{ buttonMsg }}
 		</button>
-		
-		<div id="eventDetails">
-			<span id="eventDatetime">{{Event.DateTime}}</span></br>
-			<span id="eventLocation">Location: {{Event.Location}}</span></br>
-			<span id="eventDesc">Description: {{Event.Description}}</span></br>
-		</div>
-		<div>
-		<span>Attendees: {{Event.Attendees_count}}</span></br>
-		
-		<div><div>Attending</div>
-			<ul id = "attendeesList">
-			<script>$(window).load(function (){fillAttendeesListItems('attendeesList',{{Event.key.integer_id()}});});</script>
-			</ul>
-		</div>
-		
-		<div><div>Maybe</div>
-			{% for attendeeNum in range(Event.Attendees_count)%}
-				{% if AttendeeStatus[attendeeNum] == "Maybe" %}
-					<span>{{AttendeeNames[attendeeNum]}}</span></br>
-				{% endif %}
-			{% endfor %}
-		</div>
-		
-		</div>
-		<div eventManagerAllowed>
-		<span> Add Attendee</span>
-			<select ID = "Adduser" name="Adduser" >
-			  {% for Account in Accounts %}
-				<option value={{Account.key.integer_id()}}>{{Account.Name}}</option>
-			  {% endfor %}
-			</select>
-<input ID= 'AddAttendee' type="button" value="AddAttendee" onclick="addAttending('Attending',{{Event.key.integer_id()}})" />		</div>
-		<div>
-			<label for="desc">
-				Additional Comments
-				</br><textarea id= "Comment" type="textarea" rows="10" cols="30">{{Event.Comment}}</textarea>
-			</label>
-			</br>
-			<input ID= 'SaveComment' type="button" value="Save" onclick="SaveComment({{Event.key.integer_id()}} )" eventManagerAllowed/>			
-		</div>
+		<form action="" id="eventDetails" class="form-horizontal" method="post" enctype="multipart/form-data">
+			<h2 id="eventName">{{Event.Name}}</h2>
+			<a id="editEvent" href="/editEvent" class="button" eventManagerAllowed>Edit Event</a><a eventManagerAllowed id="CancelEvent" href="/CancelEvent?eventId={{Event.key.integer_id()}}" class="button">Cancel Event</a></br>	
+			<div id="eventDetails">
+				<span id="eventDatetime">{{Event.DateTime}}</span></br>
+				<span id="eventLocation">Location: {{Event.Location}}</span></br>
+				<span id="eventDesc">Description: {{Event.Description}}</span></br>
+			</div>
+			<div>
+			<span>Attendees:</span><span id = 'attendeesCount'>{{Event.Attendees_count}}</span></br>
+			
+			<div><div>Attending</div>
+				<ul id = "attendeesList-attending">
+					<!--Loaded by javascript-->			
+				</ul>
+			</div>
+			
+			<div><div>Maybe</div>
+				<ul id = "attendeesList-maybe">
+					<!--Loaded by javascript-->
+				</ul>
+			</div>
+			
+			</div>
+			<div eventManagerAllowed>
+			<span> Add Attendee</span>
+				<select ID = "Adduser" name="Adduser" >
+				  {% for Account in Accounts %}
+					<option value={{Account.key.integer_id()}}>{{Account.Name}}</option>
+				  {% endfor %}
+				</select>
+	<input ID= 'AddAttendee' type="button" value="AddAttendee" onclick="addAttending('Attending',{{Event.key.integer_id()}})" />		</div>
+			<div>
+				<label for="desc">
+					Additional Comments
+					</br><textarea id= "Comment" type="textarea" rows="10" cols="30">{{Event.Comment}}</textarea>
+				</label>
+				</br>
+				<input ID= 'SaveComment' type="button" value="Save" onclick="SaveComment({{Event.key.integer_id()}} )" eventManagerAllowed/>			
+			</div>
 		</form>
 		</center>
 		<a href="/printAttendees?eventId={{Event.key.integer_id()}}" treasurerAllowed>Print Attendees</a>

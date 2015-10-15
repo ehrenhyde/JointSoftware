@@ -25,7 +25,7 @@ function sendAttending(status,eventId,userId){
 	});
 }
 
-function toggleAttendance(eventId,userId,htmlCaller){
+function toggleAttendance(eventId,userId,htmlCaller,callbackFunction){
 	console.log('called toggleAttendance eventId: ' + eventId + ' userId: ' + userId);
 	
 	$.ajax({
@@ -42,6 +42,7 @@ function toggleAttendance(eventId,userId,htmlCaller){
 		if (data.success == true){
 			console.log('toggleAttendance was a success. version: ' + data.version + ' oldStatus: ' + data.oldStatus +' newStatus: ' + data.newStatus);
 			$(htmlCaller).text(data.newButtonMsg);
+			callbackFunction();
 		}else{
 			console.log('toggleAttendance fail');
 			$(htmlCaller).css("border-color", "red");
@@ -142,13 +143,12 @@ function changeCredits(userId,creditsChange,triggerControl){
 	});
 }
 
-function fillAttendeesListItems(listId,eventId){
-	
-	console.log('filling attendees list');
+function updateAttendeesCount(elementId,eventId){
+	console.log('updating attendees count');
 	
 	$.ajax({
 		type:"POST",
-		url:'/GetAttendees',
+		url:'/GetAttendeesCount',
 		dataType:'json',
 		data: JSON.stringify({
 			'eventId':eventId
@@ -158,8 +158,44 @@ function fillAttendeesListItems(listId,eventId){
 		console.log('returned');
 		if (data.success == true){
 			console.log('was a success');
+			console.log(data.attendeesCount);
+			var jQSelect = '#'+elementId;
+			console.log('jQSelect :' + jQSelect);
+			$(jQSelect).text(data.attendeesCount);
+		}else{
+			console.log('fail');
+		}
+		
+	})
+	.fail(function(jqXHR,textStatus) {
+		$('#'+elementId).html("Could not get attendees count");
+	});
+}
+
+function fillAttendeesListItems(listId,eventId,status){
+	
+	console.log('filling attendees list');
+	
+	$.ajax({
+		type:"POST",
+		url:'/GetAttendees',
+		dataType:'json',
+		data: JSON.stringify({
+			'eventId':eventId,
+			'status':status
+		})
+	})
+	.done(function(data){
+		console.log('returned');
+		if (data.success == true){
+			console.log('was a success');
+			console.log(data.attendeeNames);
+			var names = data.attendeeNames;
 			//update appropriate labels on the UI
-			$(data.lis).appendTo('#'+listId);
+			$('#'+listId).html("");
+			for(var i = 0;i<names.length;i++){
+				$("<li>"+names[i]+"</li>").appendTo('#'+listId);
+			}
 		}else{
 			console.log('fail');
 		}

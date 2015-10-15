@@ -329,16 +329,33 @@ class GetAttendees(webapp2.RequestHandler):
     def post(self):
         data = json.loads(self.request.body)
         eventId = data['eventId']
+        status = data['status']
         event = Event.get_by_id(eventId)
-        lis = ''
+        attendeeNames = []
         for attendeeNum in range(event.Attendees_count):
-            test='blah'
-            attendee =  Account.get_by_id(event.Attendees[attendeeNum].UserID)
-            lis = lis + '<li>' + attendee.Name + '</li>'
+            attendingStatus = event.Attendees[attendeeNum].AttendingStatus
+            if attendingStatus == status:
+                attendee =  Account.get_by_id(event.Attendees[attendeeNum].UserID)
+                attendeeNames.append(attendee.Name)
+                
         jsonRetVal = json.dumps(
             {
                 'success':True,
-                'lis':lis
+                'attendeeNames':attendeeNames
+            } 
+        )
+        self.response.write(jsonRetVal)
+
+class GetAttendeesCount(webapp2.RequestHandler):
+    def post(self):
+        data = json.loads(self.request.body)
+        eventId = data['eventId']
+        event = Event.get_by_id(eventId)
+        attendeesCount = event.Attendees_count                
+        jsonRetVal = json.dumps(
+            {
+                'success':True,
+                'attendeesCount':attendeesCount
             } 
         )
         self.response.write(jsonRetVal)
@@ -727,5 +744,6 @@ app = webapp2.WSGIApplication([
     ('/ViewProfilePhoto/([^/]+)?', ViewProfilePhoto),
     ('/printAttendees',PrintAttendees),
     ('/DemoUsers',DemoUsers),
-    ('/GetAttendees',GetAttendees)
+    ('/GetAttendees',GetAttendees),
+    ('/GetAttendeesCount',GetAttendeesCount)
 ], debug=True)
