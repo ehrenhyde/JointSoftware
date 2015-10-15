@@ -326,15 +326,18 @@ class Logout(webapp2.RequestHandler):
         self.redirect('/login')
 
 class GetAttendees(webapp2.RequestHandler):
-    def get(self):
-        eventId = self.request.get('eventId');
+    def post(self):
+        data = json.loads(self.request.body)
+        eventId = data['eventId']
         event = Event.get_by_id(eventId)
         lis = ''
         for attendeeNum in range(event.Attendees_count):
+            test='blah'
             attendee =  Account.get_by_id(event.Attendees[attendeeNum].UserID)
             lis = lis + '<li>' + attendee.Name + '</li>'
         jsonRetVal = json.dumps(
             {
+                'success':True,
                 'lis':lis
             } 
         )

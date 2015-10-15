@@ -142,12 +142,35 @@ function changeCredits(userId,creditsChange,triggerControl){
 	});
 }
 
-function fillAttendeesListItems(listId){
-	var lis = "";
-	for (var i = 0;i<5;i++){
-		lis = lis+"<li>"+"Jack"+"</li>";
-	}
-	$(listId).html(lis);
+function fillAttendeesListItems(listId,eventId){
+	
+	console.log('filling attendees list');
+	
+	$.ajax({
+		type:"POST",
+		url:'/GetAttendees',
+		dataType:'json',
+		data: JSON.stringify({
+			'eventId':eventId
+		})
+	})
+	.done(function(data){
+		console.log('returned');
+		alert(data.lis);
+		console.log(data.lis);
+		if (data.success == true){
+			console.log('was a success');
+			//update appropriate labels on the UI
+			alert(data.lis);
+			$(data.lis).appendTo('#'+listId);
+		}else{
+			console.log('fail');
+		}
+		
+	})
+	.fail(function(jqXHR,textStatus) {
+		$('#'+listId).html("Could not get attendees");
+	});
 }
 
 function DeleteUser(UserID){

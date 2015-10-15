@@ -51,12 +51,7 @@
 		
 		<div><div>Attending</div>
 			<ul id = "attendeesList">
-			<script>$(window).load(fillAttendeesListItems('attendeesList'))</script>
-			<!--{% for attendeeNum in range(Event.Attendees_count)%}
-				{% if AttendeeStatus[attendeeNum] == "Attending" %}
-					<span>{{AttendeeNames[attendeeNum]}}</span></br>
-				{% endif %}
-			{% endfor %}-->
+			<script>$(window).load(function (){fillAttendeesListItems('attendeesList',{{Event.key.integer_id()}});});</script>
 			</ul>
 		</div>
 		
