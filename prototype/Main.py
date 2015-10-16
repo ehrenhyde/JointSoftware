@@ -570,8 +570,8 @@ class ToggleAttendance(webapp2.RequestHandler):
                 #ValidDate = True
                 success = False
                 comment = 'attendence can not be changed to past events or with in 1 hour of Event'
+        user = Account.get_by_id(userId)
         if validDate:       
-            user = Account.get_by_id(userId)
             currentAttendStatus = 'Decline'
             newStatus = 'none'
             newButtonMsg = "none set"
@@ -596,7 +596,7 @@ class ToggleAttendance(webapp2.RequestHandler):
                 newStatus = "Attending"
                 newButtonMsg = 'Maybe'
             success = True
-                
+        newCredits = user.Credits
        
         if success:
             jsonRetVal = json.dumps(
@@ -605,6 +605,7 @@ class ToggleAttendance(webapp2.RequestHandler):
                     'oldStatus':currentAttendStatus,
                     'newStatus':newStatus,
                     'newButtonMsg':newButtonMsg,
+                    'newCredits':newCredits,
                     'version':'10'
                 }
             )
