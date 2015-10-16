@@ -17,6 +17,13 @@
 		fillAttendeesListItems('attendeesList-maybe',{{Event.key.integer_id()}},"Maybe");
 		updateAttendeesCount('attendeesCount',{{Event.key.integer_id()}});
 	}
+	
+	function toggleThenRefresh(eventId,userId,htmlCaller){
+		toggleAttendance(eventId,userId,htmlCaller,loadAllAttendees);
+	}
+	function addThenRefresh(toBeStatus,eventId){
+		addAttending(toBeStatus,eventId,loadAllAttendees);
+	}
 	$(window).load(function() {loadAllAttendees();});
 	</script>			
 </head>
@@ -41,7 +48,7 @@
             </div>
 		
 		<center>
-		<button id="attendanceToggle" onclick = 'toggleAttendance({{Event.key.integer_id()}},{{user.key.integer_id()}},this);'>
+		<button id="attendanceToggle" onclick = 'toggleThenRefresh({{Event.key.integer_id()}},{{user.key.integer_id()}},this);'>
 			{{ buttonMsg }}
 		</button>
 		<form action="" id="eventDetails" class="form-horizontal" method="post" enctype="multipart/form-data">
@@ -75,7 +82,7 @@
 					<option value={{Account.key.integer_id()}}>{{Account.Name}}</option>
 				  {% endfor %}
 				</select>
-	<input ID= 'AddAttendee' type="button" value="AddAttendee" onclick="addAttending('Attending',{{Event.key.integer_id()}})" />		</div>
+	<input ID= 'AddAttendee' type="button" value="AddAttendee" onclick="addThenRefresh('Attending',{{Event.key.integer_id()}});" />		</div>
 			<div>
 				<label for="desc">
 					Additional Comments

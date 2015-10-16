@@ -1,4 +1,4 @@
-function sendAttending(status,eventId,userId){
+function sendAttending(status,eventId,userId,callbackFunc){
 	console.log("calling sendAttending");
 	console.log('status = ' +status);
 	console.log('eventId = ' + eventId);	
@@ -21,11 +21,11 @@ function sendAttending(status,eventId,userId){
 			console.log('fail');
 			console.log(data.success);
 		}
-		location.reload();
+		callbackFunc();
 	});
 }
 
-function toggleAttendance(eventId,userId,htmlCaller){
+function toggleAttendance(eventId,userId,htmlCaller,callbackFunc){
 	console.log('called toggleAttendance eventId: ' + eventId + ' userId: ' + userId);
 	
 	$.ajax({
@@ -51,6 +51,8 @@ function toggleAttendance(eventId,userId,htmlCaller){
 			}else if(data.newStatus == 'Maybe'){
 				$('#eventRow-'+eventId).addClass('info');
 			}
+			callbackFunc();
+			
 			
 		}else{
 			console.log('toggleAttendance fail');
@@ -64,12 +66,12 @@ function toggleAttendance(eventId,userId,htmlCaller){
 	
 }
 
-function addAttending(status,eventId){
+function addAttending(status,eventId,callbackFunc){
 	console.log("calling addAttending");
 	var Input = $("#Adduser");
 	var userId = +Input.val();
 	console.log('userId = ' + userId);
-	sendAttending(status,eventId,userId);
+	sendAttending(status,eventId,userId,callbackFunc);
 }
 
 function SaveComment(eventId){
