@@ -38,12 +38,20 @@ function toggleAttendance(eventId,userId,htmlCaller){
 		})
 	})
 	.done(function( data ) {
-		console.log('toggleAttendance returned');
+		
 		if (data.success == true){
 			console.log('toggleAttendance was a success. version: ' + data.version + ' oldStatus: ' + data.oldStatus +' newStatus: ' + data.newStatus);
 			$(htmlCaller).text(data.newButtonMsg);
 			//update appropriate labels on the UI
 			$('[dynamic-credits-accountId-'+userId + ']').text(data.newCredits);
+			$('#eventRow-'+eventId).removeClass();
+
+			if (data.newStatus == 'Attending'){
+				$('#eventRow-'+eventId).addClass('success');
+			}else if(data.newStatus == 'Maybe'){
+				$('#eventRow-'+eventId).addClass('info');
+			}
+			
 		}else{
 			console.log('toggleAttendance fail');
 			$(htmlCaller).css("border-color", "red");

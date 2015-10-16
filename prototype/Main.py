@@ -48,7 +48,19 @@ class Attendance:
             buttonMsg = 'Register'
 
         return buttonMsg
+    
+    def getAttendanceStatusName(self,event,user):
 
+        userId = user.key.integer_id()
+        currentAttendStatus = 'Decline'
+        buttonMsg = ""
+
+        #get the users attending status
+        for attendee in event.Attendees:
+            if attendee.UserID == userId:
+                currentAttendStatus = attendee.AttendingStatus
+
+        return currentAttendStatus
 
 class Session:
     def __init__(self,handler):
@@ -410,9 +422,10 @@ class EventsMain(webapp2.RequestHandler):
                 PastEvents = PastEvents.filter(Event.Name != event.Name)
 
            
-            #Get correct text for attendance button
+            #Get correct text for attendance button and other UI factors
             for event in UpcomingEvents:
                 event.ButtonMsg =  Attendance().getToggleButtonMsg(event,user)
+                event.userAttendanceStatus = Attendance().getAttendanceStatusName(event,user)
 
             
 	    template_values = {

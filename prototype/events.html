@@ -44,9 +44,19 @@
                 
                 
 				{% for Event in UpcomingEvents %}
-                  <tr>
+                  <tr id = 'eventRow-{{Event.key.integer_id()}}'
+				  
+				  {% if Event.userAttendanceStatus == "Attending" %}
+					class="success"
+				  {% elif Event.userAttendanceStatus == "Maybe" %}
+					class="info"
+				  {% endif %}
+				  
+				  
+				  
+				  >
                     <td>
-                      <a href="/eventdetails?eventId={{Event.key.integer_id()}}" >
+                      <a href="/eventdetails?eventId={{Event.key.integer_id()}}">
                         {{ Event.Name }}
                       </a>
                     </td>
