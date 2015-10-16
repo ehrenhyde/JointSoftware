@@ -424,7 +424,7 @@ class EventsMain(webapp2.RequestHandler):
             
             UpcomingEvents = Event.query(Event.DateTime>=query_date).order(Event.DateTime)
 
-            PastEvents = Event.query(Event.DateTime<query_date).order(Event.DateTime)
+            PastEvents = Event.query(Event.DateTime<query_date).order(-Event.DateTime)
 
             
 

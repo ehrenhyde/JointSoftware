@@ -47,28 +47,28 @@
 						<div class="form-group">
 							<label for="email" class="col-sm-2 control-label">Email</label>
 							<div class="col-sm-10">
-								<input name="email" type="email" class="form-control" id="email" value="{{targetUser.Email}}">
+								<input name="email" type="email" class="form-control" id="email" value="{{targetUser.Email}}" required>
 							</div>
 						</div>
 
 						<div class="form-group">
 							<label for="credits" class="col-sm-2 control-label">Credits</label>
 							<div class="col-sm-10">
-								<input name="credits" type="number" class="form-control" id="userCredits" value="{{targetUser.Credits}}" readonly>
+								<input name="credits" type="number" class="form-control" id="userCredits" value="{{targetUser.Credits}}" readonly required>
 							</div>
 						</div>
 
 						<div class="form-group">
 							<label for="name" class="col-sm-2 control-label">Name</label>
 							<div class="col-sm-10">
-								<input type="text" class="form-control" name="name" id="name" value="{{targetUser.Name}}">
+								<input type="text" class="form-control" name="name" id="name" value="{{targetUser.Name}}" required>
 							</div>
 						</div>
 
 						<div class="form-group">
 							<label for="password" class="col-sm-2 control-label">Password</label>
 							<div class="col-sm-10">
-								<input type="password" name="password" class="form-control" id="password" value="{{targetUser.Password}}">
+								<input type="password" name="password" class="form-control" id="password" value="{{targetUser.Password}}" required>
 							</div>
 						</div>
 
