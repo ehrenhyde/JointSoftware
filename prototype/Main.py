@@ -187,7 +187,7 @@ class Account(ndb.Model):
 class Event(ndb.Model):
         #EventID =ndb.IntegerProperty()
 	Name = ndb.StringProperty()
-	Description  = ndb.StringProperty()
+	Description  = ndb.TextProperty()
 	DateTime = ndb.DateTimeProperty()
 	Location = ndb.StringProperty()
 	Attendees = ndb.StructuredProperty(Attendees, repeated=True)
