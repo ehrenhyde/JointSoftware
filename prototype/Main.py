@@ -310,10 +310,12 @@ class CreateUser(webapp2.RequestHandler):
 	    self.response.write(template.render(template_values))
 
     def post(self):
-        #Todo check login as extra security measure
+        
+        
 	a = Account()
 	a.Name =self.request.get('name')
-	a.Email =self.request.get('email')
+	newEmail = self.request.get('email')
+	a.Email = newEmail
 	a.Emergency_Contact =self.request.get('emergencyName')
 	a.Emergency_Phone =self.request.get('emergencyMobile')
 	a.Password =self.request.get('password')
@@ -329,7 +331,14 @@ class CreateUser(webapp2.RequestHandler):
             a.EventManager = True
         else:
             a.EventManager = False
-	a.put()
+
+        duplicateUsers = Account.query(Account.Email==newEmail)
+        atLeastOneDuplicate = False
+        for duplicateUser in duplicateUsers:
+            atLeastOneDuplicate = True
+
+        if not atLeastOneDuplicate:
+            a.put()
 	self.redirect('/users')
 
 class Logout(webapp2.RequestHandler):
