@@ -415,11 +415,9 @@ class EventsMain(webapp2.RequestHandler):
             
             UpcomingEvents = Event.query(Event.DateTime>=query_date).order(Event.DateTime)
 
-            PastEvents = Event.query()
+            PastEvents = Event.query(Event.DateTime<query_date).order(Event.DateTime)
 
-            #Remove the UpcomingEvents from the PastEvents
-            for event in UpcomingEvents:
-                PastEvents = PastEvents.filter(Event.Name != event.Name)
+            
 
            
             #Get correct text for attendance button and other UI factors
@@ -573,7 +571,7 @@ class ToggleAttendance(webapp2.RequestHandler):
         query_date = datetime.now()+timedelta(hours=11)
             
         ValidEvents = Event.query(Event.DateTime>=query_date)
-        #Remove the UpcomingEvents from the PastEvents
+        
         for ValidEvent in ValidEvents:
             if ValidEvent.key.integer_id() == event.key.integer_id() :
                 validDate = True 
