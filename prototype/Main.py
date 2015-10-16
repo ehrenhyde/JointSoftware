@@ -424,8 +424,11 @@ class EventsMain(webapp2.RequestHandler):
             
             UpcomingEvents = Event.query(Event.DateTime>=query_date).order(Event.DateTime)
 
-            PastEvents = Event.query(Event.DateTime<query_date).order(-Event.DateTime)
-
+            #PastEvents = Event.query(Event.DateTime<query_date).order(-Event.DateTime)
+            cutoff_date = datetime.now()+timedelta(weeks=-52)
+            PastEvents = ndb.gql("select * from Event where DateTime<:1 and DateTime>:2 order by DateTime DESC",query_date,cutoff_date)
+            
+            
             
 
            
