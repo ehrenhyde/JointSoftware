@@ -84,25 +84,40 @@
 							<div class="col-sm-10">
 								<input type="number" name="emergencyMobile" class="form-control" id="emergencyMobile" value="{{targetUser.Emergency_Phone}}">
 							</div>
-						</div>
-						
+						</div>		
 						<div class="form-group" adminAllowed>
-							<div>
-								<label for='isAdmin' class="checkbox-inline no_indent">Administrator</label><br/>
-								<input type="checkbox" name="isAdmin" id="isAdmin" {%if targetUser.Admin %} checked="checked" {% endif %}>
-							</div>
-							<div>
-							  <label for="isTreasurer" class="checkbox-inline no_indent">Treasurer</label><br/>
-							  <input type="checkbox" name="isTreasurer" id="isTreasurer" {%if targetUser.Treasurer %} checked="checked" {% endif %}>				 
-							</div>
-							
-							<div>
-								<label for='isEventManager' class="checkbox-inline no_indent">Event Manager</label><br/>
-								<input type="checkbox" name="isEventManager" id="isEventManager" {%if targetUser.EventManager %} checked="checked" {% endif %}>
-							</div>
-							
-						
-	
+							<table>
+								<tr>
+									<div>
+										<td>
+											<label for='isAdmin' class="checkbox-inline no_indent">Administrator</label>
+										</td>
+										<td>
+											<input type="checkbox" name="isAdmin" id="isAdmin" {%if targetUser.Admin %} checked="checked" {% endif %}>
+										</td>	
+									</div>
+								</tr>
+								<tr>
+									<div>
+										<td>
+											<label for="isTreasurer" class="checkbox-inline no_indent">Treasurer</label>
+										</td>
+										<td>
+											<input type="checkbox" name="isTreasurer" id="isTreasurer" {%if targetUser.Treasurer %} checked="checked" {% endif %}>
+										</td>
+									</div>
+								</tr>
+								<tr>
+									<div>
+										<td>
+											<label for='isEventManager' class="checkbox-inline no_indent">Event Manager</label>
+										</td>
+										<td>
+											<input type="checkbox" name="isEventManager" id="isEventManager" {%if targetUser.EventManager %} checked="checked" {% endif %}>
+										</td>
+									</div>
+								</tr>
+							</table>
 						</div>
 						<br><br>
 						
