@@ -1,93 +1,65 @@
 <!DOCTYPE HTML>
 <html>
-
-<head>
-	<title>Users</title>
-
-	{% include 'includes/meta-tags.html' %} {% include 'includes/css-links.html' %} {% include 'includes/js-libraries.html' %}
-
-
-</head>
-
-<body>
-	<!-- Header -->
-	{% include 'includes/navbar.html' %}
-
-	<!--Content-->
-	<div class="container">
-		<div class="row">
-			<div class="col-md-3">
-				{% include 'includes/sideProfile.html' %}
-			</div>
-			<div class="col-md-9">
-				    <div class="panel panel-default">
-					<div class="panel-heading">
-						Users
-					</div> 
-					 <table class="table">
-						{% for account in Accounts %}
-						<tr>
-							<td>
-								<b>Name:</b>
-								<a href="/profile?userId={{account.key.integer_id()}}" class="userItemName">{{ account.Name }}</a>			
-							</td>
-							<td>
-								<b>Email:</b>
-								<span>{{ account.Email }}</span>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<b>Credits:</b>
-								<span treasurerAllowed adminAllowed>
+	<head>
+		<title>Users</title>
+		{% include 'includes/meta-tags.html' %} {% include 'includes/css-links.html' %} {% include 'includes/js-libraries.html' %}
+	</head>
+	<body>
+		<!-- Header -->
+		{% include 'includes/navbar.html' %}
+		<!--Content-->
+		<div class="container">
+			<div class="row">
+				<div class="col-md-3">
+					{% include 'includes/sideProfile.html' %}
+				</div>
+				<div class="col-md-9">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							Users
+						</div>
+						<table class="table">
+							{% for account in Accounts %}
+							<tr>
+								<td>
+									<b>Name:</b>
+									<a href="/profile?userId={{account.key.integer_id()}}" class="userItemName">{{ account.Name }}</a>			
+								</td>
+								<td>
+									<b>Email:</b>
+									<span>{{ account.Email }}</span>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<b>Credits:</b>
+									<span treasurerAllowed adminAllowed>
 									<span dynamic-credits-accountId-{{account.key.integer_id()}}>{{ account.Credits }}</span>
-							</td>
-							<td>
+								</td>
+								<td>
 									<span treasurerAllowed>
 										<span treasurerAllowed></span>
 										<!--these are not hyperlinks because we will use AJAX (javascript)to send the webservice-->
-										<input type="Submit" value="+1" class="btn btn-success btn-sm" onclick="changeCredits({{account.key.integer_id()}},1,this)" style="width:50px">
-										<input type="Submit" value="+10" class="btn btn-warning btn-sm" onclick="changeCredits({{account.key.integer_id()}},10,this)" style="width:50px">
-										<input type="Submit" value="-1" class="btn btn-danger btn-sm" onclick="changeCredits({{account.key.integer_id()}},-1,this)" style="width:50px">
+										<input type="Submit" value="+1" class="btn btn-success btn-xs" onclick="changeCredits({{account.key.integer_id()}},1,this)" style="width:50px">
+										<input type="Submit" value="+10" class="btn btn-warning btn-xs" onclick="changeCredits({{account.key.integer_id()}},10,this)" style="width:50px">
+										<input type="Submit" value="-1" class="btn btn-danger btn-xs" onclick="changeCredits({{account.key.integer_id()}},-1,this)" style="width:50px">
 									</span>
-								</span>
-							</td>	
-						</tr>
-						{% endfor %}
-					</table>
-					
-					<!--
-					<ul id="usersList">
-						{% for account in Accounts %}
-						<li class="userItem">
-							<a href="/profile?userId={{account.key.integer_id()}}" class="userItemName">{{ account.Name }}</a>
-							<span>{{ account.Email }}</span>
-							<span treasurerAllowed>
-								<span>Credits: {{ account.Credits }} Add:</span>
-							these are not hyperlinks because we will use AJAX (javascript)to send the webservice
-							<span class="add1Credit" onclick="changeCredits({{account.key.integer_id()}},1)">+1</span>
-							<span class="add1Credit" onclick="changeCredits({{account.key.integer_id()}},10)">+10</span>
-							<span class="take1Credit" onclick="changeCredits({{account.key.integer_id()}},-1)">-1</span>
-							</span>
-						</li>
-						{% endfor %}
-						<li>
-							<a id='createUser' href="/createUser" class="button" adminAllowed>Add New Member</a>
-						</li>
-					</ul>
-					-->
-					
+									</span>
+								</td>
+							</tr>
+							<!-- Separate Users -->
+							<tr>
+								<td colspan="2"></td>
+							<tr>
+								{% endfor %}
+						</table>
+					</div>
+					<center>
+						<a id='createUser' class = "btn active" href="/createUser" adminAllowed>Add New Member</a>
+					</center>
+				</div>
 			</div>
-				<center>
-				
-                    <a id='createUser' class = "btn active" href="/createUser" adminAllowed>Add New Member</a>
-				</center>
-			</div>
-			
 		</div>
-		
-	</div>
-	
-	{% include 'includes/footer.html' %}
-</body>
+		{% include 'includes/footer.html' %}
+	</body>
 </html>
