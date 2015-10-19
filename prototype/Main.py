@@ -1,3 +1,6 @@
+####
+#[application libraries]
+####
 import os
 import urllib
 import uuid
@@ -14,20 +17,23 @@ import json
 
 from datetime import *
 
+#NOTE:Do we need to keep...
 #import model
 #import fishcakesessions
-
+#...
 
 LOCAL_TESTING = False
-
+#Setup for Jinja Template Enviroment
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
-# [END imports]
+# [END application libraries]
 
 DEFAULT_ORG_NAME = "freedivers_brisbane"
 
+
+#NOTE:To be assigned
 class Attendance:
     def getToggleButtonMsg(self,event,user):
         userId = user.key.integer_id()
@@ -62,6 +68,46 @@ class Attendance:
 
         return currentAttendStatus
 
+####
+#Defining the Entity’s for the Data Store
+####
+
+#Attendies are stored as a structured datatype with in the Event Modle
+class Attendees(ndb.Model):
+        UserID = ndb.IntegerProperty()
+        AttendingStatus = ndb.StringProperty()
+
+#An Account entity stores all the information about individual users
+class Account(ndb.Model):
+	Name = ndb.StringProperty()
+	Email = ndb.StringProperty()
+	Emergency_Contact = ndb.StringProperty()
+	Emergency_Phone= ndb.StringProperty()
+	Password = ndb.StringProperty()
+	Picture = ndb.BlobProperty(default=None)
+	Credits = ndb.IntegerProperty(default=0)
+	Admin= ndb.BooleanProperty()
+	Treasurer = ndb.BooleanProperty()
+	EventManager = ndb.BooleanProperty()
+	ProfilePicBlobKey = ndb.BlobKeyProperty()
+	session_id = ndb.StringProperty()
+	TestField = ndb.StringProperty()
+
+#An Event entitiy stores information requarding the event
+class Event(ndb.Model):
+	Name = ndb.StringProperty()
+	Description  = ndb.TextProperty()
+	DateTime = ndb.DateTimeProperty()
+	Location = ndb.StringProperty()
+	#each event contains a list of attendiees represnted by the Atendees entity
+	Attendees = ndb.StructuredProperty(Attendees, repeated=True)
+	#calculates the total number of attendee Entities linked to each event (data updates when attendee is added/removed)
+	Attendees_count = ndb.ComputedProperty(lambda e: len(e.Attendees))
+	Comment = ndb.TextProperty()
+
+####
+#[Session Handlers], Responsible for the information management of a logged in User
+####
 class Session:
     def __init__(self,handler):
         #Requires a webapp requesthandler to be passed as a contructor
@@ -164,39 +210,8 @@ class Session:
             return None
         if tmp.Password != p: return None
         return tmp
-    
-class Attendees(ndb.Model):
-        UserID = ndb.IntegerProperty()
-        AttendingStatus = ndb.StringProperty()
 
-class Account(ndb.Model):
-	Name = ndb.StringProperty()
-	Email = ndb.StringProperty()
-	Emergency_Contact = ndb.StringProperty()
-	Emergency_Phone= ndb.StringProperty()
-	Password = ndb.StringProperty()
-	Picture = ndb.BlobProperty(default=None)
-	Credits = ndb.IntegerProperty(default=0)
-	Admin= ndb.BooleanProperty()
-	Treasurer = ndb.BooleanProperty()
-	EventManager = ndb.BooleanProperty()
-	ProfilePicBlobKey = ndb.BlobKeyProperty()
-	session_id = ndb.StringProperty()
-	TestField = ndb.StringProperty()
 
-class Event(ndb.Model):
-        #EventID =ndb.IntegerProperty()
-	Name = ndb.StringProperty()
-	Description  = ndb.TextProperty()
-	DateTime = ndb.DateTimeProperty()
-	Location = ndb.StringProperty()
-	Attendees = ndb.StructuredProperty(Attendees, repeated=True)
-	Attendees_count = ndb.ComputedProperty(lambda e: len(e.Attendees))
-	Comment = ndb.TextProperty()
-	
-class MainPage(webapp2.RequestHandler):
-    def get(self):
-        self.redirect('/login')
 
 #Sesion Creation then redirect to events page		
 class Login(webapp2.RequestHandler):
@@ -225,8 +240,23 @@ class Login(webapp2.RequestHandler):
             self.response.write(template.render(variables)) 
         else:
             strC = str(c)
-            self.redirect(strC)	
+            self.redirect(strC)
 
+#Logs out user
+class Logout(webapp2.RequestHandler):
+    def get(self):
+        Session(self).logout()
+        self.redirect('/login')
+####
+#[END Session Handlers]
+####
+
+
+####
+#[User/Account Page Handlers]
+####
+
+#Loads User page, supplies List of users to the Template
 class Users(webapp2.RequestHandler):
     def get(self):
         user = Session(self).get_current_user()
@@ -242,10 +272,10 @@ class Users(webapp2.RequestHandler):
             template = JINJA_ENVIRONMENT.get_template('users.html')
             self.response.write(template.render(template_values))
 
-            
+#Calles Entity from data store and updates details of particular user/account           
 class ChangeUserDetails(blobstore_handlers.BlobstoreUploadHandler):
     def post(self):
-        #Todo add security that checks logged in user is admin
+        #retrieves information from form and updates target user 
 	ID = long(self.request.get('targetUserId'))
 	a = Account.get_by_id(ID)
 	a.Name =self.request.get('name')
@@ -253,6 +283,8 @@ class ChangeUserDetails(blobstore_handlers.BlobstoreUploadHandler):
 	a.Emergency_Contact =self.request.get('emergencyName')
 	a.Emergency_Phone =self.request.get('emergencyMobile')
 	a.Password =self.request.get('password')
+        #Priviledge Update 
+        #If Checked box is submitted, privileged is granted, otherwise removed
 	if 'isAdmin' in self.request.POST:
             a.Admin = True
         else:
@@ -270,11 +302,14 @@ class ChangeUserDetails(blobstore_handlers.BlobstoreUploadHandler):
             upload = self.get_uploads()[0]
             a.ProfilePicBlobKey = upload.key()
             
-	a.put()
+	a.put()# pushes the updates to data store
 
-	self.redirect('/users')
+	self.redirect('/users')#NOTE: Change Redirect 
 
+#NOTE: Need Comment
 #https://cloud.google.com/appengine/docs/python/blobstore/
+
+#Uploads profile profile to Account in data store 
 class MyProfilePhotoUpload(blobstore_handlers.BlobstoreUploadHandler):
     def post(self):
         try:
@@ -282,9 +317,7 @@ class MyProfilePhotoUpload(blobstore_handlers.BlobstoreUploadHandler):
             user = Session(self).get_current_user()
             user.ProfilePicBlobKey = upload.key()
             user.put()
-            
             self.redirect('/users')
-
         except:
             self.error(500)
             
@@ -295,7 +328,9 @@ class ViewProfilePhoto(blobstore_handlers.BlobstoreDownloadHandler):
         else:
             self.send_blob(photo_key)
 
+#Page Handler for user creation
 class CreateUser(webapp2.RequestHandler):
+    #loads creates user page(only loads if user is logged in)
     def get(self):
         user = Session(self).get_current_user()
         if not user:
@@ -308,10 +343,9 @@ class CreateUser(webapp2.RequestHandler):
             }
 	    template = JINJA_ENVIRONMENT.get_template('createUser.html')
 	    self.response.write(template.render(template_values))
-
+    #Creates the account based on form elements passed in from /CreateUserPage
     def post(self):
-        
-        
+        #creates empty Account entity for new user account
 	a = Account()
 	a.Name =self.request.get('name')
 	newEmail = self.request.get('email')
@@ -319,6 +353,8 @@ class CreateUser(webapp2.RequestHandler):
 	a.Emergency_Contact =self.request.get('emergencyName')
 	a.Emergency_Phone =self.request.get('emergencyMobile')
 	a.Password =self.request.get('password')
+	#Priviledge Update 
+        #If Checked box is submitted, privileged is granted, otherwise removed
 	if 'isAdmin' in self.request.POST:
             a.Admin = True
         else:
@@ -338,50 +374,9 @@ class CreateUser(webapp2.RequestHandler):
             atLeastOneDuplicate = True
 
         if not atLeastOneDuplicate:
-            a.put()
+            a.put()#adds the new user to data store
 	self.redirect('/users')
-
-class Logout(webapp2.RequestHandler):
-    def get(self):
-        Session(self).logout()
-        self.redirect('/login')
-
-class GetAttendees(webapp2.RequestHandler):
-    def post(self):
-        data = json.loads(self.request.body)
-        eventId = data['eventId']
-        status = data['status']
-        event = Event.get_by_id(eventId)
-        attendeeNames = []
-        for attendeeNum in range(event.Attendees_count):
-            attendingStatus = event.Attendees[attendeeNum].AttendingStatus
-            if attendingStatus == status:
-                attendee =  Account.get_by_id(event.Attendees[attendeeNum].UserID)
-                attendeeNames.append(attendee.Name)
-                
-        jsonRetVal = json.dumps(
-            {
-                'success':True,
-                'attendeeNames':attendeeNames
-            } 
-        )
-        self.response.write(jsonRetVal)
-
-class GetAttendeesCount(webapp2.RequestHandler):
-    def post(self):
-        data = json.loads(self.request.body)
-        eventId = data['eventId']
-        event = Event.get_by_id(eventId)
-        attendeesCount = event.Attendees_count                
-        jsonRetVal = json.dumps(
-            {
-                'success':True,
-                'attendeesCount':attendeesCount
-            } 
-        )
-        self.response.write(jsonRetVal)
-        
-        
+#loads profile page, passes a single user's details into the template
 class Profile(webapp2.RequestHandler):
     def get(self):
         user = Session(self).get_current_user()
@@ -411,7 +406,54 @@ class Profile(webapp2.RequestHandler):
 	    }
             template = JINJA_ENVIRONMENT.get_template('profile.html')
             self.response.write(template.render(template_values))
-		
+
+#Removes Account entity from data store
+class DeleteAccount(webapp2.RequestHandler):
+    def post(self):
+        user = Session(self).get_current_user()
+        if not user:
+            nextPath = '='.join(('/login?continue',self.request.url))
+            self.redirect(nextPath)
+        else:
+            data = json.loads(self.request.body)
+            userId = data['userId']
+            #TODO: add Extra Security
+            targetAccount = Account.get_by_id(userId)
+            targetAccount.key.delete()#removes the event
+            success = True
+            jsonRetVal = json.dumps(
+                {
+                    'success':success
+                }
+            )
+            self.response.write(jsonRetVal)
+
+#Updates an accounts credits, amount is passed in through Javasctipt
+class ChangeCredits(webapp2.RequestHandler):
+    def post(self):
+        data = json.loads(self.request.body)
+        userId = data['userId']
+        creditsChange = data['creditsChange']
+        account = Account.get_by_id(userId)
+        account.Credits = account.Credits + int(creditsChange)
+        account.put()
+        success = True
+        jsonRetVal = json.dumps(
+            {
+                'success':success,
+                'newCredits' :account.Credits
+            }
+        )
+        self.response.write(jsonRetVal)
+
+####
+#[END User/Account Page Handlers]
+####
+
+
+####
+#[Event page Managment]
+####		
 class EventsMain(webapp2.RequestHandler):
     def get(self):
         user = Session(self).get_current_user()
@@ -541,7 +583,51 @@ class EventDetails(webapp2.RequestHandler):
         a.put()
 
         self.redirect('/events')
-       
+
+class CancelEvent(webapp2.RequestHandler):
+    def get(self):
+        user = Session(self).get_current_user()
+        if not user:
+            nextPath = '='.join(('/login?continue',self.request.url))
+            self.redirect(nextPath)
+        else:
+            UserAttending = False
+            targetEventId = long(self.request.get('eventId'))
+            targetEvent = Event.get_by_id(targetEventId)
+            Accounts = Account.query()
+            for attendeeNum in range(targetEvent.Attendees_count):#loops all attendees
+                attendee =  Account.get_by_id(targetEvent.Attendees[attendeeNum].UserID)#gets account of attendee
+                targetEvent.Attendees = [i for i in targetEvent.Attendees if i.UserID != attendee.key.integer_id()]#removes attendie for event
+                targetEvent.put()#saves event
+                attendee.Credits = user.Credits + 1 #refunds credit
+                attendee.put()#saves user
+            targetEvent.key.delete()#removes the event
+            self.redirect('/events')   
+
+#Saves Comment field for an event. Accessed Through Javascript
+class SaveComment(webapp2.RequestHandler):
+    def post(self):
+        data = json.loads(self.request.body)
+        eventId = data['eventId']
+        comment = data['Comment']
+        #Update server with values
+        a = Event.get_by_id(eventId)
+        a.Comment = comment
+        a.put()
+        success = True    
+        jsonRetVal = json.dumps(
+            {
+                'success':success          
+            }
+        )
+        self.response.write(jsonRetVal)
+####
+#[END Event page Managment]
+####
+
+####
+#[Attendance Management]
+####
 class ToggleAttendance(webapp2.RequestHandler):
     def removeAttendee(self,event,user):
         #Update server with values
@@ -641,57 +727,37 @@ class ToggleAttendance(webapp2.RequestHandler):
             )
         self.response.write(jsonRetVal)
 
-class CancelEvent(webapp2.RequestHandler):
-    def get(self):
-        user = Session(self).get_current_user()
-        if not user:
-            nextPath = '='.join(('/login?continue',self.request.url))
-            self.redirect(nextPath)
-        else:
-            UserAttending = False
-            targetEventId = long(self.request.get('eventId'))
-            targetEvent = Event.get_by_id(targetEventId)
-            Accounts = Account.query()
-            for attendeeNum in range(targetEvent.Attendees_count):#loops all attendees
-                attendee =  Account.get_by_id(targetEvent.Attendees[attendeeNum].UserID)#gets account of attendee
-                targetEvent.Attendees = [i for i in targetEvent.Attendees if i.UserID != attendee.key.integer_id()]#removes attendie for event
-                targetEvent.put()#saves event
-                attendee.Credits = user.Credits + 1 #refunds credit
-                attendee.put()#saves user
-            targetEvent.key.delete()#removes the event
-            self.redirect('/events')   
-
-class SaveComment(webapp2.RequestHandler):
+class GetAttendees(webapp2.RequestHandler):
     def post(self):
         data = json.loads(self.request.body)
         eventId = data['eventId']
-        comment = data['Comment']
-        #Update server with values
-        a = Event.get_by_id(eventId)
-        a.Comment = comment
-        a.put()
-        success = True    
+        status = data['status']
+        event = Event.get_by_id(eventId)
+        attendeeNames = []
+        for attendeeNum in range(event.Attendees_count):
+            attendingStatus = event.Attendees[attendeeNum].AttendingStatus
+            if attendingStatus == status:
+                attendee =  Account.get_by_id(event.Attendees[attendeeNum].UserID)
+                attendeeNames.append(attendee.Name)         
         jsonRetVal = json.dumps(
             {
-                'success':success          
-            }
+                'success':True,
+                'attendeeNames':attendeeNames
+            } 
         )
         self.response.write(jsonRetVal)
 
-class ChangeCredits(webapp2.RequestHandler):
+class GetAttendeesCount(webapp2.RequestHandler):
     def post(self):
         data = json.loads(self.request.body)
-        userId = data['userId']
-        creditsChange = data['creditsChange']
-        account = Account.get_by_id(userId)
-        account.Credits = account.Credits + int(creditsChange)
-        account.put()
-        success = True
+        eventId = data['eventId']
+        event = Event.get_by_id(eventId)
+        attendeesCount = event.Attendees_count                
         jsonRetVal = json.dumps(
             {
-                'success':success,
-                'newCredits' :account.Credits
-            }
+                'success':True,
+                'attendeesCount':attendeesCount
+            } 
         )
         self.response.write(jsonRetVal)
 
@@ -713,43 +779,36 @@ class PrintAttendees(webapp2.RequestHandler):
         }
         template = JINJA_ENVIRONMENT.get_template('printAttendees.html')
         self.response.write(template.render(template_values))
-
-class DeleteAccount(webapp2.RequestHandler):
-    def post(self):
-        user = Session(self).get_current_user()
-        if not user:
-            nextPath = '='.join(('/login?continue',self.request.url))
-            self.redirect(nextPath)
-        else:
-            data = json.loads(self.request.body)
-            userId = data['userId']
-            #TODO: add Extra Security
-            targetAccount = Account.get_by_id(userId)
-            targetAccount.key.delete()#removes the event
-            success = True
-            jsonRetVal = json.dumps(
-                {
-                    'success':success
-                }
-            )
-            self.response.write(jsonRetVal)
+####
+#[END Attendance Management]
+####
 
 
-class DemoUsers(webapp2.RequestHandler):
-    def get(self):
-        #Create First User
-	a = Account()
-	a.Name ='DemoUser'
-	a.Email ='test@example.com'
-	a.Password ='1234'
-	a.Admin = True
-        a.Treasurer = True
-        a.EventManager = True
-	a.put()
-	self.redirect('/')
+####
+#[DEBUG FUNCTION]
+####
+#Create Demo User DEBUG use only
+##class DemoUsers(webapp2.RequestHandler):
+##    def get(self):
+##        #Create First User
+##	a = Account()
+##	a.Name ='DemoUser'
+##	a.Email ='test@example.com'
+##	a.Password ='1234'
+##	a.Admin = True
+##        a.Treasurer = True
+##        a.EventManager = True
+##	a.put()
+##	self.redirect('/')
+####
+#[END DEBUG FUNCTION]
+####
 
+####
+#[Routing Mangment]
+####
 app = webapp2.WSGIApplication([
-    ('/', MainPage),
+    ('/', Login),
     ('/users',Users),
     ('/createUser', CreateUser),
     ('/changeUserDetails', ChangeUserDetails),
@@ -767,7 +826,10 @@ app = webapp2.WSGIApplication([
     ('/myProfilePhotoUpload',MyProfilePhotoUpload),
     ('/ViewProfilePhoto/([^/]+)?', ViewProfilePhoto),
     ('/printAttendees',PrintAttendees),
-    ('/DemoUsers',DemoUsers),
+    #[Debug use]('/DemoUsers',DemoUsers),
     ('/GetAttendees',GetAttendees),
     ('/GetAttendeesCount',GetAttendeesCount)
 ], debug=True)
+####
+#[END Routing Mangment]
+####
