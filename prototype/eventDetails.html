@@ -47,55 +47,87 @@
 				</center>
             </div>
 		
+	<div class="col-md-9">
 		<center>
-		<button id="attendanceToggle" onclick = 'toggleThenRefresh({{Event.key.integer_id()}},{{user.key.integer_id()}},this);'>
-			{{ buttonMsg }}
-		</button>
-		<form action="" id="eventDetails" class="form-horizontal" method="post" enctype="multipart/form-data">
-			<h2 id="eventName">{{Event.Name}}</h2>
-			<a id="editEvent" href="/editEvent" class="button" eventManagerAllowed>Edit Event</a><a eventManagerAllowed id="CancelEvent" href="/CancelEvent?eventId={{Event.key.integer_id()}}" class="button">Cancel Event</a></br>	
-			<div id="eventDetails">
-				<span id="eventDatetime">{{Event.DateTime}}</span></br>
-				<span id="eventLocation">Location: {{Event.Location}}</span></br>
-				<span id="eventDesc">Description: {{Event.Description}}</span></br>
-			</div>
-			<div>
-			<span>Attendees:</span><span id = 'attendeesCount'>{{Event.Attendees_count}}</span></br>
-			
-			<div><div>Attending</div>
-				<ul id = "attendeesList-attending">
-					<!--Loaded by javascript-->			
-				</ul>
-			</div>
-			
-			<div><div>Maybe</div>
-				<ul id = "attendeesList-maybe">
-					<!--Loaded by javascript-->
-				</ul>
-			</div>
-			
-			</div>
-			<div eventManagerAllowed>
-			<span> Add Attendee</span>
-				<select ID = "Adduser" name="Adduser" >
-				  {% for Account in Accounts %}
-					<option value={{Account.key.integer_id()}}>{{Account.Name}}</option>
-				  {% endfor %}
-				</select>
-	<input ID= 'AddAttendee' type="button" value="AddAttendee" onclick="addThenRefresh('Attending',{{Event.key.integer_id()}});" />		</div>
-			<div>
-				<label for="desc">
-					Additional Comments
-					</br><textarea id= "Comment" type="textarea" rows="10" cols="30">{{Event.Comment}}</textarea>
-				</label>
-				</br>
-				<input ID= 'SaveComment' type="button" value="Save" onclick="SaveComment({{Event.key.integer_id()}} )" eventManagerAllowed/>			
-			</div>
-		</form>
+		<h2 id="eventName">{{Event.Name}} </h2>	
+																		
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<b>Total Attendees: <span id = 'attendeesCount'>{{Event.Attendees_count}}</span></b>
+                </div>
+				<table class="table">
+					<tr>
+						<th>
+							<center>Attending</center>
+						</th>
+						<th>
+							<center>Maybe</center>
+						</th>
+					</tr>
+					
+					<td>
+						<center><ul class="list-unstyled" id = "attendeesList-attending">
+										<!--Loaded by javascript-->			
+						</ul></center>
+					</td>
+					
+					<td>
+						<center><ul class="list-unstyled" id = "attendeesList-maybe">
+										<!--Loaded by javascript-->
+						</ul></center>
+					</td>
+				</table>
+			</div>		
+
+			<form action="" id="eventDetails" class="form-horizontal" method="post" enctype="multipart/form-data">
+						
+						<div class="form-group">
+							<label for="eventDatetime" class="col-sm-2 control-label">Event Time/Date</label>
+							<div class="col-sm-10">
+								<input name="eventDatetime" type="datetime" class="form-control" id="eventDatetime" value="{{Event.DateTime}}" required >
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="eventLocation" class="col-sm-2 control-label">Event Location</label>
+							<div class="col-sm-10">
+								<input name="eventLocation" type="text" class="form-control" id="eventLocation" value= "{{Event.Location}}" required>
+							</div>
+						</div>
+
+						<div class="form-group">				
+							<label for="desc" class="col-sm-2 control-label">Description</label>
+							<div class="col-sm-10">
+								<textarea name="desc" class="form-control" rows="5" value="{{Event.Description}}" ></textarea>
+							</div>
+						</div>
+						
+						<div class="form-group">
+								<button type="submit" class="btn btn-primary" eventManagerAllowed>Submit</button>
+						</div>
+						
+					</form>
+	
 		</center>
-		<a href="/printAttendees?eventId={{Event.key.integer_id()}}" treasurerAllowed>Print Attendees</a>
+		<center>
+		<button 
+		onclick="window.location.href='printAttendees?eventId={{Event.key.integer_id()}}'"
+		style="width:125px"
+		id="printAttendees"
+		class="btn btn-primary"
+		name="Print Attendees" 
+		treasurerAllowed		
+		>Print Attendees</button>
 		
+		<button 
+		style="width:125px"
+		id="attendanceToggle" 
+		class="btn btn-primary" 
+		onclick = 'toggleThenRefresh({{Event.key.integer_id()}},{{user.key.integer_id()}},this);'>{{ buttonMsg }}</button>
 		</div>	
+		</center>
+		
+	</div>
 	</div>
 	{% include 'includes/footer.html' %}
 </body>
