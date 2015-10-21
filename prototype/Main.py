@@ -118,6 +118,7 @@ class Session:
         self._sync_user(tmp)
 
     def _generate_test_user(self):
+        ##Used during development when the system could be run in "Local Mode"
         newUser = Account.query(Account.Name == 'Test').get()
         if not newUser:
             newUser = Account()
@@ -225,6 +226,7 @@ class Login(webapp2.RequestHandler):
         u = self.request.get('Email') 
         p = self.request.get('Password') 
         tmp = Session(self).grab_login(u,p)
+        #if not logged in, redirect to login page but keep requested page as a continue variable
         if not tmp: 
             if tmp is None: msg = 'Bad username and/or password' 
             variables = {
@@ -308,9 +310,11 @@ class ChangeUserDetails(blobstore_handlers.BlobstoreUploadHandler):
 class MyProfilePhotoUpload(blobstore_handlers.BlobstoreUploadHandler):
     def post(self):
         try:
+            #fetch image from array of uploads
             upload = self.get_uploads()[0]
             user = Session(self).get_current_user()
             user.ProfilePicBlobKey = upload.key()
+            #image storage is handled automatically
             user.put()
             self.redirect('/users')
         except:
@@ -412,7 +416,6 @@ class DeleteAccount(webapp2.RequestHandler):
         else:
             data = json.loads(self.request.body)
             userId = data['userId']
-            #TODO: add Extra Security
             targetAccount = Account.get_by_id(userId)
             targetAccount.key.delete()#removes the event
             success = True
