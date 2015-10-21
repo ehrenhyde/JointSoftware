@@ -1,118 +1,142 @@
 <!DOCTYPE HTML>
 <html>
-	<head>
-		<title>Event Details</title>
-		{% include 'includes/meta-tags.html' %} {% include 'includes/css-links.html' %} {% include 'includes/js-libraries.html' %}
-		<!-- Temporary for removal of horizontal scroll bar -->
-		<style type="text/css">
-			html, body {
+
+<head>
+	<title>Event Details</title>
+	{% include 'includes/meta-tags.html' %} {% include 'includes/css-links.html' %} {% include 'includes/js-libraries.html' %}
+	<!-- Temporary for removal of horizontal scroll bar -->
+	<style type="text/css">
+		html, body {
 			max-width: 100%;
 			overflow-x: hidden;
-			}
-		</style>
-		<script>
-			function loadAllAttendees(){
-				fillAttendeesListItems('attendeesList-attending',{{Event.key.integer_id()}},"Attending");
-				fillAttendeesListItems('attendeesList-maybe',{{Event.key.integer_id()}},"Maybe");
-				updateAttendeesCount('attendeesCount',{{Event.key.integer_id()}});
-			}
-			
-			function toggleThenRefresh(eventId,userId,htmlCaller){
-				toggleAttendance(eventId,userId,htmlCaller,loadAllAttendees);
-			}
-			function addThenRefresh(toBeStatus,eventId){
-				addAttending(toBeStatus,eventId,loadAllAttendees);
-			}
-			$(window).load(function() {loadAllAttendees();});
-		</script>			
-	</head>
-	<body>
-		<!-- Header -->
-		{% include 'includes/navbar.html' %}
-		<!--Create Event - We'll put this in a container-->
-		<div class="container">
-			<div class="row">
-				<div class="col-md-3">
-					<center>
-						{% include 'includes/sideProfile.html' %}
-						<!--<form action="{{userUploadURL}}" method="POST" enctype="multipart/form-data">
-							Upload Photo: <input type="file" name="ProfilePic"><br>
-							<input type="submit" name="submit" value="Submit">
-							</form>-->
-						<!--<button>Upload Photo</button>
-							<br><br>-->
-					</center>
-				</div>
-				<div class="col-md-9">
-					<h2 id="eventName">{{Event.Name}} </h2>
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<b>Total Attendees: <span id = 'attendeesCount'>{{Event.Attendees_count}}</span></b>
-						</div>
-						<table class="table">
-							<tr>
-								<th>
-									<center>Attending</center>
-								</th>
-								<th>
-									<center>Maybe</center>
-								</th>
-							</tr>
-							<td>
-								<center>
-									<ul class="list-unstyled" id = "attendeesList-attending">
+		}
+	</style>
+	<script>
+	function loadAllAttendees(){
+		fillAttendeesListItems('attendeesList-attending',{{Event.key.integer_id()}},"Attending");
+		fillAttendeesListItems('attendeesList-maybe',{{Event.key.integer_id()}},"Maybe");
+		updateAttendeesCount('attendeesCount',{{Event.key.integer_id()}});
+	}
+	
+	function toggleThenRefresh(eventId,userId,htmlCaller){
+		toggleAttendance(eventId,userId,htmlCaller,loadAllAttendees);
+	}
+	function addThenRefresh(toBeStatus,eventId){
+		addAttending(toBeStatus,eventId,loadAllAttendees);
+	}
+	$(window).load(function() {loadAllAttendees();});
+	</script>			
+</head>
+
+<body>
+	<!-- Header -->
+	{% include 'includes/navbar.html' %}
+
+<!--Create Event - We'll put this in a container-->
+	<div class="container">			
+		<div class="row">	
+			<div class="col-md-3">
+                <center>
+					{% include 'includes/sideProfile.html' %}
+					<!--<form action="{{userUploadURL}}" method="POST" enctype="multipart/form-data">
+						Upload Photo: <input type="file" name="ProfilePic"><br>
+						<input type="submit" name="submit" value="Submit">
+					</form>-->
+					<!--<button>Upload Photo</button>
+					<br><br>-->
+				</center>
+            </div>
+		
+	<div class="col-md-9">
+		<center>
+		<h2 id="eventName">{{Event.Name}} </h2>	
+																		
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<b>Total Attendees: <span id = 'attendeesCount'>{{Event.Attendees_count}}</span></b>
+                </div>
+				<table class="table">
+					<tr>
+						<th>
+							<center>Attending</center>
+						</th>
+						<th>
+							<center>Maybe</center>
+						</th>
+					</tr>
+					
+					<td>
+						<center><ul class="list-unstyled" id = "attendeesList-attending">
 										<!--Loaded by javascript-->			
-									</ul>
-								</center>
-							</td>
-							<td>
-								<center>
-									<ul class="list-unstyled" id = "attendeesList-maybe">
+						</ul></center>
+					</td>
+					
+					<td>
+						<center><ul class="list-unstyled" id = "attendeesList-maybe">
 										<!--Loaded by javascript-->
-									</ul>
-								</center>
-							</td>
-						</table>
-					</div>
-					<form action="/eventDetails" id="eventDetails" class="form-horizontal" method="post" enctype="multipart/form-data">
+						</ul></center>
+					</td>
+				</table>
+			</div>		
+
+			<form action="/eventDetails" id="eventDetails" class="form-horizontal" method="post" enctype="multipart/form-data">
 						<input type="hidden" name="eventId" value="{{Event.key.integer_id()}}">
-						<div class="form-group">
+						
+						<div class="form-group">				
 							<label for="desc" class="col-sm-2 control-label">Comment</label>
 							<div class="col-sm-10">
 								<input id="comment" name = "comment" type="text" class="form-control" rows="5" value="{{Event.Comment}}"></input>
 							</div>
 						</div>
+						
 						<div class="form-group">
 							<label for="eventDatetime" class="col-sm-2 control-label">Event Time/Date</label>
 							<div class="col-sm-10">
 								<input name="eventDatetime" type="datetime" class="form-control" id="eventDatetime" value={{Event.DateTime}} required >
 							</div>
 						</div>
+
 						<div class="form-group">
 							<label for="eventLocation" class="col-sm-2 control-label">Event Location</label>
 							<div class="col-sm-10">
 								<input name="eventLocation" type="text" class="form-control" id="eventLocation" value= "{{Event.Location}}" required>
 							</div>
 						</div>
-						<div class="form-group">
+
+						<div class="form-group">				
 							<label for="desc" class="col-sm-2 control-label">Description</label>
 							<div class="col-sm-10">
-								<textarea name="desc" class="form-control" rows="5" style="max-width:100%">{{Event.Description}}</textarea>
+								<textarea name="desc" class="form-control" rows="5">{{Event.Description}}</textarea>
 							</div>
 						</div>
-						<center>
-							<div class="form-group">
+						
+						<div class="form-group">
 								<button type="submit" class="btn btn-primary" eventManagerAllowed>Submit</button>
-							</div>
-						</center>
+						</div>
+						
 					</form>
-					<center>
-						<button onclick="window.location.href='printAttendees?eventId={{Event.key.integer_id()}}'"	style="width:125px"	id="printAttendees"	class="btn btn-primary"	name="Print Attendees" treasurerAllowed>Print Attendees</button>
-						<button style="width:125px"	id="attendanceToggle" class="btn btn-primary" onclick = 'toggleThenRefresh({{Event.key.integer_id()}},{{user.key.integer_id()}},this);'>{{ buttonMsg }}</button>
-					</center>
-				</div>
-			</div>
-		</div>
-		{% include 'includes/footer.html' %}
-	</body>
+	
+		</center>
+		<center>
+		<button 
+		onclick="window.location.href='printAttendees?eventId={{Event.key.integer_id()}}'"
+		style="width:125px"
+		id="printAttendees"
+		class="btn btn-primary"
+		name="Print Attendees" 
+		treasurerAllowed		
+		>Print Attendees</button>
+		
+		<button 
+		style="width:125px"
+		id="attendanceToggle" 
+		class="btn btn-primary" 
+		onclick = 'toggleThenRefresh({{Event.key.integer_id()}},{{user.key.integer_id()}},this);'>{{ buttonMsg }}</button>
+		</div>	
+		</center>
+		
+	</div>
+	</div>
+	{% include 'includes/footer.html' %}
+</body>
 </html>
