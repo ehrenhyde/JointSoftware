@@ -21,7 +21,10 @@ function sendAttending(status,eventId,userId,callbackFunc){
 			console.log('fail');
 			console.log(data.success);
 		}
-		callbackFunc();
+		if (callbackFunc){
+			callbackFunc();
+		}
+		
 	});
 }
 
@@ -51,7 +54,11 @@ function toggleAttendance(eventId,userId,htmlCaller,callbackFunc){
 			}else if(data.newStatus == 'Maybe'){
 				$('#eventRow-'+eventId).addClass('info');
 			}
-			callbackFunc();
+			
+			if(callbackFunc){
+				callbackFunc();
+			}
+			
 			
 			
 		}else{
@@ -220,27 +227,53 @@ function fillAttendeesListItems(listId,eventId,status){
 function DeleteUser(UserID){
 	console.log('called DeleteUser userId: ' + UserID);
 	var r = confirm("Press OK, to Confirm Delete User");
-if (r == true) {
-	$.ajax({
-		type: "POST",
-		url: "/DeleteAccount",
-		dataType: 'json',
-		data: JSON.stringify({
-			"userId" : UserID
-		})
-	}).done(function( data ) {
-		console.log('DeleteUser returned');
-		if (data.success == true){
-			console.log('User Removed');
-			window.location.replace( '/users')
-		}else{
-			console.log('Delete Failed');
-				//console.log(data.success);
-			}
-		//location.reload();
-	});
-}else{
-	console.log('Aborted DeleteUser userId: ' + UserID);
+	if (r == true) {
+		$.ajax({
+			type: "POST",
+			url: "/DeleteAccount",
+			dataType: 'json',
+			data: JSON.stringify({
+				"userId" : UserID
+			})
+		}).done(function( data ) {
+			console.log('DeleteUser returned');
+			if (data.success == true){
+				console.log('User Removed');
+				window.location.replace( '/users')
+			}else{
+				console.log('Delete Failed');
+					//console.log(data.success);
+				}
+			//location.reload();
+		});
+	}else{
+		console.log('Aborted DeleteUser userId: ' + UserID);
+	}
 }
 
+function deleteEvent(eventId){
+	console.log('called deleteEvent eventId: ' + eventId);
+	var r = confirm("Press OK, to Confirm Delete Event");
+	if (r == true) {
+		$.ajax({
+			type: "POST",
+			url: "/DeleteEvent",
+			dataType: 'json',
+			data: JSON.stringify({
+				"eventId" : eventId
+			})
+		}).done(function( data ) {
+			console.log('DeleteEvent returned');
+			if (data.success == true){
+				console.log('Event Removed');
+				window.location.replace( '/events')
+			}else{
+				console.log('Delete Failed');
+					//console.log(data.success);
+				}
+			//location.reload();
+		});
+	}else{
+		console.log('Aborted deleteEvent eventId: ' + eventID);
+	}
 }
