@@ -1,5 +1,5 @@
-application: freediversdemo
-version: 2
+application: freedivers-1032
+version: 1
 runtime: python27
 api_version: 1
 threadsafe: true

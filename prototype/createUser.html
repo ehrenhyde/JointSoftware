@@ -72,15 +72,40 @@
 							</div>
 						</div>
 						
-						<label class="checkbox-inline">
-							<input type="checkbox" name="isAdmin" id="isAdmin"> Administrator
-						</label>
-						<label class="checkbox-inline">
-							<input type="checkbox" name="isTreasurer" id="isTreasurer"> Treasurer
-						</label>
-						<label class="checkbox-inline">
-							<input type="checkbox" name="isEventManager" id="isEventManager" > Event Manager
-						</label>
+						<div class="form-group" adminAllowed>
+							<table>
+								<tr>
+									<div>
+										<td>
+											<label for='isAdmin' class="checkbox-inline no_indent">Administrator</label>
+										</td>
+										<td>
+											<input type="checkbox" name="isAdmin" id="isAdmin">
+										</td>	
+									</div>
+								</tr>
+								<tr>
+									<div>
+										<td>
+											<label for="isTreasurer" class="checkbox-inline no_indent">Treasurer</label>
+										</td>
+										<td>
+											<input type="checkbox" name="isTreasurer" id="isTreasurer">
+										</td>
+									</div>
+								</tr>
+								<tr>
+									<div>
+										<td>
+											<label for='isEventManager' class="checkbox-inline no_indent">Event Manager</label>
+										</td>
+										<td>
+											<input type="checkbox" name="isEventManager" id="isEventManager">
+										</td>
+									</div>
+								</tr>
+							</table>
+						</div>
 						<br><br>
 						Upload Photo: <input type="file" name="ProfilePic"><br>
 						<div class="form-group">

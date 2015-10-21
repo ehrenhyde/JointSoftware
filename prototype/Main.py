@@ -569,17 +569,19 @@ class EventDetails(webapp2.RequestHandler):
 	    self.response.write(template.render(template_values))
 
     def post(self):
-        ID = long(self.request.get('targetUserId'))
+        ID = long(self.request.get('eventId'))
         a = Event.get_by_id(ID)
         a.Name =self.request.get('name')
         a.Description =self.request.get('desc')
         a.Location = self.request.get('location')
-        strTime = self.request.get('time')
+        """strTime = self.request.get('time')
         hoursMins = strTime.split(':')
         strDate = self.request.get('date')
         yearMonthDay = strDate.split('-')
         datevalue = date(int(yearMonthDay[0]),int(yearMonthDay[1]), int(yearMonthDay[2]))
-        a.DateTime = datetime.combine( datevalue,time(int(hoursMins[0]),int(hoursMins[1])))
+        a.DateTime = datetime.combine( datevalue,time(int(hoursMins[0]),int(hoursMins[1])))"""
+        a.DateTime = str(self.request.get('eventDatetime'))
+        a.Comment = self.request.get('comment')
         a.put()
 
         self.redirect('/events')
@@ -605,22 +607,22 @@ class CancelEvent(webapp2.RequestHandler):
             self.redirect('/events')   
 
 #Saves Comment field for an event. Accessed Through Javascript
-class SaveComment(webapp2.RequestHandler):
-    def post(self):
-        data = json.loads(self.request.body)
-        eventId = data['eventId']
-        comment = data['Comment']
-        #Update server with values
-        a = Event.get_by_id(eventId)
-        a.Comment = comment
-        a.put()
-        success = True    
-        jsonRetVal = json.dumps(
-            {
-                'success':success          
-            }
-        )
-        self.response.write(jsonRetVal)
+#class SaveComment(webapp2.RequestHandler):
+#    def post(self):
+#        data = json.loads(self.request.body)
+#        eventId = data['eventId']
+#        comment = data['Comment']
+#        #Update server with values
+#        a = Event.get_by_id(eventId)
+#        a.Comment = comment
+#        a.put()
+#        success = True    
+#        jsonRetVal = json.dumps(
+#            {
+#                'success':success          
+#            }
+#        )
+#        self.response.write(jsonRetVal)
 ####
 #[END Event page Managment]
 ####
@@ -815,10 +817,10 @@ app = webapp2.WSGIApplication([
     ('/profile', Profile),
     ('/events',EventsMain),
     ('/createevent',CreateEvent),
-    ('/eventdetails',EventDetails),
+    ('/eventDetails',EventDetails),
     ('/login',Login),
     ('/toggleAttendance',ToggleAttendance),
-    ('/SaveComment',SaveComment),
+    #('/SaveComment',SaveComment),
     ('/logout',Logout),
     ('/changeCredits',ChangeCredits),
     ('/CancelEvent',CancelEvent),

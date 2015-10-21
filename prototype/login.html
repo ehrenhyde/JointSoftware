@@ -10,7 +10,7 @@
 </head>
 
 <body>
-	{% if local_testing == True%}
+	<!-- {% if local_testing == True%}
 	<hr>
 	<h2>
         Local Testing Mode enabled
@@ -28,9 +28,9 @@
         Live Mode
     </h1>
 	<hr>
-	{% endif %}
+	{% endif %} -->
 	<!-- Page Content -->
-	<div class="container">
+	<div class="container" style="max-width: 380px">
 		<form action="/login" method="post" class="form-signin">
 			<center>
 				<h3 class="form-signin-heading">
@@ -47,7 +47,7 @@
 				</label>
 				<input type="password" name="Password" id="inputPassword" class="form-control" placeholder="Password" required>
 				<br>
-				<button class="btn btn-sm btn-primary btn-block" type="submit">
+				<button class="btn btn-sm btn-primary btn-block" type="submit" style="max-width: 100px">
 					Sign in
 				</button>
 			</center>
