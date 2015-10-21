@@ -17,11 +17,6 @@ import json
 
 from datetime import *
 
-#NOTE:Do we need to keep...
-#import model
-#import fishcakesessions
-#...
-
 LOCAL_TESTING = False
 #Setup for Jinja Template Enviroment
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -571,58 +566,47 @@ class EventDetails(webapp2.RequestHandler):
     def post(self):
         ID = long(self.request.get('eventId'))
         a = Event.get_by_id(ID)
-        a.Name =self.request.get('name')
-        a.Description =self.request.get('desc')
-        a.Location = self.request.get('location')
-        """strTime = self.request.get('time')
+        a.Name =self.request.get('eventName')
+        a.Description =self.request.get('eventDesc')
+        a.Location = self.request.get('eventLocation')
+        strTime = self.request.get('eventTime')
         hoursMins = strTime.split(':')
-        strDate = self.request.get('date')
+        strDate = self.request.get('eventDate')
         yearMonthDay = strDate.split('-')
         datevalue = date(int(yearMonthDay[0]),int(yearMonthDay[1]), int(yearMonthDay[2]))
-        a.DateTime = datetime.combine( datevalue,time(int(hoursMins[0]),int(hoursMins[1])))"""
-        a.DateTime = str(self.request.get('eventDatetime'))
-        a.Comment = self.request.get('comment')
+        a.DateTime = datetime.combine( datevalue,time(int(hoursMins[0]),int(hoursMins[1])))
+        a.Comment = self.request.get('eventComment')
         a.put()
 
         self.redirect('/events')
 
-class CancelEvent(webapp2.RequestHandler):
-    def get(self):
+class DeleteEvent(webapp2.RequestHandler):
+    def post(self):
         user = Session(self).get_current_user()
         if not user:
             nextPath = '='.join(('/login?continue',self.request.url))
             self.redirect(nextPath)
         else:
             UserAttending = False
-            targetEventId = long(self.request.get('eventId'))
+            data = json.loads(self.request.body)
+            targetEventId = data['eventId']
             targetEvent = Event.get_by_id(targetEventId)
             Accounts = Account.query()
             for attendeeNum in range(targetEvent.Attendees_count):#loops all attendees
                 attendee =  Account.get_by_id(targetEvent.Attendees[attendeeNum].UserID)#gets account of attendee
-                targetEvent.Attendees = [i for i in targetEvent.Attendees if i.UserID != attendee.key.integer_id()]#removes attendie for event
-                targetEvent.put()#saves event
+                #targetEvent.Attendees = [i for i in targetEvent.Attendees if i.UserID != attendee.key.integer_id()]#removes attendie for event
+                #targetEvent.put()#saves event
                 attendee.Credits = user.Credits + 1 #refunds credit
                 attendee.put()#saves user
             targetEvent.key.delete()#removes the event
-            self.redirect('/events')   
+            success = True
+            jsonRetVal = json.dumps(
+                {
+                    'success':success
+                }
+            )
+            self.response.write(jsonRetVal)
 
-#Saves Comment field for an event. Accessed Through Javascript
-#class SaveComment(webapp2.RequestHandler):
-#    def post(self):
-#        data = json.loads(self.request.body)
-#        eventId = data['eventId']
-#        comment = data['Comment']
-#        #Update server with values
-#        a = Event.get_by_id(eventId)
-#        a.Comment = comment
-#        a.put()
-#        success = True    
-#        jsonRetVal = json.dumps(
-#            {
-#                'success':success          
-#            }
-#        )
-#        self.response.write(jsonRetVal)
 ####
 #[END Event page Managment]
 ####
@@ -823,7 +807,7 @@ app = webapp2.WSGIApplication([
     #('/SaveComment',SaveComment),
     ('/logout',Logout),
     ('/changeCredits',ChangeCredits),
-    ('/CancelEvent',CancelEvent),
+    ('/DeleteEvent',DeleteEvent),
     ('/DeleteAccount',DeleteAccount),
     ('/myProfilePhotoUpload',MyProfilePhotoUpload),
     ('/ViewProfilePhoto/([^/]+)?', ViewProfilePhoto),
