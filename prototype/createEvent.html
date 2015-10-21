@@ -2,35 +2,14 @@
 <html lang="en">
 	<head>
 		<title>Create Event</title>
-		
 		{% include 'includes/meta-tags.html' %}
-		
 		{% include 'includes/css-links.html' %}
-		
 		{% include 'includes/js-libraries.html' %}
-		
-		<script>
-		/*A little js just for this page*/
-		$(window).ready(function(){
-			$("#isRepeat").change( function(){
-			  if($(this).is(':checked')) {
-					console.log('check');
-					$('#repeatingOptions').show('slow');
-				} else {
-					console.log('uncheck');
-					$('#repeatingOptions').hide('slow');
-				}
-			});
-			$('#repeatingOptions').hide(0);
-		});
-		</script>
-		
 	</head>
 	<body>
 		{% include 'includes/navbar.html' %}
-		
 		<!--Create Event - We'll put this in a container-->
-		<div class="container">	
+		<div class="container">
 			<div class="row">
 				<div class="col-md-3">
 					<center>
@@ -38,66 +17,68 @@
 						<!--<form action="{{userUploadURL}}" method="POST" enctype="multipart/form-data">
 							Upload Photo: <input type="file" name="ProfilePic"><br>
 							<input type="submit" name="submit" value="Submit">
-						</form>-->
+							</form>-->
 						<!--<button>Upload Photo</button>
-						<br><br>-->
+							<br><br>-->
 					</center>
 				</div>
 				<div class="col-md-9">
 					<form id="eventDetails" action="/createevent" method="post" class="form-horizontal" enctype="multipart/form-data">
-						
 						<div class="form-group">
 							<label for="name" class="col-sm-2 control-label"> Event Name </label>
 							<div class="col-sm-10">	
 								<input name="name" type="text" class="form-control" id="name" placeholder="Event" required>
 							</div>
 						</div>
-						
 						<div class="form-group">
 							<label for="date" class="col-sm-2 control-label"> Event Date </label>
 							<div class="col-sm-10">	
 								<input name="date" type="date" class="form-control" id="date" required>
 							</div>
-						</div>			
-
+						</div>
 						<div class="form-group">
 							<label for="time" class="col-sm-2 control-label"> Event Time </label>
 							<div class="col-sm-10">	
 								<input name="time" type="time" class="form-control" id="time" required>
 							</div>
-						</div>							
-
+						</div>
 						<div class="form-group">
 							<label for="location" class="col-sm-2 control-label"> Location </label>
 							<div class="col-sm-10">	
 								<input name="location" type="text" class="form-control" id="location" placeholder="Australia" required>
 							</div>
-						</div>								
-							
-						<label class="checkbox-inline"> Repeating? </label>
-							<input type="checkbox" name="isRepeat" id="isRepeat">
-							<span id='repeatingOptions'>									
-								<select name="intervalnum"><!--Javacript will hide this when the isRepeat checkbox is unchecked-->
+						</div>
+						<div class="form-group">
+							<label for="desc" class="col-sm-2 control-label"> Description </label>
+							<div class="col-sm-10">	
+								<textarea name="desc" class="form-control" rows="5" style="max-width:100%"></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">Repeat</label>
+							<div class="col-sm-10">
+								<input type="checkbox" name="isRepeat" id="isRepeat">
+								Repeat for: 
+								<select name="intervalnum">
+									<!--Javacript will hide this when the isRepeat checkbox is unchecked-->
 									<option value=2>2</option>
 									<option value=3>3</option>
 									<option value=4>4</option>
 								</select>
-								<select name="intervaltype"><!--Javacript will hide this when the isRepeat checkbox is unchecked-->
+								<select name="intervaltype">
+									<!--Javacript will hide this when the isRepeat checkbox is unchecked-->
 									<option value=1>Weeks</option>
 									<option value=2>Fortnight</option>
 									<option value=3>Month</option>
 								</select>
-							</span>
-						<div class="form-group">				
-							<label for="desc"> Description </label>
-							<div class="col-sm-10">
-								<textarea name="desc" class="form-control" rows="5"></textarea>
 							</div>
 						</div>
+						<br>
 						<div class="form-group">
+							<center>
 								<button type="submit" class="btn btn-default" eventManagerAllower>Submit</button>
+							</center>
 						</div>
-
 					</form>
 				</div>
 			</div>

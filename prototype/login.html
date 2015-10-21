@@ -1,59 +1,56 @@
 <!DOCTYPE HTML>
 <html>
-
-<head>
-	<title>
-		Login
-	</title>
-	{% include 'includes/meta-tags.html' %} {% include 'includes/css-links.html' %} {% include 'includes/js-libraries.html' %}
-
-</head>
-
-<body>
-	<!-- {% if local_testing == True%}
-	<hr>
-	<h2>
-        Local Testing Mode enabled
-    </h2>
-	<h6>
-        To Disable change the global LOCAL_TESTING in Main.py
-    </h6>
-	<a href='/events'>
-        Bypass the Login
-    </a>
-	<hr>
-	{% else %}
-	<hr>
-	<h1>
-        Live Mode
-    </h1>
-	<hr>
-	{% endif %} -->
-	<!-- Page Content -->
-	<div class="container" style="max-width: 380px">
-		<form action="/login" method="post" class="form-signin">
-			<center>
-				<h3 class="form-signin-heading">
-				Australian Freedivers Association
-				</h3>
-				<br>
-				<label for="inputEmail" class="sr-only">
+	<head>
+		<title>
+			Login
+		</title>
+		{% include 'includes/meta-tags.html' %} {% include 'includes/css-links.html' %} {% include 'includes/js-libraries.html' %}
+	</head>
+	<body>
+		<!-- {% if local_testing == True%}
+			<hr>
+			<h2>
+			       Local Testing Mode enabled
+			   </h2>
+			<h6>
+			       To Disable change the global LOCAL_TESTING in Main.py
+			   </h6>
+			<a href='/events'>
+			       Bypass the Login
+			   </a>
+			<hr>
+			{% else %}
+			<hr>
+			<h1>
+			       Live Mode
+			   </h1>
+			<hr>
+			{% endif %} -->
+		<!-- Page Content -->
+		<center>
+			<a href="http://australianfreediving.org/">
+			<img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRBNnZs3_6PmK_VMmbr-grQnwBtaagTyvPLv1SWIIkt_EGE1EW4cQ" alt="AFA Logo" style="max-width: 100%">
+			</a>
+		</center>
+		<div class="container" style="max-width: 380px">
+			<form action="/login" method="post" class="form-signin">
+				<center>
+					<br>
+					<label for="inputEmail" class="sr-only">
 					Email address
-				</label>
-				<input type="email" name="Email" id="inputEmail" class="form-control" placeholder="Email Address" required autofocus>
-				<br>
-				<label for="inputPassword" class="sr-only">
+					</label>
+					<input type="email" name="Email" id="inputEmail" class="form-control" placeholder="Email Address" required autofocus>
+					<br>
+					<label for="inputPassword" class="sr-only">
 					Password
-				</label>
-				<input type="password" name="Password" id="inputPassword" class="form-control" placeholder="Password" required>
-				<br>
-				<button class="btn btn-sm btn-primary btn-block" type="submit" style="max-width: 100px">
+					</label>
+					<input type="password" name="Password" id="inputPassword" class="form-control" placeholder="Password" required>
+					<br>
+					<button class="btn btn-sm btn-primary btn-block" type="submit" style="max-width: 100px">
 					Sign in
-				</button>
-			</center>
-		</form>
-	</div>
-	{% include 'includes/footer.html' %}
-</body>
-
+					</button>
+				</center>
+			</form>
+		</div>
+	</body>
 </html>
