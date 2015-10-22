@@ -109,6 +109,8 @@
 					<center>
 						<button onclick="window.location.href='printAttendees?eventId={{Event.key.integer_id()}}'"	style="width:125px"	id="printAttendees"	class="btn btn-primary"	name="Print Attendees" treasurerAllowed>Print Attendees</button>
 						<button style="width:125px"	id="attendanceToggle" class="btn btn-primary" onclick = 'toggleThenRefresh({{Event.key.integer_id()}},{{user.key.integer_id()}},this);'>{{ buttonMsg }}</button>
+						<button style="width:125px"	id="deleteEvent" class="btn btn-danger" eventManagerAllowed onclick = 'deleteEvent({{Event.key.integer_id()}});'>Cancel Event</button>
+
 					</center>
 				</div>
 			</div>
