@@ -16,6 +16,7 @@ import webapp2
 import json
 
 from datetime import *
+import calendar
 
 LOCAL_TESTING = False
 #Setup for Jinja Template Enviroment
@@ -487,6 +488,21 @@ class EventsMain(webapp2.RequestHandler):
             self.response.write(template.render(template_values))	
 		
 class CreateEvent(webapp2.RequestHandler):
+
+    def addDays(self,sourceDatetime,numDays):
+        delay = timedelta(days=numDays)
+        return sourceDatetime + delay
+        
+    def addMonths(self,sourceDatetime,numMonths):
+        month = sourceDatetime.month - 1 + numMonths
+        year = int(sourceDatetime.year + month / 12 )
+        month = month % 12 + 1
+        day = min(sourceDatetime.day,calendar.monthrange(year,month)[1])
+        hour = sourceDatetime.hour
+        minute = sourceDatetime.minute
+        second = sourceDatetime.second
+        return datetime(year,month,day,hour,minute,second)
+        
     def get(self):
         user = Session(self).get_current_user()
         if not user:
@@ -500,26 +516,21 @@ class CreateEvent(webapp2.RequestHandler):
 	    self.response.write(template.render(template_values))			
 		
     def post(self):
-            #todo add security for create event( user is event manager)
+            
         
-        if 'isRepeat' in self.request.POST:
-            intervaltype = int(self.request.get('intervaltype'))
-            if intervaltype == 1:
-                delay = timedelta(days=7)
-            elif intervaltype == 2:
-                delay = timedelta(days=14)
-            elif intervaltype == 3:
-                delay = timedelta(month=1)    
+        
+        intervalType = int(self.request.get('intervaltype'))
+                
         strDate = self.request.get('date')
         yearMonthDay = strDate.split('-')
-        datevalue = date(int(yearMonthDay[0]),int(yearMonthDay[1]), int(yearMonthDay[2]))
-       
+        originalDatetimeValue = datetime(int(yearMonthDay[0]),int(yearMonthDay[1]), int(yearMonthDay[2]))
+        datetimeValue = datetime(int(yearMonthDay[0]),int(yearMonthDay[1]), int(yearMonthDay[2]))
         if 'isRepeat' in self.request.POST:
              repeats = int(self.request.get('intervalnum'))
         else:
             repeats = 1
         
-        for eventnum in range(repeats):
+        for eventNum in range(repeats):
             user = Session(self).get_current_user()
             a = Event()
             a.Name =self.request.get('name')
@@ -527,14 +538,19 @@ class CreateEvent(webapp2.RequestHandler):
             a.Location = self.request.get('location')
             strTime = self.request.get('time')
             hoursMins = strTime.split(':')
-            a.DateTime = datetime.combine( datevalue,time(int(hoursMins[0]),int(hoursMins[1])))
+            a.DateTime = datetime.combine( datetimeValue,time(int(hoursMins[0]),int(hoursMins[1])))
             a.put()
             if 'isRepeat' in self.request.POST:
-                datevalue = datevalue + delay
+                if intervalType == 1:
+                    datetimeValue = self.addDays(originalDatetimeValue,7*(eventNum+1))
+                elif intervalType == 2:
+                    datetimeValue = self.addDays(originalDatetimeValue,14*(eventNum+1))
+                elif intervalType==3:
+                    datetimeValue = self.addMonths(originalDatetimeValue,1*(eventNum+1))
             Attendee = Attendees(UserID = user.key.integer_id(),AttendingStatus = 'Attending')
             a.Attendees.append(Attendee)
             a.put()    
-	self.redirect('/events')		
+        self.redirect('/events')		
 		
 class EventDetails(webapp2.RequestHandler):
     def get(self):
@@ -596,11 +612,12 @@ class DeleteEvent(webapp2.RequestHandler):
             targetEvent = Event.get_by_id(targetEventId)
             Accounts = Account.query()
             for attendeeNum in range(targetEvent.Attendees_count):#loops all attendees
-                attendee =  Account.get_by_id(targetEvent.Attendees[attendeeNum].UserID)#gets account of attendee
-                #targetEvent.Attendees = [i for i in targetEvent.Attendees if i.UserID != attendee.key.integer_id()]#removes attendie for event
-                #targetEvent.put()#saves event
-                attendee.Credits = user.Credits + 1 #refunds credit
-                attendee.put()#saves user
+                if targetEvent.Attendees[attendeeNum].AttendingStatus == "Attending":
+                    attendee =  Account.get_by_id(targetEvent.Attendees[attendeeNum].UserID)#gets account of attendee
+                    #targetEvent.Attendees = [i for i in targetEvent.Attendees if i.UserID != attendee.key.integer_id()]#removes attendie for event
+                    #targetEvent.put()#saves event
+                    attendee.Credits = user.Credits + 1 #refunds credit
+                    attendee.put()#saves user
             targetEvent.key.delete()#removes the event
             success = True
             jsonRetVal = json.dumps(

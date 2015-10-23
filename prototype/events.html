@@ -34,7 +34,7 @@
                     Event
                   </th>
                   <th>
-                    Time
+                    Date & Time
                   </th>
                   
                   <th colspan="2">
@@ -62,7 +62,7 @@
                     </td>
                     <td>
                       <span class="eventItemDatetime">
-                        {{Event.DateTime}}
+                        <!--{{Event.DateTime}}-->{{Event.DateTime.strftime("%c")}}
                       </span>
                     </td>
                     
@@ -83,7 +83,7 @@
                     Event
                   </th>
                   <th>
-                    Time
+                    Date & Time
                   </th>
                 </tr>
                   {% for Event in PastEvents %}	
@@ -95,7 +95,7 @@
                     </td>
                     <td>
                       <span class="eventItemDatetime">
-                        {{Event.DateTime}}
+                        <!--{{Event.DateTime}}-->{{Event.DateTime.strftime("%c")}}
                       </span>
                     </td>
                     
