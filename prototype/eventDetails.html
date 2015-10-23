@@ -77,15 +77,27 @@
 					<form action="/eventDetails" id="eventDetails" class="form-horizontal" method="post" enctype="multipart/form-data">
 						<input type="hidden" name="eventId" value="{{Event.key.integer_id()}}">
 						<div class="form-group">
-							<label for="desc" class="col-sm-2 control-label">Comment</label>
+							<label for="eventName" class="col-sm-2 control-label">Event Name</label>
 							<div class="col-sm-10">
-								<input id="comment" name = "comment" type="text" class="form-control" rows="5" value="{{Event.Comment}}"></input>
+								<input id="eventName" name = "eventName" type="text" class="form-control" value="{{Event.Name}}"></input>
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="eventDatetime" class="col-sm-2 control-label">Event Time/Date</label>
+							<label for="desc" class="col-sm-2 control-label">Comment</label>
 							<div class="col-sm-10">
-								<input name="eventDatetime" type="datetime" class="form-control" id="eventDatetime" value={{Event.DateTime}} required >
+								<input id="comment" name = "eventComment" type="text" class="form-control" rows="5" value="{{Event.Comment}}"></input>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="date" class="col-sm-2 control-label">Event Date</label>
+							<div class="col-sm-10">	
+								<input name="eventDate" type="date" class="form-control" id="date" value="{{Event.DateTime.date()}}" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="time" class="col-sm-2 control-label">Event Time</label>
+							<div class="col-sm-10">	
+								<input name="eventTime" type="time" class="form-control" id="time" value="{{Event.DateTime.time()}}" required>
 							</div>
 						</div>
 						<div class="form-group">
@@ -95,9 +107,9 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="desc" class="col-sm-2 control-label">Description</label>
+							<label for="eventDesc" class="col-sm-2 control-label">Description</label>
 							<div class="col-sm-10">
-								<textarea name="desc" class="form-control" rows="5" style="max-width:100%">{{Event.Description}}</textarea>
+								<textarea id="eventDesc" name="eventDesc" class="form-control" rows="5" style="max-width:100%">{{Event.Description}}</textarea>
 							</div>
 						</div>
 						<center>
