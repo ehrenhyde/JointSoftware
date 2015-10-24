@@ -14,7 +14,8 @@
 	<script>
 	/*Make profile pic upload have better user feedback*/
 	function readURL(input){
-		//if only 1 file
+		
+		//if file selected
 		if (input.files && input.files[0]){
 			var reader = new FileReader();
 			
@@ -23,9 +24,18 @@
 			};
 			
 			reader.readAsDataURL(input.files[0]);
+		}else{
+			//on cancel
+			//replace image with original
+			var oldSrc =  $('#imgProfilePic').attr('oldSrc');
+			$('#imgProfilePic').attr('src',oldSrc);
 		}
 	}
 	$(document).ready(function(){
+		//store old picture in case the user changes the value of the upload input to blank
+		var oldSrc = $('#imgProfilePic').attr('src');
+		$('#imgProfilePic').attr('oldSrc',oldSrc);
+		
 		$('#updateProfilePic').change(function(){
 			readURL(this);
 		});
