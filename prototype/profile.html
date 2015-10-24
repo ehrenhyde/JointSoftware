@@ -11,6 +11,26 @@
 			overflow-x: hidden;
 		}
 	</style>
+	<script>
+	/*Make profile pic upload have better user feedback*/
+	function readURL(input){
+		//if only 1 file
+		if (input.files && input.files[0]){
+			var reader = new FileReader();
+			
+			reader.onload = function(e){
+				$('#imgProfilePic').attr('src',e.target.result);
+			};
+			
+			reader.readAsDataURL(input.files[0]);
+		}
+	}
+	$(document).ready(function(){
+		$('#updateProfilePic').change(function(){
+			readURL(this);
+		});
+	});
+	</script>
 </head>
 
 <body>
@@ -34,7 +54,7 @@
 			<div class="col-md-9">
 
 				<center>
-				<img style="height:220px;width:220px;" alt="ProfilePic" class="img-thumbnail" src="/ViewProfilePhoto/{{targetUser.ProfilePicBlobKey}}" /></img>
+				<img id="imgProfilePic" style="height:220px;width:220px;" alt="ProfilePic" class="img-thumbnail" src="/ViewProfilePhoto/{{targetUser.ProfilePicBlobKey}}" /></img>
 				<br><br>
 
 					<form action="{{targetUserUploadURL}}" id="userDetails" class="form-horizontal" method="post" enctype="multipart/form-data">
