@@ -324,7 +324,9 @@ class MyProfilePhotoUpload(blobstore_handlers.BlobstoreUploadHandler):
 class ViewProfilePhoto(blobstore_handlers.BlobstoreDownloadHandler):
     def get(self, photo_key):
         if not blobstore.get(photo_key):
-            self.error(404)
+            #a default profile picture (blue fish)
+            self.send_blob("AMIfv949TBudU_nEUHAfR2b798oWgf3BcX4SwlZuEeZDeTjIPnYja22GHqHL7Cr4AgThTXasvhuLHwq5wFCHlGGJWU4jt4v9j7fVBhrM44OD1WFXMtdP0tjKPar1sI2B-Fi1K-I6BPhiml3ZyMcuZ3FgYat8D7QCTHJrKn7Xg57fi5nlDs_36l8")
+            #self.error(404)
         else:
             self.send_blob(photo_key)
 
