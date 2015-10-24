@@ -31,6 +31,19 @@ function sendAttending(status,eventId,userId,callbackFunc){
 function toggleAttendance(eventId,userId,htmlCaller,callbackFunc){
 	console.log('called toggleAttendance eventId: ' + eventId + ' userId: ' + userId);
 	
+	//disable two clicks at the same time
+	if ($(htmlCaller).attr("loading") == "true"){
+		console.log("already loading");
+		return;
+	}
+	
+	//disable control
+	if (htmlCaller){
+		var oldColour = $(htmlCaller).css('color');
+		$(htmlCaller).attr("loading","true");
+		$(htmlCaller).css('color','orange');
+	}
+	
 	$.ajax({
 		type: "POST",
 		url: "/toggleAttendance",
@@ -65,10 +78,22 @@ function toggleAttendance(eventId,userId,htmlCaller,callbackFunc){
 			console.log('toggleAttendance fail');
 			$(htmlCaller).css("border-color", "red");
 			$(htmlCaller).css("color", "red");
-				window.alert(data.comment);
-				//console.log(data.success);
-			}
-		//location.reload();
+			window.alert(data.comment);
+		}
+		
+		//re-enable control
+		if (htmlCaller){
+			$(htmlCaller).css('color',oldColour);
+			$(htmlCaller).attr("loading","false");
+		}
+		
+	})
+	.fail(function(jqXHR,textStatus) {
+		//re-enable control
+		if (htmlCaller){
+			$(htmlCaller).css('color',oldColour);
+			$(htmlCaller).attr("loading","false");
+		}
 	});
 	
 }
@@ -79,32 +104,6 @@ function addAttending(status,eventId,callbackFunc){
 	var userId = +Input.val();
 	console.log('userId = ' + userId);
 	sendAttending(status,eventId,userId,callbackFunc);
-}
-
-function SaveComment(eventId){
-	console.log("calling SaveComment");
-	console.log('eventId = ' + eventId);	
-	var Input = $("#Comment");
-	var comment = Input.val();
-	$.ajax({
-		type: "POST",
-		url: "/SaveComment",
-		dataType: 'json',
-		data: JSON.stringify({
-			"Comment": comment,
-			"eventId":eventId,
-		})
-	})
-	.done(function( data ) {
-		console.log('returned');
-		if (data.success == true){
-			console.log('was a success');
-		}else{
-			console.log('fail');
-			console.log(data.success);
-		}
-		location.reload();
-	});
 }
 
 function changeCredits(userId,creditsChange,triggerControl){

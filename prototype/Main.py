@@ -824,7 +824,6 @@ app = webapp2.WSGIApplication([
     ('/eventDetails',EventDetails),
     ('/login',Login),
     ('/toggleAttendance',ToggleAttendance),
-    #('/SaveComment',SaveComment),
     ('/logout',Logout),
     ('/changeCredits',ChangeCredits),
     ('/DeleteEvent',DeleteEvent),
