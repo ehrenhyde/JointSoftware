@@ -419,8 +419,17 @@ class DeleteAccount(webapp2.RequestHandler):
         else:
             data = json.loads(self.request.body)
             userId = data['userId']
+            #delete user account
             targetAccount = Account.get_by_id(userId)
-            targetAccount.key.delete()#removes the event
+            targetAccount.key.delete()
+            
+            #delete all instances of that user as an attendee
+            events = Event.query()
+            for event in events:#for every event, check every attendee for a match
+                for attendeeNum in range(event.Attendees_count):#loops all attendees
+                    if event.Attendees[attendeeNum].UserID == userId:#if user is the deleted user
+                        event.Attendees = [i for i in event.Attendees if i.UserID != userId] #remove the user
+                        event.put()
             success = True
             jsonRetVal = json.dumps(
                 {
