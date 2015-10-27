@@ -325,7 +325,10 @@ class ViewProfilePhoto(blobstore_handlers.BlobstoreDownloadHandler):
     def get(self, photo_key):
         if not blobstore.get(photo_key):
             #a default profile picture (blue fish)
+            #non demo version
             self.send_blob("AMIfv949TBudU_nEUHAfR2b798oWgf3BcX4SwlZuEeZDeTjIPnYja22GHqHL7Cr4AgThTXasvhuLHwq5wFCHlGGJWU4jt4v9j7fVBhrM44OD1WFXMtdP0tjKPar1sI2B-Fi1K-I6BPhiml3ZyMcuZ3FgYat8D7QCTHJrKn7Xg57fi5nlDs_36l8")
+            #demo version
+            #self.send_blob("AMIfv94ILLRPjZZefqBa7vXOcbXEZe9ZpDv1yUvI6XqWj8jntVn_DNQD66B7JhJKyvvexu402-5F6eMOMsY1OUKW0Ic_93t1vUt3lpOv066xuc6CFFkT2xIBLL2WW1xIVcCnE5afclITi9aET18nFUU6VMWqLuc9hhfG1GhsRtX7xoSFb0ZPEew")
             #self.error(404)
         else:
             self.send_blob(photo_key)
@@ -805,18 +808,81 @@ class PrintAttendees(webapp2.RequestHandler):
 #[DEBUG FUNCTION]
 ####
 #Create Demo User DEBUG use only
-##class DemoUsers(webapp2.RequestHandler):
-##    def get(self):
-##        #Create First User
-##	a = Account()
-##	a.Name ='DemoUser'
-##	a.Email ='test@example.com'
-##	a.Password ='1234'
-##	a.Admin = True
-##        a.Treasurer = True
-##        a.EventManager = True
-##	a.put()
-##	self.redirect('/')
+class DemoUsersReset(webapp2.RequestHandler):
+    def get(self):
+        #delete all accounts
+        accounts = Account.query()
+        for account in accounts:
+            account.key.delete()
+
+        events = Event.query()
+        for event in events:
+            event.key.delete()
+
+        #create a bunch of accounts
+        for num in range(1,20):
+            a = Account()
+            a.Name ='DemoUser' + str(num)
+            a.Email ='demo'+str(num)+'@demo.com'
+            a.Password ='demo'
+            a.Admin = True
+            a.Treasurer = True
+            a.EventManager = True
+            a.put()
+
+
+
+        #create a bunch of events
+        a = Event()
+        a.Name ="10 Minute Challenge"
+        a.Description ="Can you hold your breath for 10 minutes? If you succeed you get a free snorkel"
+        a.Location = "Indooroopilly Sports Centre"
+        strTime = '17:30:00'
+        hoursMins = strTime.split(':')
+        strDate = '2016-11-11'
+        yearMonthDay = strDate.split('-')
+        datetimeValue = datetime(int(yearMonthDay[0]),int(yearMonthDay[1]), int(yearMonthDay[2]))
+        a.DateTime = datetime.combine( datetimeValue,time(int(hoursMins[0]),int(hoursMins[1])))
+        a.put()
+
+        a = Event()
+        a.Name ="Pearl Recovery"
+        a.Description ="Throw a pearl down into the pool as deep as you want, and then try to get it back by the end of the day. BYO Pearl"
+        a.Location = "QUT Pool QUT 2 George Street Brisbane"
+        strTime = '18:00:00'
+        hoursMins = strTime.split(':')
+        strDate = '2015-11-04'
+        yearMonthDay = strDate.split('-')
+        datetimeValue = datetime(int(yearMonthDay[0]),int(yearMonthDay[1]), int(yearMonthDay[2]))
+        a.DateTime = datetime.combine( datetimeValue,time(int(hoursMins[0]),int(hoursMins[1])))
+        a.put()
+
+        a = Event()
+        a.Name ="Moreton Bay Wrecks"
+        a.Description ="Who wants to go diving down around some sunken ships?"
+        a.Comment ="Might call off if only 4 people or less"
+        a.Location = "Moreton Bay Ferry"
+        strTime = '09:00:00'
+        hoursMins = strTime.split(':')
+        strDate = '2015-12-18'
+        yearMonthDay = strDate.split('-')
+        datetimeValue = datetime(int(yearMonthDay[0]),int(yearMonthDay[1]), int(yearMonthDay[2]))
+        a.DateTime = datetime.combine( datetimeValue,time(int(hoursMins[0]),int(hoursMins[1])))
+        a.put()
+
+        a = Event()
+        a.Name ="Welcome New Members"
+        a.Description ="A bbq for all the new members to be welcomed to the club."
+        a.Location = "South Bank Pool"
+        strTime = '13:30:00'
+        hoursMins = strTime.split(':')
+        strDate = '2015-10-25'
+        yearMonthDay = strDate.split('-')
+        datetimeValue = datetime(int(yearMonthDay[0]),int(yearMonthDay[1]), int(yearMonthDay[2]))
+        a.DateTime = datetime.combine( datetimeValue,time(int(hoursMins[0]),int(hoursMins[1])))
+        a.put()
+
+        self.redirect('/')
 ####
 #[END DEBUG FUNCTION]
 ####
@@ -842,9 +908,9 @@ app = webapp2.WSGIApplication([
     ('/myProfilePhotoUpload',MyProfilePhotoUpload),
     ('/ViewProfilePhoto/([^/]+)?', ViewProfilePhoto),
     ('/printAttendees',PrintAttendees),
-    #[Debug use]('/DemoUsers',DemoUsers),
     ('/GetAttendees',GetAttendees),
-    ('/GetAttendeesCount',GetAttendeesCount)
+    ('/GetAttendeesCount',GetAttendeesCount),
+    #('/DemoUsersReset',DemoUsersReset)#DEMO ONLY
 ], debug=True)
 ####
 #[END Routing Mangment]
