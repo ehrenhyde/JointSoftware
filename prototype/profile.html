@@ -150,10 +150,16 @@
 							</table>
 						</div>
 						<br><br>
-						
-						<div class="form-group" adminAllowed>
-								<button type="submit" class="btn btn-primary">Submit</button>
-						</div>
+						<!--If user is editing their own details always show submit button else only show admins-->
+						{%if (targetUser.key.integer_id() == user.key.integer_id()) %}
+							<div class="form-group">
+									<button type="submit" class="btn btn-primary">Submit</button>
+							</div>
+						{% else %}
+							<div class="form-group" adminAllowed>
+									<button type="submit" class="btn btn-primary">Submit</button>
+							</div>
+						{% endif %}
 					</form>
 					<div adminAllowed>
 					<button id="DeleteUser-{{targetUser.key.integer_id()}}" class ="btn btn-danger" onclick = 'DeleteUser({{targetUser.key.integer_id()}})'>Delete User</button>
