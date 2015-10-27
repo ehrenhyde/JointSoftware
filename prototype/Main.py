@@ -224,7 +224,7 @@ class Login(webapp2.RequestHandler):
     def post(self):
 	c = self.request.get('continue')
         if not c: c = '/events' 
-        u = self.request.get('Email') 
+        u = self.request.get('Email').lower() 
         p = self.request.get('Password') 
         tmp = Session(self).grab_login(u,p)
         #if not logged in, redirect to login page but keep requested page as a continue variable
@@ -277,7 +277,7 @@ class ChangeUserDetails(blobstore_handlers.BlobstoreUploadHandler):
 	ID = long(self.request.get('targetUserId'))
 	a = Account.get_by_id(ID)
 	a.Name =self.request.get('name')
-	a.Email =self.request.get('email')
+	a.Email =self.request.get('email').lower()
 	a.Emergency_Contact =self.request.get('emergencyName')
 	a.Emergency_Phone =self.request.get('emergencyMobile')
 	a.Password =self.request.get('password')
@@ -353,7 +353,7 @@ class CreateUser(webapp2.RequestHandler):
         #creates empty Account entity for new user account
 	a = Account()
 	a.Name =self.request.get('name')
-	newEmail = self.request.get('email')
+	newEmail = self.request.get('email').lower()
 	a.Email = newEmail
 	a.Emergency_Contact =self.request.get('emergencyName')
 	a.Emergency_Phone =self.request.get('emergencyMobile')
