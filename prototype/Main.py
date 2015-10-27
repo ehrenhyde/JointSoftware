@@ -820,7 +820,7 @@ class DemoUsersReset(webapp2.RequestHandler):
             event.key.delete()
 
         #create a bunch of accounts
-        for num in range(1,20):
+        for num in range(1,10):
             a = Account()
             a.Name ='DemoUser' + str(num)
             a.Email ='demo'+str(num)+'@demo.com'
